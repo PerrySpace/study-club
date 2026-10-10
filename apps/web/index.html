@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      儿童端 viewport：
+        - viewport-fit=cover        → 允许内容延展到刘海/圆角区域，配合 env(safe-area-inset-*)
+        - user-scalable=no          → 防儿童双击/双指误缩放打乱布局
+        - maximum-scale=1           → 同上
+        - minimum-scale=1           → 反向锁死：Android 上单靠 maximum-scale 仍可能被
+                                      「双击放大」顶开，配上它才完全抹掉缩放档位
+      ⚠️ iOS 10+ 起 Safari **忽略** user-scalable / maximum-scale，所以这只是第一道。
+         真正关上捏合靠的是 CSS `touch-action` 与 platform/dom-guard.ts 的事件拦截
+         （见 styles/base.css 顶部注释与 docs/02-系统架构/02-多端适配与响应式设计规范.md §3.3）。
+      全屏高度统一用 100dvh（见 styles/base.css），避免移动端地址栏导致的 100vh 溢出。
+    -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, viewport-fit=cover, user-scalable=no"
+    />
+    <meta name="theme-color" content="#ffd76b" />
+    <meta name="description" content="小学 1–6 年级课内识字 + 古诗文启蒙应用。本地优先、离线可用、免费开放、可自托管。" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="学习岛" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/pwa-192.svg" />
+    <link rel="mask-icon" href="/favicon.svg" color="#ffd76b" />
+    <title>学习俱乐部</title>
+    <script>
+      // 首屏前挂载主题底色，避免白屏闪一下。
+      document.documentElement.style.background = '#f5fff8';
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>本应用需要开启 JavaScript 才能使用。</noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

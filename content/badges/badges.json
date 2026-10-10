@@ -1,0 +1,96 @@
+{
+  "content_version": "1.0.0",
+  "items": [
+    {
+      "_id": "bd_first_lesson",
+      "code": "first_lesson",
+      "title": "第一课",
+      "description": "完成第一个关卡",
+      "icon_ref": null,
+      "condition": {
+        "type": "lesson_count",
+        "value": 1
+      },
+      "order": 1,
+      "status": "active"
+    },
+    {
+      "_id": "bd_lesson_10",
+      "code": "lesson_10",
+      "title": "十关小达人",
+      "description": "累计完成 10 个关卡",
+      "icon_ref": null,
+      "condition": {
+        "type": "lesson_count",
+        "value": 10
+      },
+      "order": 2,
+      "status": "active"
+    },
+    {
+      "_id": "bd_char_50",
+      "code": "char_50",
+      "title": "认识五十字",
+      "description": "累计学习 50 个字",
+      "icon_ref": null,
+      "condition": {
+        "type": "char_count",
+        "value": 50
+      },
+      "order": 3,
+      "status": "active"
+    },
+    {
+      "_id": "bd_char_100",
+      "code": "char_100",
+      "title": "认识一百字",
+      "description": "累计学习 100 个字",
+      "icon_ref": null,
+      "condition": {
+        "type": "char_count",
+        "value": 100
+      },
+      "order": 4,
+      "status": "active"
+    },
+    {
+      "_id": "bd_streak_3",
+      "code": "streak_3",
+      "title": "坚持三天",
+      "description": "连续学习 3 天",
+      "icon_ref": null,
+      "condition": {
+        "type": "streak_days",
+        "value": 3
+      },
+      "order": 5,
+      "status": "active"
+    },
+    {
+      "_id": "bd_streak_7",
+      "code": "streak_7",
+      "title": "坚持一周",
+      "description": "连续学习 7 天",
+      "icon_ref": null,
+      "condition": {
+        "type": "streak_days",
+        "value": 7
+      },
+      "order": 6,
+      "status": "active"
+    },
+    {
+      "_id": "bd_poem_3",
+      "code": "poem_3",
+      "title": "小小诗人",
+      "description": "学会 3 首古诗",
+      "icon_ref": null,
+      "condition": {
+        "type": "poem_count",
+        "value": 3
+      },
+      "order": 7,
+      "status": "active"
+    }
+  ]
+}

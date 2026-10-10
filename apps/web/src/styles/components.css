@@ -1,0 +1,156 @@
+/**
+ * 通用组件样式（跨 base/biz 组件复用的少数工具类）。
+ * 命名：kebab-case / BEM，只用 class 选择器（兼容将来 uni-app 迁移，见 06-1 §2.9.4）。
+ */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.stack--sm {
+  gap: var(--space-sm);
+}
+
+.stack--lg {
+  gap: var(--space-lg);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.row--between {
+  justify-content: space-between;
+}
+
+.row--wrap {
+  flex-wrap: wrap;
+}
+
+/* ---- 主导航项（SideNav 与 TabBar 共用，保证两处观感一致）----
+   两态语义（规范 2.1）：
+     未选中 = 中性灰（「不在这里」，⛔ 不能用主色黄暗示可点）
+     当前   = --color-info 蓝底（「当前所在」）
+   图标自带的彩色是**图形识别色**（每个入口一个，方便不识字的孩子辨认），
+   不是状态语义色 —— 状态由底色与字重表达，故未选中时把图标降为灰。 */
+.navlink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: var(--tap-min);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  font-weight: 500;
+  transition:
+    background 160ms ease-out,
+    color 160ms ease-out;
+}
+
+.navlink__icon {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  filter: grayscale(1);
+  opacity: 0.55;
+  transition:
+    filter 160ms ease-out,
+    opacity 160ms ease-out;
+}
+
+.navlink--active {
+  background: color-mix(in srgb, var(--color-info) 16%, var(--color-surface));
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.navlink--active .navlink__icon {
+  filter: none;
+  opacity: 1;
+}
+
+.navlink:focus-visible {
+  outline: 3px solid var(--color-info);
+  outline-offset: 2px;
+}
+
+/* 触控热区：最小 56px，主操作 64px（06-1 §2.9.3） */
+.tap {
+  min-height: var(--tap-min);
+  min-width: var(--tap-min);
+}
+
+.tap--primary {
+  min-height: var(--tap-primary);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-sm {
+  font-size: var(--font-sm);
+}
+
+.text-lg {
+  font-size: var(--font-lg);
+}
+
+.text-xl {
+  font-size: var(--font-xl);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.title-lg {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.section-title {
+  font-size: var(--font-lg);
+  font-weight: 600;
+}
+
+/* 底部安全区：底部固定元素必须带此内边距（02-2 §3.4） */
+.safe-bottom {
+  padding-bottom: calc(var(--space-md) + var(--safe-bottom));
+}
+
+.divider {
+  height: 1px;
+  background: var(--color-border);
+  border: 0;
+  margin: var(--space-md) 0;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  color: var(--color-text-muted);
+  font-size: var(--font-sm);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

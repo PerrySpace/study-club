@@ -1,0 +1,10 @@
+# 运行时依赖（尽量少，见任务约束）。版本用下界约束，避免锁死到不可用的旧版。
+fastapi>=0.110
+uvicorn[standard]>=0.27
+motor>=3.3            # 异步 MongoDB 驱动（自带 pymongo）
+pydantic>=2.6
+pydantic-settings>=2.1
+argon2-cffi>=23.1     # Argon2id 口令哈希
+pyjwt>=2.8            # 会话令牌签发/校验
+cryptography>=42.0    # Ed25519 邀请码验签
+python-multipart>=0.0.9  # 后台素材上传（multipart/form-data 解析）

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="兔子头像">
+  <circle cx="64" cy="64" r="62" fill="#FFE3EE"/>
+  <ellipse cx="47" cy="34" rx="9" ry="21" fill="#FFFFFF" transform="rotate(-10 47 34)"/>
+  <ellipse cx="47" cy="34" rx="4.6" ry="14" fill="#FFC2D4" transform="rotate(-10 47 34)"/>
+  <ellipse cx="81" cy="34" rx="9" ry="21" fill="#FFFFFF" transform="rotate(10 81 34)"/>
+  <ellipse cx="81" cy="34" rx="4.6" ry="14" fill="#FFC2D4" transform="rotate(10 81 34)"/>
+  <circle cx="64" cy="74" r="36" fill="#FFFFFF"/>
+  <ellipse cx="43" cy="82" rx="7" ry="5" fill="#FFD3E0"/>
+  <ellipse cx="85" cy="82" rx="7" ry="5" fill="#FFD3E0"/>
+  <circle cx="51" cy="70" r="5" fill="#3A2E39"/>
+  <circle cx="77" cy="70" r="5" fill="#3A2E39"/>
+  <circle cx="52.6" cy="68.2" r="1.7" fill="#FFFFFF"/>
+  <circle cx="78.6" cy="68.2" r="1.7" fill="#FFFFFF"/>
+  <ellipse cx="64" cy="82" rx="5" ry="3.6" fill="#FF8FA8"/>
+  <path d="M64 85.6 v4" stroke="#E07A93" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+  <path d="M60 91 q4 3.4 8 0" stroke="#E07A93" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</svg>

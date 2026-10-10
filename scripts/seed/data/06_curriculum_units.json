@@ -1,0 +1,7 @@
+{
+  "collection": "curriculum_units",
+  "feature": "自编单元（非出版物映射）",
+  "source": "content/lessons/units.json",
+  "strip_wrapper": true,
+  "unique_key": "unit_code"
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://study-club/schema/lesson.schema.json",
+  "title": "关卡",
+  "type": "object",
+  "required": [
+    "_id", "title", "level", "order", "character_ids", "game_types",
+    "unlock_rules", "poem_id", "unit_id", "status", "created_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_id": { "type": "string" },
+    "title": { "type": "string", "minLength": 1 },
+    "level": { "enum": ["sprout", "bridge", "grade1", "grade2", "grade3", "grade4", "grade5", "grade6"] },
+    "order": { "type": "integer", "minimum": 1 },
+    "character_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "game_types": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "image-choice", "audio-choice", "pinyin-match", "word-build",
+          "stroke-order", "poem-fill", "poem-order", "poem-match"
+        ]
+      }
+    },
+    "unlock_rules": {
+      "type": "object",
+      "required": ["required_lesson_id", "min_stars"],
+      "additionalProperties": false,
+      "properties": {
+        "required_lesson_id": { "type": ["string", "null"] },
+        "min_stars": { "type": "integer", "minimum": 0, "maximum": 3 }
+      }
+    },
+    "poem_id": { "type": ["string", "null"] },
+    "unit_id": { "type": ["string", "null"] },
+    "status": { "enum": ["draft", "pending_review", "published", "offline", "deleted"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

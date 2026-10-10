@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://study-club/schema/reading.schema.json",
+  "title": "识字短文（阅读承接）",
+  "type": "object",
+  "required": [
+    "_id", "title", "type", "level", "grade", "order", "theme",
+    "sentences", "text", "character_ids", "character_chars", "new_character_chars",
+    "word_count", "status", "created_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_id": { "type": "string", "pattern": "^rd_" },
+    "title": { "type": "string", "minLength": 1 },
+    "type": { "enum": ["sentence", "passage"] },
+    "level": { "enum": ["sprout", "bridge", "grade1", "grade2", "grade3", "grade4", "grade5", "grade6"] },
+    "grade": { "type": "integer", "minimum": 0, "maximum": 6 },
+    "difficulty": { "type": "integer", "minimum": 1, "maximum": 3 },
+    "order": { "type": "integer", "minimum": 1 },
+    "theme": { "type": "string" },
+    "sentences": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["text", "pinyin", "meaning"],
+        "additionalProperties": false,
+        "properties": {
+          "text": { "type": "string", "minLength": 1 },
+          "pinyin": { "type": "string" },
+          "meaning": { "type": "string" }
+        }
+      }
+    },
+    "text": { "type": "string", "minLength": 1 },
+    "full_pinyin": { "type": "string" },
+    "character_ids": {
+      "description": "文中出现、且已在字库中的字（按 ch_<codepoint> 的 _id）。覆盖率 = len(character_ids) / len(character_chars)。",
+      "type": "array",
+      "items": { "type": "string", "pattern": "^ch_[0-9a-f]+$" }
+    },
+    "character_chars": {
+      "description": "文中出现的全部去重汉字字面（含尚未入字库的）。",
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[\\u4e00-\\u9fff]$" }
+    },
+    "new_character_chars": {
+      "description": "文中出现但尚未收录进字库的汉字字面（家长带读用）。覆盖率 = len(character_ids) / len(character_chars)。",
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[\\u4e00-\\u9fff]$" }
+    },
+    "word_count": { "type": "integer", "minimum": 1 },
+    "image_ref": { "type": ["string", "null"] },
+    "audio_ref": { "type": ["string", "null"] },
+    "tips": { "type": "string" },
+    "status": { "enum": ["draft", "pending_review", "published", "offline", "deleted"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

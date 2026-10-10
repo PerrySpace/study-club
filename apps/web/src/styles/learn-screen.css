@@ -1,0 +1,176 @@
+/**
+ * 学习页「一屏」布局 —— 识字闯关 / 古诗 / 故事三条学习线共用（02-2 §3.6）。
+ *
+ * ## 为什么需要这套骨架
+ * 学习页原来是「长文档」形态：进度、引导气泡、内容、操作按钮从上到下排成一条，
+ * 整页跟着内容一起变高。这在手机上就会出问题 —— **主操作按钮被内容顶到屏幕外**：
+ * 答完题找不到「下一题」、写完字找不到「下一步」，只能往上划。
+ * 而 6 岁孩子不会主动尝试滚动：看不见的按钮 = 不存在的按钮，
+ * 流程就卡在「他明明答对了，却停在这一题」。
+ *
+ * ## 结构契约（三条学习线必须遵守）
+ *   .learn-page         整页 = 视口内的一列（高度由外壳给定，**自身不滚动**）
+ *   .learn-page__head   常驻顶部：进度 / 步骤 / 标题
+ *   .learn-page__body   唯一可滚动区：内容超长时只滚这里
+ *   .learn-page__foot   常驻底部：当前这一步的主操作
+ *
+ * ⛔ 不要把主操作放 `__body`：那等于把它交给「滚动位置」决定是否可见。
+ * ⛔ 不要让 `.learn-page` 自身产生滚动条：那会把 `__foot` 一起滚走，等于没做。
+ * ⛔ 不要用 `position: fixed` 做底部操作条：它会盖住内容（含安全区）且失去
+ *    「内容区自己让位」的关系；用 flex 分配高度才是对的。
+ */
+
+/* ---------------------------------------------------------------------------
+ * 外壳：把整页锁在视口内
+ * ------------------------------------------------------------------------- */
+.app-shell--one {
+  /*
+   * ⚠️ 必须是 height（不是 min-height）：`.app-shell` 原生的 `min-height: 100dvh`
+   * 只保证「不低于一屏」，内容一多仍会撑高 —— 那样 __body 永远拿不到一个
+   * 有限的高度，`min-height: 0` 的收缩也就无从谈起，foot 照样被顶下去。
+   * 同时 overflow: hidden 兜住任何意外溢出，避免整页出现第二条滚动条。
+   */
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* 老内核没有 dvh：退回 vh（地址栏收放时会差一点，可接受） */
+@supports not (height: 100dvh) {
+  .app-shell--one {
+    height: 100vh;
+  }
+}
+
+.app-shell--one .app-shell__main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  /*
+   * 沉浸式外壳（关卡/古诗/故事）没有底部导航，而原生样式给内容区留了
+   * `--tap-primary + --space-lg`（88px）的底部内边距 —— 那是给「有底部 TabBar」
+   * 的页面防遮挡用的。留着它，一屏的可用高度就白少 88px。
+   */
+  padding-bottom: calc(var(--space-sm) + var(--safe-bottom));
+}
+
+/* ---------------------------------------------------------------------------
+ * 页面骨架
+ * ------------------------------------------------------------------------- */
+.learn-page {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.learn-page__head,
+.learn-page__foot {
+  flex: none;
+}
+
+.learn-page__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.learn-page__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  /* 唯一滚动区：内容超长时只滚这里，头尾原地不动 */
+  overflow-y: auto;
+  /* 滚到头不再把滚动传给外层（外层本来也滚不动，但没有回弹更稳） */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 居中版：准备中 / 空状态 / 结果页 —— 内容少时居中，多时照常可滚 */
+.learn-page__body--center {
+  align-items: center;
+  /*
+   * ⛔ 别用 `justify-content: center`：flex 容器在**内容溢出**时，
+   * 居中会把上方的部分推到滚动区之外且滚不回去（顶部被"吃掉"）。
+   * 用首尾 `auto` 外边距是同一个居中效果，但溢出时不会丢内容。
+   */
+}
+
+.learn-page__body--center > :first-child {
+  margin-top: auto;
+}
+
+.learn-page__body--center > :last-child {
+  margin-bottom: auto;
+}
+
+/* 居中版里的子项要占满宽度，否则卡片会被压成「内容宽」而失去对齐 */
+.learn-page__body--center > * {
+  width: 100%;
+}
+
+.learn-page__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-top: var(--space-xs);
+}
+
+/* ---------------------------------------------------------------------------
+ * 矮屏压缩（横屏手机 / 小笔记本 / 分屏 / 小屏手机）
+ * ------------------------------------------------------------------------- */
+/*
+ * 目的不是「把字变小」，而是让**非核心的东西**先把空间让出来：
+ * 间距可以收紧，字号不能压到看不清（儿童端正文 18px 的下限不动）。
+ *
+ * ⚠️ 为什么用「高度媒体查询」而不是把 `min(x, ydvh)` 塞进 clamp：
+ *   含 `dvh` 的表达式在旧内核（Safari < 15.4 / Chrome < 108）整条无效，
+ *   而 font-size 一旦无效就退回**继承值**（18px）—— 那比「字大了点」严重得多，
+ *   字卡主字会直接缩成正文大小。分档写法在所有内核上都有确定结果。
+ *
+ * 三档阈值按真实机型定：
+ *   820px —— iPhone 12/13/14 mini 与旧款（812）、以及多数安卓竖屏（800）
+ *   760px —— 更矮的竖屏（如 736/720）与开始吃紧的横屏
+ *   700px —— iPhone SE（667）与全部横屏手机
+ */
+
+/* 820px：字卡主字（--font-card-glyph）先收一档。
+   聚焦大字 / 米字格提示字 / 跟读题大字各自收在组件自己的 scoped 样式里，
+   因为那几个类名只属于对应组件。 */
+@media (max-height: 820px) {
+  .learn-page {
+    --font-card-glyph: clamp(104px, 24vw, 200px);
+  }
+}
+
+@media (max-height: 760px) {
+  .learn-page {
+    gap: var(--space-xs);
+  }
+
+  .learn-page__head {
+    gap: var(--space-xs);
+  }
+
+  .learn-page__body {
+    gap: var(--space-sm);
+  }
+}
+
+@media (max-height: 700px) {
+  .learn-page {
+    --font-card-glyph: clamp(88px, 22vw, 160px);
+  }
+
+  .learn-page__head {
+    gap: var(--space-2xs);
+  }
+
+  .learn-page__body {
+    gap: var(--space-xs);
+  }
+}

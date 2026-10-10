@@ -1,0 +1,328 @@
+{
+  "characters": [
+    {
+      "_id": "ch_0000",
+      "char": "一",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "order": 0,
+      "tags": [
+        "数字"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0001",
+      "char": "丁",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "order": 1,
+      "tags": [
+        "自然"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0002",
+      "char": "丂",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 3,
+      "order": 2,
+      "tags": [
+        "动物"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0003",
+      "char": "七",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "order": 3,
+      "tags": [
+        "生活"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0004",
+      "char": "丄",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "order": 4,
+      "tags": [
+        "数字"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0005",
+      "char": "丅",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 3,
+      "order": 5,
+      "tags": [
+        "自然"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0006",
+      "char": "丆",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "order": 6,
+      "tags": [
+        "动物"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0007",
+      "char": "万",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "order": 7,
+      "tags": [
+        "生活"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0008",
+      "char": "丈",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 3,
+      "order": 8,
+      "tags": [
+        "数字"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0009",
+      "char": "三",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "order": 9,
+      "tags": [
+        "自然"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0010",
+      "char": "上",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "order": 10,
+      "tags": [
+        "动物"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0011",
+      "char": "下",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 3,
+      "order": 11,
+      "tags": [
+        "生活"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0012",
+      "char": "丌",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "order": 12,
+      "tags": [
+        "数字"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0013",
+      "char": "不",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "order": 13,
+      "tags": [
+        "自然"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0014",
+      "char": "与",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 3,
+      "order": 14,
+      "tags": [
+        "动物"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0015",
+      "char": "丏",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "order": 15,
+      "tags": [
+        "生活"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0016",
+      "char": "丐",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "order": 16,
+      "tags": [
+        "数字"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0017",
+      "char": "丑",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 3,
+      "order": 17,
+      "tags": [
+        "自然"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0018",
+      "char": "丒",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "order": 18,
+      "tags": [
+        "动物"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0019",
+      "char": "专",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "order": 19,
+      "tags": [
+        "生活"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0020",
+      "char": "且",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 3,
+      "order": 20,
+      "tags": [
+        "数字"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0021",
+      "char": "丕",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "order": 21,
+      "tags": [
+        "自然"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_0022",
+      "char": "世",
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "order": 22,
+      "tags": [
+        "动物"
+      ],
+      "status": "published"
+    }
+  ],
+  "poems": [
+    {
+      "_id": "pm_1",
+      "title": "静夜思",
+      "difficulty": 1,
+      "grade": 1,
+      "status": "published"
+    },
+    {
+      "_id": "pm_2",
+      "title": "咏鹅",
+      "difficulty": 2,
+      "grade": 1,
+      "status": "published"
+    },
+    {
+      "_id": "pm_3",
+      "title": "春晓",
+      "difficulty": 1,
+      "grade": 1,
+      "status": "published"
+    }
+  ],
+  "stories": [
+    {
+      "_id": "st_1",
+      "title": "小马喝水",
+      "grade": 1,
+      "status": "published"
+    },
+    {
+      "_id": "st_2",
+      "title": "白云",
+      "grade": 1,
+      "status": "published"
+    }
+  ],
+  "targetGrade": 1,
+  "charsPerLesson": 6,
+  "overrides": {
+    "literacy:1:1": {
+      "order": 3,
+      "tag_label": "数字宝宝"
+    },
+    "literacy:1:2": {
+      "tag_label": "我的身体"
+    }
+  }
+}

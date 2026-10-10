@@ -1,0 +1,61 @@
+# 依赖
+node_modules
+.pnpm-store
+
+# Python（后端 apps/api）
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# 构建产物
+dist
+dist-ssr
+build
+*.tsbuildinfo
+
+# 环境与密钥（绝不入库）
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# 日志
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 素材存储（ASSET_DIR 的宿主默认值）—— 运行时由后台上传/生成，
+# 不入库；可版本管理的是导入种子 content/（见 content/assets/）
+/data/
+
+# 数据库备份导出（scripts/db/backup.sh）
+backups/
+
+# 邀请码签发产物（scripts/api/issue-invites.sh）
+# 生成物不入库：明文 .csv 绝不入库；只含哈希的 .json 也属本地签发产物，
+# 需导入时在本机/服务器上执行 seed 即可。规范种子仍是 01_invites.json。
+scripts/seed/data/invites-*.csv
+scripts/seed/data/invites-*.json
+
+# 编辑器与系统
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.sw?
+
+# AI 会话工作目录（记忆/临时脚本，不入库）
+.workbuddy/
+
+# 关卡生成一致性检查的中间产物（由 tests/test_lessons_parity.py 现场生成）
+scripts/test-generated-py.json

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="小狗头像">
+  <circle cx="64" cy="64" r="62" fill="#EFE0CC"/>
+  <ellipse cx="34" cy="62" rx="13" ry="24" fill="#8D6440" transform="rotate(14 34 62)"/>
+  <ellipse cx="94" cy="62" rx="13" ry="24" fill="#8D6440" transform="rotate(-14 94 62)"/>
+  <circle cx="64" cy="72" r="36" fill="#B07A4A"/>
+  <ellipse cx="64" cy="88" rx="22" ry="17" fill="#F2E2CE"/>
+  <circle cx="51" cy="68" r="5.2" fill="#3A2E39"/>
+  <circle cx="77" cy="68" r="5.2" fill="#3A2E39"/>
+  <circle cx="52.6" cy="66.4" r="1.7" fill="#FFFFFF"/>
+  <circle cx="78.6" cy="66.4" r="1.7" fill="#FFFFFF"/>
+  <ellipse cx="64" cy="82" rx="6" ry="5" fill="#3A2E39"/>
+  <path d="M64 87 v4" stroke="#3A2E39" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+  <path d="M59 93 q5 4 10 0" stroke="#3A2E39" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</svg>

@@ -1,0 +1,84 @@
+<!--
+  应用图标（SVG sprite）。
+
+  ## 设计规范 —— 与学习地图同一套视觉语汇
+  地图里的关卡节点是「**圆形 + 柔和底色 + 主体色 + 顶部高光**」，
+  图标沿用同一套语汇，于是整个 App 看起来是同一本绘本，而不是
+  一堆拼凑的第三方图标。
+
+  规则（改图标时必须遵守，否则又会风格分裂）：
+    1. **圆形浅色底** + 主体色图形 —— 每个图标自带一个柔和的圆形，
+       相当于地图节点的缩略版；
+    2. **圆头圆角**（`stroke-linecap="round"` / `stroke-linejoin="round"`）——
+       ⛔ 儿童界面上尖角会显得生硬；
+    3. 描边 2（24 视窗下），内部细节线 1.6 —— 保持视觉重量一致，
+       细线条在小尺寸下会糊成一团；
+    4. ⛔ **不要用 `currentColor` 作主体色** —— 要用下面的固定色，
+       这样图标之间才有「同一套配色」的观感；`currentColor` 会让每个
+       入口各自继承文字色，色相全乱。
+
+  颜色取自地图三块知识块与关卡节点（绿 / 蓝 / 暖橙），与背景对比度 ≥ 3:1。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <!-- 今日：太阳（一天的开始）。底 #fff3d6 / 主体 #f5a524 -->
+  <symbol id="i-home" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="11" fill="#fff3d6" />
+    <circle cx="12" cy="12" r="4.2" fill="#f5a524" />
+    <path d="M12 4.2v1.8M12 18v1.8M4.2 12H6M18 12h1.8M6.5 6.5l1.3 1.3M16.2 16.2l1.3 1.3M17.5 6.5l-1.3 1.3M7.8 16.2l-1.3 1.3"
+      stroke="#f5a524" stroke-width="1.8" stroke-linecap="round" />
+  </symbol>
+
+  <!-- 学习地图：蜿蜒小路 + 两个节点 —— 与 Canvas 赛道同一意象。底 #dff0c8 / 主体 #5a9e3d -->
+  <symbol id="i-map" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="11" fill="#dff0c8" />
+    <path d="M7 18c0-3.5 2-4 5-4.6 3-.6 5-1.4 5-4.4"
+      fill="none" stroke="#8fc46e" stroke-width="3.2" stroke-linecap="round" />
+    <circle cx="7" cy="18" r="2.6" fill="#ffd166" stroke="#f0a92e" stroke-width="1.4" />
+    <circle cx="17" cy="9" r="2.6" fill="#7ec8ff" stroke="#3a86ff" stroke-width="1.4" />
+  </symbol>
+
+  <!-- 复习：循环箭头（再来一遍）。底 #e0eefb / 主体 #3a86ff -->
+  <symbol id="i-review" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="11" fill="#e0eefb" />
+    <path d="M7.5 12a4.5 4.5 0 1 1 1.4 3.3" fill="none" stroke="#3a86ff" stroke-width="2.2" stroke-linecap="round" />
+    <path d="M6.4 9.2l.4 3.2 3.2-.4" fill="none" stroke="#3a86ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  </symbol>
+
+  <!-- 错题本：翻开的书 + 对勾（做对了）。底 #fde3e0 / 主体 #e05c4b -->
+  <symbol id="i-wrong" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="11" fill="#fde3e0" />
+    <path d="M12 7.6C10.4 6.3 8.6 5.8 6 5.8v10.4c2.6 0 4.4.5 6 1.8 1.6-1.3 3.4-1.8 6-1.8V5.8c-2.6 0-4.4.5-6 1.8z"
+      fill="none" stroke="#e05c4b" stroke-width="1.9" stroke-linejoin="round" />
+    <path d="M12 7.6v10.4" stroke="#e05c4b" stroke-width="1.6" stroke-linecap="round" />
+    <path d="M9 12.6l1.7 1.7 3.4-3.6" fill="none" stroke="#e05c4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </symbol>
+
+  <!-- 家长报告：柱状图。底 #fde8d0 / 主体 #e07a3c -->
+  <symbol id="i-report" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="11" fill="#fde8d0" />
+    <rect x="6.6" y="12.4" width="2.8" height="5" rx="1.4" fill="#e07a3c" />
+    <rect x="10.6" y="9" width="2.8" height="8.4" rx="1.4" fill="#e07a3c" />
+    <rect x="14.6" y="6.4" width="2.8" height="11" rx="1.4" fill="#e07a3c" />
+  </symbol>
+
+  <!-- 设置：齿轮。底 #ece7dd / 主体 #7a6a55 -->
+  <symbol id="i-settings" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="11" fill="#ece7dd" />
+    <circle cx="12" cy="12" r="3" fill="none" stroke="#7a6a55" stroke-width="2.2" />
+    <path d="M12 4.4v2.2M12 17.4v2.2M4.4 12h2.2M17.4 12h2.2M6.6 6.6l1.6 1.6M15.8 15.8l1.6 1.6M17.4 6.6l-1.6 1.6M8.2 15.8l-1.6 1.6"
+      stroke="#7a6a55" stroke-width="2.2" stroke-linecap="round" />
+  </symbol>
+
+  <!-- 古诗：竖排诗页（与「读一读」区分：这是诗，不是一般文章）。底 #fde8d0 / 主体 #c25b34 -->
+  <symbol id="i-poem" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="11" fill="#fde8d0" />
+    <rect x="6.8" y="5" width="10.4" height="14" rx="2" fill="#fff8ee" stroke="#c25b34" stroke-width="1.9" />
+    <path d="M9.6 8.4v7.2M12.4 8.4v7.2" stroke="#c25b34" stroke-width="1.6" stroke-linecap="round" />
+  </symbol>
+
+  <!-- 返回箭头。底 #eef0ea / 主体 #6b7a5a -->
+  <symbol id="i-back" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="11" fill="#eef0ea" />
+    <path d="M14.4 7.6L9.2 12l5.2 4.4" fill="none" stroke="#6b7a5a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  </symbol>
+</svg>

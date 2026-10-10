@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="狐狸头像">
+  <circle cx="64" cy="64" r="62" fill="#FFE6D2"/>
+  <path d="M32 54 L34 16 L62 40 Z" fill="#E8743B"/>
+  <path d="M96 54 L94 16 L66 40 Z" fill="#E8743B"/>
+  <path d="M39 48 L40.5 29 L54 41 Z" fill="#F7B08A"/>
+  <path d="M89 48 L87.5 29 L74 41 Z" fill="#F7B08A"/>
+  <circle cx="64" cy="72" r="38" fill="#F0864C"/>
+  <ellipse cx="64" cy="90" rx="24" ry="19" fill="#FFFFFF"/>
+  <circle cx="51" cy="68" r="5.2" fill="#3A2E39"/>
+  <circle cx="77" cy="68" r="5.2" fill="#3A2E39"/>
+  <circle cx="52.6" cy="66.4" r="1.7" fill="#FFFFFF"/>
+  <circle cx="78.6" cy="66.4" r="1.7" fill="#FFFFFF"/>
+  <ellipse cx="64" cy="85" rx="5.2" ry="3.8" fill="#3A2E39"/>
+  <path d="M64 88.8 v3.4" stroke="#3A2E39" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+  <path d="M60 94 q4 3.2 8 0" stroke="#3A2E39" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</svg>

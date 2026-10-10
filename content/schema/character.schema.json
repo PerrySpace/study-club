@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://study-club/schema/character.schema.json",
+  "title": "汉字字条",
+  "type": "object",
+  "required": [
+    "_id", "char", "pinyin", "pinyin_plain", "tone", "is_polyphone", "polyphone_readings",
+    "radical", "stroke_count", "structure", "stroke_order_ref", "meaning", "words", "sentences",
+    "pictograph", "image_ref", "audio_ref", "grade", "level", "difficulty", "tags",
+    "similar_chars", "antonym", "synonyms", "unit_refs", "status", "version", "created_at", "updated_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_id": { "type": "string", "minLength": 1 },
+    "char": { "type": "string", "minLength": 1, "maxLength": 1 },
+    "pinyin": { "type": "string", "minLength": 1 },
+    "pinyin_plain": { "type": "string", "pattern": "^[a-zv]+$" },
+    "tone": { "type": "integer", "minimum": 0, "maximum": 4 },
+    "is_polyphone": { "type": "boolean" },
+    "polyphone_readings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pinyin", "tone", "meaning", "usage", "note"],
+        "additionalProperties": false,
+        "properties": {
+          "pinyin": { "type": "string" },
+          "tone": { "type": "integer", "minimum": 0, "maximum": 4 },
+          "meaning": { "type": "string" },
+          "usage": { "type": "string" },
+          "note": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "radical": { "type": "string", "minLength": 1 },
+    "stroke_count": { "type": "integer", "minimum": 1, "maximum": 64 },
+    "structure": { "enum": ["独体", "左右", "上下", "半包围", "全包围", "品字"] },
+    "stroke_order_ref": { "type": ["string", "null"] },
+    "meaning": { "type": "string", "minLength": 1, "maxLength": 40 },
+    "words": { "type": "array", "minItems": 3, "maxItems": 5, "items": { "type": "string" } },
+    "sentences": { "type": "array", "minItems": 1, "maxItems": 3, "items": { "type": "string" } },
+    "pictograph": { "type": ["string", "null"] },
+    "image_ref": { "type": ["string", "null"] },
+    "audio_ref": { "type": ["string", "null"] },
+    "grade": { "type": "integer", "minimum": 0, "maximum": 6 },
+    "level": { "enum": ["sprout", "bridge", "grade1", "grade2", "grade3", "grade4", "grade5", "grade6"] },
+    "difficulty": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "similar_chars": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1 } },
+    "antonym": { "type": ["string", "null"] },
+    "synonyms": { "type": "array", "items": { "type": "string" } },
+    "unit_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["unit_id", "unit_name", "group_name", "order"],
+        "additionalProperties": false,
+        "properties": {
+          "unit_id": { "type": "string" },
+          "unit_name": { "type": "string" },
+          "group_name": { "type": ["string", "null"] },
+          "order": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "status": { "enum": ["draft", "pending_review", "published", "offline", "deleted"] },
+    "version": { "type": "integer", "minimum": 1 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

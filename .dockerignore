@@ -1,0 +1,45 @@
+# ============================================================================
+# 仓库根 .dockerignore
+#
+# 作用域说明（容易搞错）：
+#   构建上下文是**仓库根**的镜像是 web / admin（见 deploy/*/docker-compose.yml
+#   的 `context: ../..`）。而 apps/api 的上下文是 apps/api 自己，由
+#   apps/api/.dockerignore 生效 —— 两个文件互不影响。
+#
+# ⚠️ 这里只排除「镜像内会重新生成」或「明确不需要进镜像」的东西。
+#    绝不能排除 packages/ content/ apps/ deploy/ —— 那些是构建产物与运行时的必需输入。
+# ============================================================================
+
+# 依赖（镜像内 pnpm install 重新安装）
+**/node_modules
+
+# 构建产物（镜像内重新构建）
+**/dist
+**/.vite
+
+# 版本控制与本地覆盖配置（运行时由 compose 的 env_file 注入，不 COPY 进镜像）
+.git
+.gitignore
+.dockerignore
+**/.env
+**/.env.local
+
+# 设计与工程文档：不参与镜像构建（镜像里要的是代码与内容）
+docs
+
+# 本地备份与临时数据
+backups
+**/*.log
+scripts/seed/data/invites-*.csv
+
+# Python 缓存
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+**/.ruff_cache
+**/.mypy_cache
+
+# 编辑器
+**/.DS_Store
+**/.idea
+**/.vscode

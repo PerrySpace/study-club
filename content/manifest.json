@@ -1,0 +1,58 @@
+{
+  "content_version": "1.1.0",
+  "min_app_version": "0.1.0",
+  "updated_at": "2026-10-10T05:33:27.117Z",
+  "counts": {
+    "characters": 83,
+    "poems": 3,
+    "units": 7,
+    "lessons": 14,
+    "stories": 5,
+    "readings": 6,
+    "badges": 7
+  },
+  "files": [
+    {
+      "path": "characters/grade-1.json",
+      "checksum": "sha256:3e396609106eb941d75923beb93c7271165484d8b09ff1515f2de79cffc6d060",
+      "bytes": 87570,
+      "count": 83
+    },
+    {
+      "path": "poems/required-75.json",
+      "checksum": "sha256:130558b901daf4e491667a9f200333ca78185045783b626a7a6404a4131a682f",
+      "bytes": 4577,
+      "count": 3
+    },
+    {
+      "path": "lessons/units.json",
+      "checksum": "sha256:da6cc05d1f3ce9444fd77dd6ee9753b67626fe183d5a217548a1ad70a9c1a3ef",
+      "bytes": 4312,
+      "count": 7
+    },
+    {
+      "path": "lessons/lessons.json",
+      "checksum": "sha256:301dbfdc5760194639f832d74638b1d343e0a82ea663d484d3b89480befb39ff",
+      "bytes": 7822,
+      "count": 14
+    },
+    {
+      "path": "stories/stories.json",
+      "checksum": "sha256:c4d87f999db3c3de09b916f42dcd930c118db9f109c4b9570ec433d9e3753515",
+      "bytes": 2388,
+      "count": 5
+    },
+    {
+      "path": "readings/readings.json",
+      "checksum": "sha256:a42cc103edec145c0b82832a414c763f6a9ab78b2a3557cbc1a2c8a6bd0bd25e",
+      "bytes": 13576,
+      "count": 6
+    },
+    {
+      "path": "badges/badges.json",
+      "checksum": "sha256:c586a181af6880165847fc3a24207245b384213f2a537dd9fff455690537e118",
+      "bytes": 2194,
+      "count": 7
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "collection": "content_manifest",
+  "feature": "内容包清单（单文档）",
+  "source": "content/manifest.json",
+  "single_doc_id": "current",
+  "unique_key": "_id"
+}

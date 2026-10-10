@@ -1,0 +1,9 @@
+{
+  "collection": "lessons",
+  "feature": "关卡编排（运行时生成）",
+  "generated": "lessons",
+  "target_grade": 1,
+  "chars_per_lesson": 6,
+  "overrides": "scripts/seed/data/lesson_overrides.json",
+  "unique_key": "_id"
+}

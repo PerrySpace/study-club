@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="猫头鹰头像">
+  <circle cx="64" cy="64" r="62" fill="#EFE3F7"/>
+  <path d="M28 44 L30 22 L52 36 Z" fill="#7E57C2"/>
+  <path d="M100 44 L98 22 L76 36 Z" fill="#7E57C2"/>
+  <circle cx="64" cy="70" r="38" fill="#9C7BD6"/>
+  <circle cx="50" cy="66" r="16" fill="#FFFFFF"/>
+  <circle cx="78" cy="66" r="16" fill="#FFFFFF"/>
+  <circle cx="50" cy="66" r="7" fill="#3A2E39"/>
+  <circle cx="78" cy="66" r="7" fill="#3A2E39"/>
+  <circle cx="52.4" cy="63.4" r="2.4" fill="#FFFFFF"/>
+  <circle cx="80.4" cy="63.4" r="2.4" fill="#FFFFFF"/>
+  <path d="M64 74 L58 84 L70 84 Z" fill="#F5A623"/>
+  <path d="M46 98 q18 10 36 0" stroke="#7E57C2" stroke-width="3" stroke-linecap="round" fill="none"/>
+</svg>

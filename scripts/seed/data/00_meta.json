@@ -1,0 +1,21 @@
+{
+  "feature": "种子数据说明（不导入）",
+  "note": "本目录每个文件对应一个集合/功能，按文件名前缀顺序导入。字段定义见 docs/03-数据设计/02-数据字典.md。",
+  "order": [
+    "01_invites.json         邀请码（只放哈希，不放明文码）",
+    "02_accounts.json        管理员账号（passcode_hash 留空，由部署者填）",
+    "03_badges.json          徽章（来自 content/badges/badges.json）",
+    "04_characters.json      汉字（来自 content/characters/grade-1.json）",
+    "05_poems.json           古诗（来自 content/poems/required-75.json）",
+    "06_curriculum_units.json 自编单元（来自 content/lessons/units.json）",
+    "07_lessons.json         关卡（来自 content/lessons/lessons.json）",
+    "08_stories.json         故事与儿歌（来自 content/stories/stories.json）",
+    "09_assets.json          素材（默认空，素材可后续补）",
+    "10_manifest.json        内容包清单（来自 content/manifest.json）"
+  ],
+  "usage": {
+    "all": "scripts/seed/seed.sh",
+    "only": "scripts/seed/seed.sh --only characters",
+    "drop": "scripts/seed/seed.sh --drop"
+  }
+}

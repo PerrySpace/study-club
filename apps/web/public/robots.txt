@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# 本应用为学生端 + 家长端学习界面，无需要索引的敏感内容。
+Sitemap:

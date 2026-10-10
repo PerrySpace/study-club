@@ -1,0 +1,345 @@
+{
+  "content_version": "1.0.0",
+  "items": [
+    {
+      "_id": "ls_g1_01",
+      "title": "数一数",
+      "level": "grade1",
+      "order": 1,
+      "character_ids": [
+        "ch_4e00",
+        "ch_4e8c",
+        "ch_4e09",
+        "ch_56db",
+        "ch_4e94"
+      ],
+      "game_types": [
+        "image-choice",
+        "audio-choice"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": null,
+        "min_stars": 0
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-01",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_02",
+      "title": "接着数",
+      "level": "grade1",
+      "order": 2,
+      "character_ids": [
+        "ch_516d",
+        "ch_4e03",
+        "ch_516b",
+        "ch_4e5d",
+        "ch_5341"
+      ],
+      "game_types": [
+        "image-choice",
+        "pinyin-match"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_01",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-01",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_03",
+      "title": "认识我自己",
+      "level": "grade1",
+      "order": 3,
+      "character_ids": [
+        "ch_4eba",
+        "ch_53e3",
+        "ch_624b"
+      ],
+      "game_types": [
+        "image-choice",
+        "word-build"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_02",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-02",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_04",
+      "title": "五官本领大",
+      "level": "grade1",
+      "order": 4,
+      "character_ids": [
+        "ch_8db3",
+        "ch_76ee",
+        "ch_8033"
+      ],
+      "game_types": [
+        "image-choice",
+        "audio-choice"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_03",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-02",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_05",
+      "title": "太阳和月亮",
+      "level": "grade1",
+      "order": 5,
+      "character_ids": [
+        "ch_65e5",
+        "ch_6708",
+        "ch_6c34",
+        "ch_706b",
+        "ch_6728"
+      ],
+      "game_types": [
+        "image-choice",
+        "pinyin-match"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_04",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-03",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_06",
+      "title": "大地与山川",
+      "level": "grade1",
+      "order": 6,
+      "character_ids": [
+        "ch_91d1",
+        "ch_571f",
+        "ch_5929",
+        "ch_5730",
+        "ch_5c71"
+      ],
+      "game_types": [
+        "image-choice",
+        "word-build"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_05",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-03",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_07",
+      "title": "石头和田地",
+      "level": "grade1",
+      "order": 7,
+      "character_ids": [
+        "ch_77f3",
+        "ch_7530",
+        "ch_98ce",
+        "ch_4e91",
+        "ch_96e8"
+      ],
+      "game_types": [
+        "image-choice",
+        "audio-choice"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_06",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-03",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_08",
+      "title": "上面和下面",
+      "level": "grade1",
+      "order": 8,
+      "character_ids": [
+        "ch_4e0a",
+        "ch_4e0b",
+        "ch_5927",
+        "ch_5c0f"
+      ],
+      "game_types": [
+        "image-choice",
+        "pinyin-match"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_07",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-04",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_09",
+      "title": "多一点少一点",
+      "level": "grade1",
+      "order": 9,
+      "character_ids": [
+        "ch_591a",
+        "ch_5c11",
+        "ch_597d"
+      ],
+      "game_types": [
+        "image-choice",
+        "word-build"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_08",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-04",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_10",
+      "title": "我要上学",
+      "level": "grade1",
+      "order": 10,
+      "character_ids": [
+        "ch_5b66",
+        "ch_751f",
+        "ch_4e66",
+        "ch_672c"
+      ],
+      "game_types": [
+        "image-choice",
+        "audio-choice"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_09",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-05",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_11",
+      "title": "读书和出门",
+      "level": "grade1",
+      "order": 11,
+      "character_ids": [
+        "ch_6587",
+        "ch_95e8",
+        "ch_8f66"
+      ],
+      "game_types": [
+        "image-choice",
+        "pinyin-match"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_10",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-05",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_12",
+      "title": "动物朋友",
+      "level": "grade1",
+      "order": 12,
+      "character_ids": [
+        "ch_9a6c",
+        "ch_725b",
+        "ch_7f8a",
+        "ch_9e1f",
+        "ch_9c7c",
+        "ch_866b"
+      ],
+      "game_types": [
+        "image-choice",
+        "audio-choice"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_11",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-06",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_13",
+      "title": "花草树木",
+      "level": "grade1",
+      "order": 13,
+      "character_ids": [
+        "ch_82b1",
+        "ch_8349",
+        "ch_6811",
+        "ch_679c"
+      ],
+      "game_types": [
+        "image-choice",
+        "word-build"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_12",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-07",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ls_g1_14",
+      "title": "颜色和动作",
+      "level": "grade1",
+      "order": 14,
+      "character_ids": [
+        "ch_767d",
+        "ch_7ea2",
+        "ch_6765",
+        "ch_53bb",
+        "ch_770b"
+      ],
+      "game_types": [
+        "image-choice",
+        "pinyin-match"
+      ],
+      "unlock_rules": {
+        "required_lesson_id": "ls_g1_13",
+        "min_stars": 1
+      },
+      "poem_id": null,
+      "unit_id": "u-g1-07",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z"
+    }
+  ]
+}

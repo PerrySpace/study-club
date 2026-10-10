@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://study-club/schema/manifest.schema.json",
+  "title": "内容包清单",
+  "type": "object",
+  "required": ["content_version", "min_app_version", "updated_at", "counts", "files"],
+  "additionalProperties": false,
+  "properties": {
+    "content_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "min_app_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "使用此内容包所需的最低应用版本；老客户端必须忽略要求更高版本的更新"
+    },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "counts": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "checksum", "bytes", "count"],
+        "additionalProperties": false,
+        "properties": {
+          "path": { "type": "string" },
+          "checksum": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "bytes": { "type": "integer", "minimum": 0 },
+          "count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  }
+}

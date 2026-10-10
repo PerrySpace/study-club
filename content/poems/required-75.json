@@ -1,0 +1,151 @@
+{
+  "content_version": "1.0.0",
+  "items": [
+    {
+      "_id": "po_jingyesi",
+      "title": "静夜思",
+      "dynasty": "唐",
+      "author": "李白",
+      "lines": [
+        {
+          "text": "床前明月光",
+          "pinyin": "chuáng qián míng yuè guāng",
+          "meaning": "床前洒满了明亮的月光"
+        },
+        {
+          "text": "疑是地上霜",
+          "pinyin": "yí shì dì shàng shuāng",
+          "meaning": "好像是地上结了一层白霜"
+        },
+        {
+          "text": "举头望明月",
+          "pinyin": "jǔ tóu wàng míng yuè",
+          "meaning": "抬起头望着天上的明月"
+        },
+        {
+          "text": "低头思故乡",
+          "pinyin": "dī tóu sī gù xiāng",
+          "meaning": "低下头就想起了远方的家乡"
+        }
+      ],
+      "full_text": "床前明月光，疑是地上霜，举头望明月，低头思故乡",
+      "audio_ref": null,
+      "appreciation": "诗人离家在外，夜里看到月光，想起了家乡。短短四句话，写出了想家的心情。",
+      "background": "李白在外旅行时写下这首诗。",
+      "key_characters": [
+        "月",
+        "明",
+        "光",
+        "思",
+        "乡"
+      ],
+      "grade": 1,
+      "unit_ref": null,
+      "theme_tags": [
+        "思乡"
+      ],
+      "difficulty": 1,
+      "source": "课标必背",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "po_yonge",
+      "title": "咏鹅",
+      "dynasty": "唐",
+      "author": "骆宾王",
+      "lines": [
+        {
+          "text": "鹅",
+          "pinyin": "é",
+          "meaning": "大白鹅"
+        },
+        {
+          "text": "曲项向天歌",
+          "pinyin": "qū xiàng xiàng tiān gē",
+          "meaning": "弯着脖子对着天空唱歌"
+        },
+        {
+          "text": "白毛浮绿水",
+          "pinyin": "bái máo fú lǜ shuǐ",
+          "meaning": "雪白的羽毛浮在碧绿的水面上"
+        },
+        {
+          "text": "红掌拨清波",
+          "pinyin": "hóng zhǎng bō qīng bō",
+          "meaning": "红红的脚掌拨动着清清的水波"
+        }
+      ],
+      "full_text": "鹅，曲项向天歌，白毛浮绿水，红掌拨清波",
+      "audio_ref": null,
+      "appreciation": "诗人小时候看鹅游泳，把鹅的样子写得很像。白毛、绿水、红掌，颜色真好看。",
+      "background": "相传是骆宾王七岁时写的。",
+      "key_characters": [
+        "鹅",
+        "白",
+        "水",
+        "红"
+      ],
+      "grade": 1,
+      "unit_ref": null,
+      "theme_tags": [
+        "咏物"
+      ],
+      "difficulty": 1,
+      "source": "课标必背",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "po_chunxiao",
+      "title": "春晓",
+      "dynasty": "唐",
+      "author": "孟浩然",
+      "lines": [
+        {
+          "text": "春眠不觉晓",
+          "pinyin": "chūn mián bù jué xiǎo",
+          "meaning": "春天睡得香，不知不觉天就亮了"
+        },
+        {
+          "text": "处处闻啼鸟",
+          "pinyin": "chù chù wén tí niǎo",
+          "meaning": "到处都听见小鸟在叫"
+        },
+        {
+          "text": "夜来风雨声",
+          "pinyin": "yè lái fēng yǔ shēng",
+          "meaning": "想起夜里听到的风雨声"
+        },
+        {
+          "text": "花落知多少",
+          "pinyin": "huā luò zhī duō shǎo",
+          "meaning": "不知道有多少花被吹落了"
+        }
+      ],
+      "full_text": "春眠不觉晓，处处闻啼鸟，夜来风雨声，花落知多少",
+      "audio_ref": null,
+      "appreciation": "诗人一觉醒来，听到鸟叫，想起昨晚的风雨，心里惦记着院子里的花。",
+      "background": "孟浩然隐居时写的春天小诗。",
+      "key_characters": [
+        "春",
+        "鸟",
+        "风",
+        "雨",
+        "花"
+      ],
+      "grade": 1,
+      "unit_ref": null,
+      "theme_tags": [
+        "写景"
+      ],
+      "difficulty": 2,
+      "source": "课标必背",
+      "status": "published",
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    }
+  ]
+}

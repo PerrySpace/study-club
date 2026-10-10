@@ -1,0 +1,60 @@
+# ============================================================================
+# deploy/mongo —— MongoDB 7（单服务独立编排）
+#
+# 用法：
+#   cd deploy/mongo && docker compose --env-file ../../.env up -d
+#   或    scripts/db/start.sh
+#
+# 网络：network_mode: host —— 容器直接使用宿主网络栈，
+#       因此 MongoDB 监听在宿主的 127.0.0.1:27017，
+#       api / web 容器与宿主上的客户端都以 localhost:27017 连接。
+#
+#   注意：host 网络下不可使用 ports 映射（compose 会报错）。
+#   若在 Docker Desktop for macOS/Windows 上未启用 host 网络，
+#   请改用 bridge 模式（见 README）。
+# ============================================================================
+
+name: study-club-mongo
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: sc-mongo
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      # 启用鉴权时同时填写用户名与密码；两者都为空则不启用鉴权（本地开发默认）
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-}
+      MONGO_INITDB_DATABASE: ${MONGODB_DB:-study_club}
+    # 监听地址：默认 0.0.0.0（本机开发，方便容器与同网段的手机调试）。
+    # ⚠️ 部署到共享局域网或公网机器时必须设成 127.0.0.1：
+    #   本服务**没有任何鉴权**，绑 0.0.0.0 等于把全部数据敞开给同网段。
+    #   改成 127.0.0.1 不影响 api / web —— 它们同为 host 网络，走 localhost 即可。
+    command: >
+      mongod
+      --bind_ip ${MONGO_BIND_IP:-0.0.0.0}
+      --port ${MONGO_PORT:-27017}
+      --wiredTigerCacheSizeGB ${MONGO_CACHE_GB:-0.5}
+    volumes:
+      - sc-mongo-data:/data/db
+      - sc-mongo-config:/data/configdb
+      # 初始化脚本：仅在该数据卷首次创建时执行
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok' || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  sc-mongo-data:
+    name: study-club-mongo-data
+  sc-mongo-config:
+    name: study-club-mongo-config

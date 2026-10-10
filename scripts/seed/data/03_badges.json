@@ -1,0 +1,7 @@
+{
+  "collection": "badges",
+  "feature": "徽章定义",
+  "source": "content/badges/badges.json",
+  "strip_wrapper": true,
+  "unique_key": "_id"
+}

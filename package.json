@@ -1,0 +1,30 @@
+{
+  "name": "study-club",
+  "version": "0.1.0",
+  "private": true,
+  "description": "小学课内识字 + 古诗文启蒙应用 —— 免费开放、本地优先、可自托管、面向开源",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @study-club/web dev",
+    "dev:admin": "pnpm --filter @study-club/admin dev",
+    "build": "pnpm -r --filter \"./packages/**\" build && pnpm --filter @study-club/web build",
+    "build:admin": "pnpm --filter @study-club/admin build",
+    "preview": "pnpm --filter @study-club/web preview",
+    "preview:admin": "pnpm --filter @study-club/admin preview",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "content:validate": "node scripts/content/validate.mjs",
+    "content:manifest": "node scripts/content/build-manifest.mjs",
+    "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules packages/*/dist apps/web/dist apps/admin/dist"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "typescript": "^5.6.3"
+  }
+}

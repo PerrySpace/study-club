@@ -1,0 +1,7 @@
+{
+  "collection": "characters",
+  "feature": "汉字主表（核心资产）",
+  "source": "content/characters/grade-1.json",
+  "strip_wrapper": true,
+  "unique_key": "_id"
+}

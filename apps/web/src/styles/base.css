@@ -1,0 +1,195 @@
+/**
+ * 重置与基础样式。
+ * 依赖顺序：tokens.css（变量） → responsive.css（外壳栅格） → 本文件。
+ */
+@import './tokens.css';
+@import './responsive.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /*
+   * 交互防误触（总开关，02-2 §3.3）。孩子是「用手指按住整块屏幕」在学的，
+   * 浏览器默认行为会把界面弄乱，这里在**根节点**一次性关掉三类：
+   *   ① 长按弹出的「拷贝 / 查询 / 分享」浮层 —— `-webkit-touch-callout: none`
+   *   ② 点到元素时那层灰色高亮 —— `-webkit-tap-highlight-color: transparent`
+   *   ③ 双指捏合 / 双击放大 —— `touch-action`，具体值见下方 `@supports` 段
+   *      （基础值 `manipulation`，支持双值语法的内核升到 `pan-x pan-y`）。
+   *      viewport 里的 `user-scalable=no` 在 iOS 10+ 已被系统忽略，
+   *      真正能关上捏合的是 CSS + platform/dom-guard.ts 的事件兜底，两者缺一不可。
+   */
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  /* 挡住「双击放大」：这一条所有内核都认，是可用的最低保障 */
+  touch-action: manipulation;
+}
+
+/*
+ * `touch-action` 分档写法的原因（踩过才知道）：
+ *   - `manipulation` 只挡双击，**允许捏合**，所以它不够；
+ *   - `pan-x pan-y` 才是「允许滚动、禁止捏合」的正解，但 iOS Safari 不解析双值语法 ——
+ *     它会把整条声明丢弃（不是当成 none），于是退回默认的 `auto`。
+ * 所以：能认双值的内核（Chrome / Android / 桌面）用 `@supports` 升级到 `pan-x pan-y`；
+ * iOS 保持 `manipulation` 挡双击，捏合交给 `gesturestart` 事件拦。
+ */
+@supports (touch-action: pan-x pan-y) {
+  html,
+  body {
+    touch-action: pan-x pan-y;
+  }
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family:
+    system-ui,
+    -apple-system,
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft YaHei',
+    'Noto Sans SC',
+    sans-serif;
+  font-size: var(--font-body);
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* 与 html 一致：挡双击缩放；支持双值的内核由上方 @supports 段升级为「禁捏合」（02-2 §3.3） */
+  touch-action: manipulation;
+  /*
+   * 默认**全应用禁止选中**，需要选中的地方用 `.selectable` 单独开回来。
+   * 为什么反过来做（默认关、按需开）而不是给每个界面加 `.learning-surface`：
+   * 漏加一处的后果是「长按弹出菜单、学习被打断」，而这类漏加永远补不完 ——
+   * 反过来漏开一处的后果只是「某段文字选不中」，可接受得多。
+   */
+  user-select: none;
+  -webkit-user-select: none;
+  /* 关掉「下拉刷新 / 滚到头继续拖」的回弹：它们看起来就像页面自己在动 */
+  overscroll-behavior: none;
+}
+
+/* 老浏览器不支持 dvh 时降级（02-2 §3.4） */
+@supports not (min-height: 100dvh) {
+  body,
+  #app {
+    min-height: 100vh;
+  }
+}
+
+#app {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  /* 链接同样禁拖拽（拖动链接会在触屏上留下残影，还会顺手触发一次导航） */
+  -webkit-user-drag: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+  /*
+   * 禁止原生拖拽：触屏上手指按住图形再滑动，浏览器会把它拖出一个半透明残影，
+   * 松手后还可能触发「拖到地址栏 = 打开图片」。字卡 / 图标 / 插图都是这种元素。
+   * `-webkit-user-drag` 旧版 Safari 不认，所以 platform/dom-guard.ts 里还有一层
+   * `dragstart` 拦截兜底。
+   */
+  -webkit-user-drag: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  /*
+   * 输入控件必须能选中，否则连「改一个字」都做不到（光标放不进去 / 选不中文本）。
+   * body 上的 `user-select: none` 会被这里覆盖回来。
+   * ⚠️ 别把这一条删掉去「统一禁止选中」—— 登录页输错一个字符就改不动了。
+   */
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* 学习界面显式标注「此处禁止选中」（语义标记，等价于全局默认，便于对照规范阅读） */
+.learning-surface {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/*
+ * 需要摘抄的区域：报告页、释义、范例句子、弹窗正文。
+ * 只有这些地方允许长按选中与原生菜单 —— 家长在报告页复制一段分析时要用到。
+ */
+.selectable {
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* 仅指针设备使用 hover（触屏上 :hover 会粘住） */
+@media (hover: hover) {
+  .clickable:hover {
+    filter: brightness(1.02);
+  }
+}
+
+.clickable:active {
+  transform: scale(0.98);
+}
+
+.clickable {
+  transition:
+    transform 90ms ease-out,
+    filter 90ms ease-out;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-info);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}

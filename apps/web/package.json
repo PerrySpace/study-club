@@ -1,0 +1,32 @@
+{
+  "name": "@study-club/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "学习俱乐部 —— 学生端 + 家长端 Web PWA（手机 / iPad / 桌面）",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "echo \"lint 由仓库根 ESLint 配置统一提供（本版本可选）\""
+  },
+  "dependencies": {
+    "@study-club/core": "workspace:*",
+    "@study-club/subject-hanzi": "workspace:*",
+    "@study-club/tokens": "workspace:*",
+    "pinia": "^2.2.4",
+    "vue": "^3.5.12",
+    "vue-router": "^4.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "@vitejs/plugin-vue": "^5.1.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vite-plugin-pwa": "^0.21.1",
+    "vue-tsc": "^2.1.10",
+    "workbox-window": "^7.1.0"
+  }
+}

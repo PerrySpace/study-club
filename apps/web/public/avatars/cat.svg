@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="小猫头像">
+  <circle cx="64" cy="64" r="62" fill="#FFF3D1"/>
+  <path d="M30 56 L36 20 L64 42 Z" fill="#E9B949"/>
+  <path d="M98 56 L92 20 L64 42 Z" fill="#E9B949"/>
+  <path d="M41 50 L44 31 L57 42 Z" fill="#FFDCA8"/>
+  <path d="M87 50 L84 31 L71 42 Z" fill="#FFDCA8"/>
+  <circle cx="64" cy="74" r="36" fill="#F0C75E"/>
+  <path d="M18 76 h14 M18 85 h14" stroke="#D9A93B" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+  <path d="M96 76 h14 M96 85 h14" stroke="#D9A93B" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+  <circle cx="51" cy="71" r="5.4" fill="#3A2E39"/>
+  <circle cx="77" cy="71" r="5.4" fill="#3A2E39"/>
+  <circle cx="52.8" cy="69.2" r="1.8" fill="#FFFFFF"/>
+  <circle cx="78.8" cy="69.2" r="1.8" fill="#FFFFFF"/>
+  <ellipse cx="64" cy="84" rx="4.8" ry="3.6" fill="#D2795A"/>
+  <path d="M64 87.6 v3" stroke="#3A2E39" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+  <path d="M60 92 q4 3 8 0" stroke="#3A2E39" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+</svg>

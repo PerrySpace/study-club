@@ -1,0 +1,7 @@
+{
+  "collection": "assets",
+  "feature": "素材（音频/图片/笔顺）",
+  "unique_key": "storage_key",
+  "documents": [],
+  "note": "素材默认不入库；内容包里的 image_ref/audio_ref 目前均为 null。补素材时按 03-2 §4.5 增加 documents 条目，storage_key 唯一。"
+}

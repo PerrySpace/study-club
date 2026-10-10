@@ -1,0 +1,83 @@
+/**
+ * @study-club/tokens —— 设计变量（唯一来源，勿在各组件重复定义）
+ * 色板从原型的视觉体系提炼，命名保持语义化（不叫 hanzi / math，扩科不失效）。
+ */
+
+:root {
+  /* ---- 色板 ---- */
+  --color-primary: #ffd166;
+  --color-primary-strong: #f4b942;
+  --color-success: #32b67a;
+  --color-danger: #ef476f;
+  --color-info: #3a86ff;
+  --color-warn: #f08c00;
+
+  --color-bg: #f5fff8;
+  --color-surface: #ffffff;
+  --color-surface-alt: #eef7f1;
+  --color-border: #dfe8e2;
+
+  --color-text: #2c2c2a;
+  --color-text-muted: #5f5e5a;
+  --color-text-invert: #ffffff;
+
+  /* ---- 状态色（语义绑定，禁止拿来做装饰）----
+     ⛔ 「还没做 / 未解锁」一律用 --color-border / 中性灰，**不要用主色黄**：
+     孩子会把「黄色 = 可以点」学成一个稳定映射，若未解锁的关卡也是黄的，
+     点了没反应就等于在教他一个错误的对应关系。详见 docs/06-工程规范/04-视觉风格规范.md 规则 2.2。 */
+
+  /* ---- 场景色板（Canvas / 插画**装饰**专用）----
+     ⚠️ 只营造氛围，**不承载语义**。状态色请用上面的语义色。
+     这组值原本硬编码在 TrackCanvas.vue 里，收进令牌是为了让改主题不必翻组件。 */
+  --color-scene-sky: #dff0c8;         /* 草地渐层·上 */
+  --color-scene-grass: #bcdc9c;       /* 草地渐层·下 */
+  --color-scene-path: #f2f7e4;        /* 赛道路面 */
+  --color-scene-path-edge: #96be6e;   /* 赛道描边 */
+  --color-scene-trail-done: #7ed6a3;  /* 已走过的路面（绿） */
+  --color-scene-node-done: #4ec98a;   /* 节点·已完成（绿） */
+  --color-scene-node-done-edge: #2f9e69;
+  --color-scene-node-current: #7ec8ff;      /* 节点·当前（进行中） */
+  --color-scene-node-current-edge: #3a86ff;
+  --color-scene-node-locked: #b9c4ad;       /* 节点·未解锁（灰） */
+  --color-scene-tree: #4f9e4a;
+  --color-scene-flower-a: #f2a93b;
+  --color-scene-flower-b: #ef6f6c;
+  --color-scene-cloud: rgba(255, 255, 255, 0.75);
+
+  /* ---- 间距 ---- */
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* ---- 字号（儿童端正文 >= 18px，绝对下限 16px） ---- */
+  --font-xs: 12px;
+  --font-sm: 14px;
+  --font-md: 16px;
+  --font-body: 18px;
+  --font-lg: 20px;
+  --font-xl: 28px;
+  --font-2xl: 36px;
+
+  /* ---- 圆角 ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* ---- 阴影 ---- */
+  --shadow-sm: 0 1px 2px rgba(44, 44, 42, 0.06);
+  --shadow-md: 0 4px 12px rgba(44, 44, 42, 0.08);
+  --shadow-lg: 0 10px 28px rgba(44, 44, 42, 0.12);
+
+  /* ---- 布局 ---- */
+  --content-max: 880px;
+  --tap-min: 56px;
+  --tap-primary: 64px;
+  --nav-width-rail: 88px;
+  --nav-width-full: 240px;
+  --topbar-height: 56px;
+}

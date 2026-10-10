@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://study-club/schema/content-file.schema.json",
+  "title": "内容文件外层结构",
+  "description": "constraints/ 下每个 JSON 文件的外层结构；items 的具体 schema 见对应实体 schema。",
+  "type": "object",
+  "required": ["content_version", "items"],
+  "additionalProperties": false,
+  "properties": {
+    "content_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "items": { "type": "array" }
+  }
+}

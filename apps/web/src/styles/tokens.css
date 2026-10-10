@@ -1,0 +1,23 @@
+/**
+ * 设计变量 —— 唯一定义处在 packages/tokens/src/tokens.css，本文件只做转引与 Web 端增量。
+ * ⚠️ 勿在此覆盖色板/间距（见 06-1 §2.4）。
+ *
+ * 用相对路径 @import（而非包名），保证 dev / build 在任何解析器配置下都能落到同一份源文件；
+ * 包名入口（`@study-club/tokens/tokens.css`）在 package.json 的 exports 中同样可用。
+ */
+@import '../../../../packages/tokens/src/tokens.css';
+
+:root {
+  /* 字卡主字：小屏不过小、大屏不过大（见 02-2 §3.5） */
+  --font-card-glyph: clamp(120px, 26vw, 240px);
+
+  /* 层级 */
+  --z-nav: 20;
+  --z-topbar: 30;
+  --z-modal: 60;
+  --z-toast: 80;
+
+  /* 顶栏与底栏的安全区（刘海/灵动岛/Home 指示条） */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}

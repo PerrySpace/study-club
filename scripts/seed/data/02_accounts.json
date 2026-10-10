@@ -1,0 +1,24 @@
+{
+  "collection": "accounts",
+  "feature": "管理员账号（单管理员后台）",
+  "unique_key": "display_name",
+  "documents": [
+    {
+      "display_name": "管理员",
+      "avatar_key": "rabbit",
+      "passcode_hash": "",
+      "invite_code_hash": null,
+      "sync_key_salt": null,
+      "e2e_enabled": false,
+      "role": "admin",
+      "status": "active",
+      "access_tier": "open",
+      "last_login_at": null,
+      "failed_attempts": 0,
+      "locked_until": null,
+      "created_at": "2026-10-08T00:00:00Z",
+      "updated_at": "2026-10-08T00:00:00Z"
+    }
+  ],
+  "note": "passcode_hash 留空表示该账号不可登录：请用 scripts/api/hash-password.sh 生成 Argon2id 哈希后填入；或直接在本地副本里写 passcode 字段（seed 会哈希后入库、不留明文）。管理员后台亦可用 ADMIN_PASSWORD_HASH + X-Admin-Password 头访问，不依赖本账号。"
+}

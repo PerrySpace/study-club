@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="熊猫头像">
+  <circle cx="64" cy="64" r="62" fill="#EDEDF2"/>
+  <circle cx="40" cy="36" r="14" fill="#33323A"/>
+  <circle cx="88" cy="36" r="14" fill="#33323A"/>
+  <circle cx="64" cy="72" r="38" fill="#FFFFFF"/>
+  <ellipse cx="49" cy="66" rx="12" ry="14" fill="#33323A" transform="rotate(-18 49 66)"/>
+  <ellipse cx="79" cy="66" rx="12" ry="14" fill="#33323A" transform="rotate(18 79 66)"/>
+  <circle cx="51" cy="68" r="5.2" fill="#FFFFFF"/>
+  <circle cx="77" cy="68" r="5.2" fill="#FFFFFF"/>
+  <circle cx="51" cy="68" r="2.8" fill="#33323A"/>
+  <circle cx="77" cy="68" r="2.8" fill="#33323A"/>
+  <ellipse cx="64" cy="84" rx="5.6" ry="4" fill="#33323A"/>
+  <path d="M64 88 v4" stroke="#33323A" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+  <path d="M59.6 93 q4.4 3.6 8.8 0" stroke="#33323A" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</svg>

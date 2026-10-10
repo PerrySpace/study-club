@@ -1,0 +1,7 @@
+{
+  "collection": "poems",
+  "feature": "古诗",
+  "source": "content/poems/required-75.json",
+  "strip_wrapper": true,
+  "unique_key": "_id"
+}

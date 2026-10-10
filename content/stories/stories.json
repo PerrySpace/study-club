@@ -1,0 +1,70 @@
+{
+  "content_version": "1.0.0",
+  "items": [
+    {
+      "_id": "st_yishui",
+      "title": "小马喝水",
+      "type": "story",
+      "level": "grade1",
+      "grade": 1,
+      "text": "小马下山。\n小马来到水边。\n小马喝水。\n小马上山。",
+      "highlight_characters": ["小", "马", "下", "山", "来", "到", "水", "边", "喝", "上"],
+      "audio_ref": null,
+      "unlock_after_lesson_ids": [],
+      "word_count": 20,
+      "status": "published"
+    },
+    {
+      "_id": "st_riyue",
+      "title": "日月水火",
+      "type": "rhyme",
+      "level": "grade1",
+      "grade": 1,
+      "text": "日出来，月出来，\n水里有火，火里有山。\n一二三，三二一，\n十个数字我全会。",
+      "highlight_characters": ["日", "出", "月", "水", "火", "山", "里", "一", "二", "三", "十", "个", "字", "全", "会"],
+      "audio_ref": null,
+      "unlock_after_lesson_ids": [],
+      "word_count": 34,
+      "status": "published"
+    },
+    {
+      "_id": "st_tianli",
+      "title": "田里",
+      "type": "story",
+      "level": "grade1",
+      "grade": 1,
+      "text": "田里水多。\n田里草多。\n田里禾苗多。\n田里牛多。",
+      "highlight_characters": ["田", "里", "水", "草", "禾", "苗", "牛", "多"],
+      "audio_ref": null,
+      "unlock_after_lesson_ids": [],
+      "word_count": 18,
+      "status": "published"
+    },
+    {
+      "_id": "st_kaixue",
+      "title": "好学生",
+      "type": "rhyme",
+      "level": "grade1",
+      "grade": 1,
+      "text": "一二三四五六七，\n八九十。\n好好学习，天天向上。",
+      "highlight_characters": ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "好", "学", "习", "天", "向", "上"],
+      "audio_ref": null,
+      "unlock_after_lesson_ids": [],
+      "word_count": 23,
+      "status": "published"
+    },
+    {
+      "_id": "st_baiyun",
+      "title": "白云",
+      "type": "story",
+      "level": "grade1",
+      "grade": 1,
+      "text": "天白云多。\n白云下雨。\n雨后天晴。\n天白云多。",
+      "highlight_characters": ["天", "白", "云", "多", "下", "雨", "后", "晴"],
+      "audio_ref": null,
+      "unlock_after_lesson_ids": [],
+      "word_count": 16,
+      "status": "published"
+    }
+  ]
+}

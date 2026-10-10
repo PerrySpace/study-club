@@ -1,0 +1,7 @@
+{
+  "collection": "stories",
+  "feature": "故事与儿歌",
+  "source": "content/stories/stories.json",
+  "strip_wrapper": true,
+  "unique_key": "_id"
+}

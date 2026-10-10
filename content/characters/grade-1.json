@@ -1,0 +1,3791 @@
+{
+  "content_version": "1.0.0",
+  "items": [
+    {
+      "_id": "ch_4e00",
+      "char": "一",
+      "pinyin": "yī",
+      "pinyin_plain": "yi",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "一",
+      "stroke_count": 1,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "数字，最小的正整数",
+      "words": [
+        "一个",
+        "一起",
+        "第一"
+      ],
+      "sentences": [
+        "我有一本书。",
+        "我们一起玩。"
+      ],
+      "pictograph": "一横表示数目「一」。",
+      "glyph": "1️⃣",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "数字"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-01",
+          "unit_name": "数字一家",
+          "group_name": null,
+          "order": 1
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_4e8c",
+      "char": "二",
+      "pinyin": "èr",
+      "pinyin_plain": "er",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "二",
+      "stroke_count": 2,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "数字，一加一",
+      "words": [
+        "二月",
+        "第二",
+        "二手"
+      ],
+      "sentences": [
+        "二月里天气还很冷。"
+      ],
+      "pictograph": null,
+      "glyph": "2️⃣",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "数字"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-01",
+          "unit_name": "数字一家",
+          "group_name": null,
+          "order": 2
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_4e09",
+      "char": "三",
+      "pinyin": "sān",
+      "pinyin_plain": "san",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "一",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "数字，二加一",
+      "words": [
+        "三天",
+        "三角",
+        "再三"
+      ],
+      "sentences": [
+        "我三天前种下的豆子发芽了。"
+      ],
+      "pictograph": null,
+      "glyph": "3️⃣",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "数字"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-01",
+          "unit_name": "数字一家",
+          "group_name": null,
+          "order": 3
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_56db",
+      "char": "四",
+      "pinyin": "sì",
+      "pinyin_plain": "si",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "囗",
+      "stroke_count": 5,
+      "structure": "全包围",
+      "stroke_order_ref": null,
+      "meaning": "数字，三加一",
+      "words": [
+        "四季",
+        "四方",
+        "四周"
+      ],
+      "sentences": [
+        "一年有四季。"
+      ],
+      "pictograph": null,
+      "glyph": "4️⃣",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "数字"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-01",
+          "unit_name": "数字一家",
+          "group_name": null,
+          "order": 4
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_4e94",
+      "char": "五",
+      "pinyin": "wǔ",
+      "pinyin_plain": "wu",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "二",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "数字，四加一",
+      "words": [
+        "五月",
+        "五官",
+        "五彩"
+      ],
+      "sentences": [
+        "五月一日是劳动节。"
+      ],
+      "pictograph": null,
+      "glyph": "🖐️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "数字"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-01",
+          "unit_name": "数字一家",
+          "group_name": null,
+          "order": 5
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_516d",
+      "char": "六",
+      "pinyin": "liù",
+      "pinyin_plain": "liu",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "八",
+      "stroke_count": 4,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "数字，五加一",
+      "words": [
+        "六月",
+        "六只",
+        "六边"
+      ],
+      "sentences": [
+        "六月里荷花开了。"
+      ],
+      "pictograph": null,
+      "glyph": "6️⃣",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "数字"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-01",
+          "unit_name": "数字一家",
+          "group_name": null,
+          "order": 6
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_4e03",
+      "char": "七",
+      "pinyin": "qī",
+      "pinyin_plain": "qi",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "一",
+      "stroke_count": 2,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "数字，六加一",
+      "words": [
+        "七天",
+        "七彩",
+        "七巧板"
+      ],
+      "sentences": [
+        "彩虹有七种颜色。"
+      ],
+      "pictograph": null,
+      "glyph": "7️⃣",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "数字"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-01",
+          "unit_name": "数字一家",
+          "group_name": null,
+          "order": 7
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_516b",
+      "char": "八",
+      "pinyin": "bā",
+      "pinyin_plain": "ba",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "八",
+      "stroke_count": 2,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "数字，七加一",
+      "words": [
+        "八月",
+        "八方",
+        "八哥"
+      ],
+      "sentences": [
+        "八月十五是中秋节。"
+      ],
+      "pictograph": null,
+      "glyph": "8️⃣",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "数字"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-01",
+          "unit_name": "数字一家",
+          "group_name": null,
+          "order": 8
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_4e5d",
+      "char": "九",
+      "pinyin": "jiǔ",
+      "pinyin_plain": "jiu",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "丿",
+      "stroke_count": 2,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "数字，八加一",
+      "words": [
+        "九月",
+        "九天",
+        "九牛一毛"
+      ],
+      "sentences": [
+        "九月开学了。"
+      ],
+      "pictograph": null,
+      "glyph": "9️⃣",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "数字"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-01",
+          "unit_name": "数字一家",
+          "group_name": null,
+          "order": 9
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_5341",
+      "char": "十",
+      "pinyin": "shí",
+      "pinyin_plain": "shi",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "十",
+      "stroke_count": 2,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "数字，九加一",
+      "words": [
+        "十分",
+        "十月",
+        "十足"
+      ],
+      "sentences": [
+        "我数到十就停下来。"
+      ],
+      "pictograph": null,
+      "glyph": "🔟",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "数字"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-01",
+          "unit_name": "数字一家",
+          "group_name": null,
+          "order": 10
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_4eba",
+      "char": "人",
+      "pinyin": "rén",
+      "pinyin_plain": "ren",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "人",
+      "stroke_count": 2,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "会说话、会劳动的人",
+      "words": [
+        "人们",
+        "大人",
+        "人口"
+      ],
+      "sentences": [
+        "公园里人很多。"
+      ],
+      "pictograph": "像一个侧身站立的人。",
+      "glyph": "🧍",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "人体"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-02",
+          "unit_name": "我的身体",
+          "group_name": null,
+          "order": 1
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_53e3",
+      "char": "口",
+      "pinyin": "kǒu",
+      "pinyin_plain": "kou",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "口",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "嘴；也用作量词",
+      "words": [
+        "开口",
+        "口水",
+        "一口"
+      ],
+      "sentences": [
+        "请张开你的口。"
+      ],
+      "pictograph": "像一张张开的嘴。",
+      "glyph": "👄",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "人体"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-02",
+          "unit_name": "我的身体",
+          "group_name": null,
+          "order": 2
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_624b",
+      "char": "手",
+      "pinyin": "shǒu",
+      "pinyin_plain": "shou",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "手",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "人体上肢的末端，能拿东西",
+      "words": [
+        "双手",
+        "手心",
+        "手工"
+      ],
+      "sentences": [
+        "我用双手捧起水。"
+      ],
+      "pictograph": "像一只五指张开的手。",
+      "glyph": "✋",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "人体"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-02",
+          "unit_name": "我的身体",
+          "group_name": null,
+          "order": 3
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_8db3",
+      "char": "足",
+      "pinyin": "zú",
+      "pinyin_plain": "zu",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "足",
+      "stroke_count": 7,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "脚；也指足够",
+      "words": [
+        "足球",
+        "满足",
+        "足下"
+      ],
+      "sentences": [
+        "我参加了足球比赛。"
+      ],
+      "pictograph": null,
+      "glyph": "🦶",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "人体"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-02",
+          "unit_name": "我的身体",
+          "group_name": null,
+          "order": 4
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_76ee",
+      "char": "目",
+      "pinyin": "mù",
+      "pinyin_plain": "mu",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "目",
+      "stroke_count": 5,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "眼睛",
+      "words": [
+        "目光",
+        "题目",
+        "耳目"
+      ],
+      "sentences": [
+        "他抬起头，目光很亮。"
+      ],
+      "pictograph": "像一只竖起来的眼睛。",
+      "glyph": "👁️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "人体"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-02",
+          "unit_name": "我的身体",
+          "group_name": null,
+          "order": 5
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_8033",
+      "char": "耳",
+      "pinyin": "ěr",
+      "pinyin_plain": "er",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "耳",
+      "stroke_count": 6,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "听觉器官",
+      "words": [
+        "耳朵",
+        "木耳",
+        "耳目"
+      ],
+      "sentences": [
+        "小兔子的耳朵很长。"
+      ],
+      "pictograph": null,
+      "glyph": "👂",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "人体"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-02",
+          "unit_name": "我的身体",
+          "group_name": null,
+          "order": 6
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_65e5",
+      "char": "日",
+      "pinyin": "rì",
+      "pinyin_plain": "ri",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "日",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "太阳；也指一天",
+      "words": [
+        "日出",
+        "生日",
+        "日子"
+      ],
+      "sentences": [
+        "日出的时候天边红了。"
+      ],
+      "pictograph": "像一轮圆圆的太阳。",
+      "glyph": "☀️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 1
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_6708",
+      "char": "月",
+      "pinyin": "yuè",
+      "pinyin_plain": "yue",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "月",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "月亮；也指月份",
+      "words": [
+        "月亮",
+        "月光",
+        "一月"
+      ],
+      "sentences": [
+        "月亮弯弯像小船。"
+      ],
+      "pictograph": "像一弯新月。",
+      "glyph": "🌙",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 2
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_6c34",
+      "char": "水",
+      "pinyin": "shuǐ",
+      "pinyin_plain": "shui",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "水",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "没有颜色、没有味道的液体",
+      "words": [
+        "喝水",
+        "水果",
+        "水面"
+      ],
+      "sentences": [
+        "多喝水对身体好。"
+      ],
+      "pictograph": "像流动的水纹。",
+      "glyph": "💧",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 3
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_706b",
+      "char": "火",
+      "pinyin": "huǒ",
+      "pinyin_plain": "huo",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "火",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "东西燃烧时发出的光和热",
+      "words": [
+        "火车",
+        "火苗",
+        "大火"
+      ],
+      "sentences": [
+        "火苗在风中跳来跳去。"
+      ],
+      "pictograph": "像跳动的火焰。",
+      "glyph": "🔥",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 4
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_6728",
+      "char": "木",
+      "pinyin": "mù",
+      "pinyin_plain": "mu",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "木",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "树木；也指木头",
+      "words": [
+        "树木",
+        "木头",
+        "木马"
+      ],
+      "sentences": [
+        "院子里种了一棵小树。"
+      ],
+      "pictograph": "像一棵有枝有根的树。",
+      "glyph": "🪵",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 5
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_91d1",
+      "char": "金",
+      "pinyin": "jīn",
+      "pinyin_plain": "jin",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "金",
+      "stroke_count": 8,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "金属；也指钱",
+      "words": [
+        "金子",
+        "金色",
+        "金属"
+      ],
+      "sentences": [
+        "秋天的稻田一片金色。"
+      ],
+      "pictograph": null,
+      "glyph": "🥇",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 3,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 6
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_571f",
+      "char": "土",
+      "pinyin": "tǔ",
+      "pinyin_plain": "tu",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "土",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "地面上的泥沙",
+      "words": [
+        "土地",
+        "泥土",
+        "土豆"
+      ],
+      "sentences": [
+        "花种在泥土里。"
+      ],
+      "pictograph": "像地面隆起的一堆土。",
+      "glyph": "🟫",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 7
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_5929",
+      "char": "天",
+      "pinyin": "tiān",
+      "pinyin_plain": "tian",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "大",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "天空；也指一天",
+      "words": [
+        "天空",
+        "白天",
+        "天气"
+      ],
+      "sentences": [
+        "天空飘着白云。"
+      ],
+      "pictograph": null,
+      "glyph": "🌌",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 8
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_5730",
+      "char": "地",
+      "pinyin": "dì",
+      "pinyin_plain": "di",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "土",
+      "stroke_count": 6,
+      "structure": "左右",
+      "stroke_order_ref": null,
+      "meaning": "地面；也指地方",
+      "words": [
+        "土地",
+        "地面",
+        "大地"
+      ],
+      "sentences": [
+        "大地披上了绿衣裳。"
+      ],
+      "pictograph": null,
+      "glyph": "🟩",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 9
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_5c71",
+      "char": "山",
+      "pinyin": "shān",
+      "pinyin_plain": "shan",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "山",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "地面上高高隆起的部分",
+      "words": [
+        "高山",
+        "山脚",
+        "山上"
+      ],
+      "sentences": [
+        "远处的山高高的。"
+      ],
+      "pictograph": "像三座连着的山峰。",
+      "glyph": "⛰️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 10
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_77f3",
+      "char": "石",
+      "pinyin": "shí",
+      "pinyin_plain": "shi",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "石",
+      "stroke_count": 5,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "石头",
+      "words": [
+        "石头",
+        "石子",
+        "化石"
+      ],
+      "sentences": [
+        "河边有很多石头。"
+      ],
+      "pictograph": null,
+      "glyph": "🪨",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 11
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_7530",
+      "char": "田",
+      "pinyin": "tián",
+      "pinyin_plain": "tian",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "田",
+      "stroke_count": 5,
+      "structure": "全包围",
+      "stroke_order_ref": null,
+      "meaning": "种庄稼的土地",
+      "words": [
+        "田地",
+        "稻田",
+        "田野"
+      ],
+      "sentences": [
+        "稻田里的稻子黄了。"
+      ],
+      "pictograph": "像一块块分好的田地。",
+      "glyph": "🌾",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 12
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_4e0a",
+      "char": "上",
+      "pinyin": "shàng",
+      "pinyin_plain": "shang",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "一",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "位置在高处",
+      "words": [
+        "上面",
+        "上学",
+        "早上"
+      ],
+      "sentences": [
+        "书包放在桌子上。"
+      ],
+      "pictograph": null,
+      "glyph": "⬆️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "方位"
+      ],
+      "similar_chars": [],
+      "antonym": "下",
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-04",
+          "unit_name": "身边的大小",
+          "group_name": null,
+          "order": 1
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_4e0b",
+      "char": "下",
+      "pinyin": "xià",
+      "pinyin_plain": "xia",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "一",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "位置在低处",
+      "words": [
+        "下面",
+        "下雨",
+        "下午"
+      ],
+      "sentences": [
+        "小鱼躲到水下面。"
+      ],
+      "pictograph": null,
+      "glyph": "⬇️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "方位"
+      ],
+      "similar_chars": [],
+      "antonym": "上",
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-04",
+          "unit_name": "身边的大小",
+          "group_name": null,
+          "order": 2
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_5927",
+      "char": "大",
+      "pinyin": "dà",
+      "pinyin_plain": "da",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "大",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "体积或数量多",
+      "words": [
+        "大人",
+        "长大",
+        "大声"
+      ],
+      "sentences": [
+        "大象的耳朵很大。"
+      ],
+      "pictograph": null,
+      "glyph": "🐘",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "形容"
+      ],
+      "similar_chars": [],
+      "antonym": "小",
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-04",
+          "unit_name": "身边的大小",
+          "group_name": null,
+          "order": 3
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_5c0f",
+      "char": "小",
+      "pinyin": "xiǎo",
+      "pinyin_plain": "xiao",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "小",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "体积或数量少",
+      "words": [
+        "小心",
+        "大小",
+        "小鸟"
+      ],
+      "sentences": [
+        "小蚂蚁在搬米粒。"
+      ],
+      "pictograph": null,
+      "glyph": "🐜",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "形容"
+      ],
+      "similar_chars": [],
+      "antonym": "大",
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-04",
+          "unit_name": "身边的大小",
+          "group_name": null,
+          "order": 4
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_591a",
+      "char": "多",
+      "pinyin": "duō",
+      "pinyin_plain": "duo",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "夕",
+      "stroke_count": 6,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "数量大",
+      "words": [
+        "多少",
+        "许多",
+        "多么"
+      ],
+      "sentences": [
+        "花园里有许多蝴蝶。"
+      ],
+      "pictograph": null,
+      "glyph": "🔼",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "数量"
+      ],
+      "similar_chars": [],
+      "antonym": "少",
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-04",
+          "unit_name": "身边的大小",
+          "group_name": null,
+          "order": 5
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_5c11",
+      "char": "少",
+      "pinyin": "shǎo",
+      "pinyin_plain": "shao",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "小",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "数量小",
+      "words": [
+        "多少",
+        "少数",
+        "少年"
+      ],
+      "sentences": [
+        "今天来的人很少。"
+      ],
+      "pictograph": null,
+      "glyph": "🔽",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "数量"
+      ],
+      "similar_chars": [],
+      "antonym": "多",
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-04",
+          "unit_name": "身边的大小",
+          "group_name": null,
+          "order": 6
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_597d",
+      "char": "好",
+      "pinyin": "hǎo",
+      "pinyin_plain": "hao",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "女",
+      "stroke_count": 6,
+      "structure": "左右",
+      "stroke_order_ref": null,
+      "meaning": "优点多，让人满意",
+      "words": [
+        "好人",
+        "好听",
+        "你好"
+      ],
+      "sentences": [
+        "你好，很高兴认识你。"
+      ],
+      "pictograph": null,
+      "glyph": "👍",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "形容"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-04",
+          "unit_name": "身边的大小",
+          "group_name": null,
+          "order": 7
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_5b66",
+      "char": "学",
+      "pinyin": "xué",
+      "pinyin_plain": "xue",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "子",
+      "stroke_count": 8,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "学习",
+      "words": [
+        "学生",
+        "上学",
+        "学习"
+      ],
+      "sentences": [
+        "我每天都要学习。"
+      ],
+      "pictograph": null,
+      "glyph": "🎓",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "学习"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-05",
+          "unit_name": "读书写字",
+          "group_name": null,
+          "order": 1
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_751f",
+      "char": "生",
+      "pinyin": "shēng",
+      "pinyin_plain": "sheng",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "生",
+      "stroke_count": 5,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "生长；也指学生",
+      "words": [
+        "生长",
+        "学生",
+        "生日"
+      ],
+      "sentences": [
+        "小树在小院里生长。"
+      ],
+      "pictograph": null,
+      "glyph": "🌱",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "学习"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-05",
+          "unit_name": "读书写字",
+          "group_name": null,
+          "order": 2
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_4e66",
+      "char": "书",
+      "pinyin": "shū",
+      "pinyin_plain": "shu",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "乛",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "装订成册的读物",
+      "words": [
+        "看书",
+        "书本",
+        "书包"
+      ],
+      "sentences": [
+        "我最喜欢看书。"
+      ],
+      "pictograph": null,
+      "glyph": "📖",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "学习"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-05",
+          "unit_name": "读书写字",
+          "group_name": null,
+          "order": 3
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_672c",
+      "char": "本",
+      "pinyin": "běn",
+      "pinyin_plain": "ben",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "木",
+      "stroke_count": 5,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "本子；也指根本",
+      "words": [
+        "本子",
+        "书本",
+        "本来"
+      ],
+      "sentences": [
+        "我把本子交给老师。"
+      ],
+      "pictograph": null,
+      "glyph": "📒",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "学习"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-05",
+          "unit_name": "读书写字",
+          "group_name": null,
+          "order": 4
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_6587",
+      "char": "文",
+      "pinyin": "wén",
+      "pinyin_plain": "wen",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "文",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "文字；也指文章",
+      "words": [
+        "语文",
+        "文字",
+        "作文"
+      ],
+      "sentences": [
+        "语文课上我们读课文。"
+      ],
+      "pictograph": null,
+      "glyph": "🔤",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "学习"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-05",
+          "unit_name": "读书写字",
+          "group_name": null,
+          "order": 5
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_95e8",
+      "char": "门",
+      "pinyin": "mén",
+      "pinyin_plain": "men",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "门",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "房屋的出入口",
+      "words": [
+        "大门",
+        "门口",
+        "开门"
+      ],
+      "sentences": [
+        "请把大门关上。"
+      ],
+      "pictograph": "像一扇双开的门。",
+      "glyph": "🚪",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "生活"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-05",
+          "unit_name": "读书写字",
+          "group_name": null,
+          "order": 6
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_8f66",
+      "char": "车",
+      "pinyin": "chē",
+      "pinyin_plain": "che",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "车",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "陆地上的交通工具",
+      "words": [
+        "汽车",
+        "火车",
+        "车站"
+      ],
+      "sentences": [
+        "汽车在马路上一辆接一辆。"
+      ],
+      "pictograph": null,
+      "glyph": "🚗",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "生活"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-05",
+          "unit_name": "读书写字",
+          "group_name": null,
+          "order": 7
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_9a6c",
+      "char": "马",
+      "pinyin": "mǎ",
+      "pinyin_plain": "ma",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "马",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "一种善跑的动物",
+      "words": [
+        "马路",
+        "木马",
+        "小马"
+      ],
+      "sentences": [
+        "小马在草地上跑。"
+      ],
+      "pictograph": "像一匹有鬃毛的马。",
+      "glyph": "🐴",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "动物"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-06",
+          "unit_name": "动物朋友",
+          "group_name": null,
+          "order": 1
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_725b",
+      "char": "牛",
+      "pinyin": "niú",
+      "pinyin_plain": "niu",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "牛",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "一种家畜",
+      "words": [
+        "水牛",
+        "牛奶",
+        "小牛"
+      ],
+      "sentences": [
+        "水牛在田里慢慢走。"
+      ],
+      "pictograph": "像牛头的形状。",
+      "glyph": "🐮",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "动物"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-06",
+          "unit_name": "动物朋友",
+          "group_name": null,
+          "order": 2
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_7f8a",
+      "char": "羊",
+      "pinyin": "yáng",
+      "pinyin_plain": "yang",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "羊",
+      "stroke_count": 6,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "一种家畜",
+      "words": [
+        "山羊",
+        "绵羊",
+        "羊毛"
+      ],
+      "sentences": [
+        "小羊在山上吃草。"
+      ],
+      "pictograph": null,
+      "glyph": "🐑",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "动物"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-06",
+          "unit_name": "动物朋友",
+          "group_name": null,
+          "order": 3
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_9e1f",
+      "char": "鸟",
+      "pinyin": "niǎo",
+      "pinyin_plain": "niao",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "鸟",
+      "stroke_count": 5,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "有羽毛和翅膀的动物",
+      "words": [
+        "小鸟",
+        "鸟窝",
+        "飞鸟"
+      ],
+      "sentences": [
+        "小鸟在树上唱歌。"
+      ],
+      "pictograph": null,
+      "glyph": "🐦",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "动物"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-06",
+          "unit_name": "动物朋友",
+          "group_name": null,
+          "order": 4
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_9c7c",
+      "char": "鱼",
+      "pinyin": "yú",
+      "pinyin_plain": "yu",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "鱼",
+      "stroke_count": 8,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "生活在水里的动物",
+      "words": [
+        "金鱼",
+        "小鱼",
+        "鱼儿"
+      ],
+      "sentences": [
+        "金鱼在水里游来游去。"
+      ],
+      "pictograph": null,
+      "glyph": "🐟",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "动物"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-06",
+          "unit_name": "动物朋友",
+          "group_name": null,
+          "order": 5
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_866b",
+      "char": "虫",
+      "pinyin": "chóng",
+      "pinyin_plain": "chong",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "虫",
+      "stroke_count": 6,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "昆虫",
+      "words": [
+        "虫子",
+        "昆虫",
+        "毛虫"
+      ],
+      "sentences": [
+        "毛毛虫慢慢爬。"
+      ],
+      "pictograph": null,
+      "glyph": "🐛",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "动物"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-06",
+          "unit_name": "动物朋友",
+          "group_name": null,
+          "order": 6
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_82b1",
+      "char": "花",
+      "pinyin": "huā",
+      "pinyin_plain": "hua",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "艹",
+      "stroke_count": 7,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "植物开出的花朵",
+      "words": [
+        "花朵",
+        "花园",
+        "开花"
+      ],
+      "sentences": [
+        "花园里开满了花。"
+      ],
+      "pictograph": null,
+      "glyph": "🌸",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "植物"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-07",
+          "unit_name": "花草树木",
+          "group_name": null,
+          "order": 1
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_8349",
+      "char": "草",
+      "pinyin": "cǎo",
+      "pinyin_plain": "cao",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "艹",
+      "stroke_count": 9,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "草本植物",
+      "words": [
+        "小草",
+        "草地",
+        "青草"
+      ],
+      "sentences": [
+        "小草从土里钻出来。"
+      ],
+      "pictograph": null,
+      "glyph": "🌿",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "植物"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-07",
+          "unit_name": "花草树木",
+          "group_name": null,
+          "order": 2
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_6811",
+      "char": "树",
+      "pinyin": "shù",
+      "pinyin_plain": "shu",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "木",
+      "stroke_count": 9,
+      "structure": "左右",
+      "stroke_order_ref": null,
+      "meaning": "木本植物",
+      "words": [
+        "大树",
+        "树叶",
+        "树木"
+      ],
+      "sentences": [
+        "大树下面很凉快。"
+      ],
+      "pictograph": null,
+      "glyph": "🌳",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "植物"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-07",
+          "unit_name": "花草树木",
+          "group_name": null,
+          "order": 3
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_679c",
+      "char": "果",
+      "pinyin": "guǒ",
+      "pinyin_plain": "guo",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "木",
+      "stroke_count": 8,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "果实",
+      "words": [
+        "水果",
+        "苹果",
+        "果树"
+      ],
+      "sentences": [
+        "我喜欢吃水果。"
+      ],
+      "pictograph": null,
+      "glyph": "🍎",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "植物"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-07",
+          "unit_name": "花草树木",
+          "group_name": null,
+          "order": 4
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_98ce",
+      "char": "风",
+      "pinyin": "fēng",
+      "pinyin_plain": "feng",
+      "tone": 1,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "风",
+      "stroke_count": 4,
+      "structure": "半包围",
+      "stroke_order_ref": null,
+      "meaning": "空气的流动",
+      "words": [
+        "大风",
+        "风雨",
+        "风车"
+      ],
+      "sentences": [
+        "大风把树叶吹跑了。"
+      ],
+      "pictograph": null,
+      "glyph": "🌬️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 13
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_4e91",
+      "char": "云",
+      "pinyin": "yún",
+      "pinyin_plain": "yun",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "二",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "天上的水汽凝成的一片",
+      "words": [
+        "白云",
+        "云朵",
+        "乌云"
+      ],
+      "sentences": [
+        "天上有一片白云。"
+      ],
+      "pictograph": null,
+      "glyph": "☁️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 14
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_96e8",
+      "char": "雨",
+      "pinyin": "yǔ",
+      "pinyin_plain": "yu",
+      "tone": 3,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "雨",
+      "stroke_count": 8,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "从云中落下来的水",
+      "words": [
+        "下雨",
+        "雨水",
+        "大雨"
+      ],
+      "sentences": [
+        "下雨了，记得带伞。"
+      ],
+      "pictograph": null,
+      "glyph": "🌧️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "自然"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-03",
+          "unit_name": "天地山水",
+          "group_name": null,
+          "order": 15
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_767d",
+      "char": "白",
+      "pinyin": "bái",
+      "pinyin_plain": "bai",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "白",
+      "stroke_count": 5,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "像雪一样的颜色",
+      "words": [
+        "白云",
+        "白天",
+        "明白"
+      ],
+      "sentences": [
+        "小兔子的毛是白的。"
+      ],
+      "pictograph": null,
+      "glyph": "⚪",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "颜色"
+      ],
+      "similar_chars": [],
+      "antonym": "黑",
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-07",
+          "unit_name": "花草树木",
+          "group_name": null,
+          "order": 5
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_7ea2",
+      "char": "红",
+      "pinyin": "hóng",
+      "pinyin_plain": "hong",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "纟",
+      "stroke_count": 6,
+      "structure": "左右",
+      "stroke_order_ref": null,
+      "meaning": "像血一样的颜色",
+      "words": [
+        "红色",
+        "红花",
+        "火红"
+      ],
+      "sentences": [
+        "红红的苹果挂满枝头。"
+      ],
+      "pictograph": null,
+      "glyph": "🔴",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "颜色"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-07",
+          "unit_name": "花草树木",
+          "group_name": null,
+          "order": 6
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_6765",
+      "char": "来",
+      "pinyin": "lái",
+      "pinyin_plain": "lai",
+      "tone": 2,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "木",
+      "stroke_count": 7,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "从别处到这里",
+      "words": [
+        "回来",
+        "出来",
+        "来到"
+      ],
+      "sentences": [
+        "春天来了，燕子飞回来了。"
+      ],
+      "pictograph": null,
+      "glyph": "➡️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "动作"
+      ],
+      "similar_chars": [],
+      "antonym": "去",
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-07",
+          "unit_name": "花草树木",
+          "group_name": null,
+          "order": 7
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_53bb",
+      "char": "去",
+      "pinyin": "qù",
+      "pinyin_plain": "qu",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "厶",
+      "stroke_count": 5,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "从这里到别处",
+      "words": [
+        "出去",
+        "回去",
+        "去年"
+      ],
+      "sentences": [
+        "去年我学会了游泳。"
+      ],
+      "pictograph": null,
+      "glyph": "⬅️",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 2,
+      "tags": [
+        "动作"
+      ],
+      "similar_chars": [],
+      "antonym": "来",
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-07",
+          "unit_name": "花草树木",
+          "group_name": null,
+          "order": 8
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_770b",
+      "char": "看",
+      "pinyin": "kàn",
+      "pinyin_plain": "kan",
+      "tone": 4,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "目",
+      "stroke_count": 9,
+      "structure": "上下",
+      "stroke_order_ref": null,
+      "meaning": "用眼睛观察",
+      "words": [
+        "看书",
+        "看见",
+        "好看"
+      ],
+      "sentences": [
+        "我在阳台上看星星。"
+      ],
+      "pictograph": null,
+      "glyph": "👀",
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "动作"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [
+        {
+          "unit_id": "u-g1-07",
+          "unit_name": "花草树木",
+          "group_name": null,
+          "order": 9
+        }
+      ],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-08T13:43:15.627Z",
+      "updated_at": "2026-10-08T13:43:15.627Z"
+    },
+    {
+      "_id": "ch_7684",
+      "char": "的",
+      "pinyin": "de",
+      "pinyin_plain": "de",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "白",
+      "stroke_count": 8,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示所属或修饰",
+      "words": [
+        "我的书",
+        "好的",
+        "新的",
+        "红的花"
+      ],
+      "sentences": [
+        "这是我的书。"
+      ],
+      "pictograph": "从「白勺」借来表示归属。",
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_4e86",
+      "char": "了",
+      "pinyin": "le",
+      "pinyin_plain": "le",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "乙",
+      "stroke_count": 2,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示事情完成或变化",
+      "words": [
+        "来了",
+        "走了",
+        "好了",
+        "来了"
+      ],
+      "sentences": [
+        "太阳出来了。",
+        "我到学校了。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_5728",
+      "char": "在",
+      "pinyin": "zài",
+      "pinyin_plain": "zai",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "土",
+      "stroke_count": 6,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示位置或正在发生",
+      "words": [
+        "在家",
+        "现在",
+        "正在",
+        "在家"
+      ],
+      "sentences": [
+        "妈妈在家里。",
+        "小鸟在树上。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_6709",
+      "char": "有",
+      "pinyin": "yǒu",
+      "pinyin_plain": "you",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "月",
+      "stroke_count": 6,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示存在或拥有",
+      "words": [
+        "有的",
+        "没有",
+        "有些",
+        "没有"
+      ],
+      "sentences": [
+        "我有一本书。",
+        "山上有树。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_6211",
+      "char": "我",
+      "pinyin": "wǒ",
+      "pinyin_plain": "wo",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "戈",
+      "stroke_count": 7,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "第一人称称呼自己",
+      "words": [
+        "我们",
+        "我的",
+        "我们",
+        "我的书"
+      ],
+      "sentences": [
+        "我是小学生。",
+        "我爱看书。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_4e0d",
+      "char": "不",
+      "pinyin": "bù",
+      "pinyin_plain": "bu",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "一",
+      "stroke_count": 4,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示否定",
+      "words": [
+        "不要",
+        "不好",
+        "不是",
+        "不要"
+      ],
+      "sentences": [
+        "天不冷。",
+        "我不看电视。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_662f",
+      "char": "是",
+      "pinyin": "shì",
+      "pinyin_plain": "shi",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "日",
+      "stroke_count": 9,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示判断或相等",
+      "words": [
+        "不是",
+        "就是",
+        "是的",
+        "不是"
+      ],
+      "sentences": [
+        "这是我的书。",
+        "他是学生。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_51fa",
+      "char": "出",
+      "pinyin": "chū",
+      "pinyin_plain": "chu",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "凵",
+      "stroke_count": 5,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示从里面到外面",
+      "words": [
+        "出来",
+        "日出",
+        "出来",
+        "日出"
+      ],
+      "sentences": [
+        "太阳出来了。",
+        "请进来。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_5230",
+      "char": "到",
+      "pinyin": "dào",
+      "pinyin_plain": "dao",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "刂",
+      "stroke_count": 8,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示到达",
+      "words": [
+        "来到",
+        "到了",
+        "到了",
+        "来到"
+      ],
+      "sentences": [
+        "我到学校了。",
+        "小马到河边。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_4e2a",
+      "char": "个",
+      "pinyin": "gè",
+      "pinyin_plain": "ge",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "人",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "通用量词",
+      "words": [
+        "一个",
+        "三个",
+        "这个",
+        "一个"
+      ],
+      "sentences": [
+        "一个苹果。",
+        "三个小朋友。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_91cc",
+      "char": "里",
+      "pinyin": "lǐ",
+      "pinyin_plain": "li",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "里",
+      "stroke_count": 7,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示内部",
+      "words": [
+        "里面",
+        "家里",
+        "那里",
+        "里面"
+      ],
+      "sentences": [
+        "书在包里。",
+        "田里有水。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_540e",
+      "char": "后",
+      "pinyin": "hòu",
+      "pinyin_plain": "hou",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "口",
+      "stroke_count": 6,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示时间在后面",
+      "words": [
+        "后来",
+        "以后",
+        "以后",
+        "后来"
+      ],
+      "sentences": [
+        "雨后出太阳了。",
+        "后来他来了。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_8fb9",
+      "char": "边",
+      "pinyin": "biān",
+      "pinyin_plain": "bian",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "辶",
+      "stroke_count": 5,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示边缘或旁边",
+      "words": [
+        "河边",
+        "旁边",
+        "河边",
+        "边上"
+      ],
+      "sentences": [
+        "小马到河边。",
+        "坐在我旁边。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_559d",
+      "char": "喝",
+      "pinyin": "hē",
+      "pinyin_plain": "he",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "口",
+      "stroke_count": 12,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示把水吸进去",
+      "words": [
+        "喝水",
+        "喝茶",
+        "喝水",
+        "喝茶"
+      ],
+      "sentences": [
+        "小马喝水。",
+        "我喝水。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_5b57",
+      "char": "字",
+      "pinyin": "zì",
+      "pinyin_plain": "zi",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "宀",
+      "stroke_count": 6,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "文字",
+      "words": [
+        "汉字",
+        "写字",
+        "生字",
+        "写字"
+      ],
+      "sentences": [
+        "我会写汉字。",
+        "这个字好看。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_4f1a",
+      "char": "会",
+      "pinyin": "huì",
+      "pinyin_plain": "hui",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "人",
+      "stroke_count": 6,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示能够或将要",
+      "words": [
+        "学会",
+        "不会",
+        "学会",
+        "开会"
+      ],
+      "sentences": [
+        "我全会。",
+        "我会写字。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_79be",
+      "char": "禾",
+      "pinyin": "hé",
+      "pinyin_plain": "he",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "禾",
+      "stroke_count": 5,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "谷类作物的幼苗",
+      "words": [
+        "禾苗",
+        "禾田",
+        "禾苗",
+        "禾田"
+      ],
+      "sentences": [
+        "田里有禾苗。",
+        "禾苗绿了。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_82d7",
+      "char": "苗",
+      "pinyin": "miáo",
+      "pinyin_plain": "miao",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "艹",
+      "stroke_count": 8,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "初生的植物",
+      "words": [
+        "禾苗",
+        "树苗",
+        "苗条",
+        "树苗"
+      ],
+      "sentences": [
+        "禾苗长高了。",
+        "田里是禾苗。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_4e60",
+      "char": "习",
+      "pinyin": "xí",
+      "pinyin_plain": "xi",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "乙",
+      "stroke_count": 3,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示反复练习",
+      "words": [
+        "学习",
+        "练习",
+        "学习",
+        "习惯"
+      ],
+      "sentences": [
+        "好好学习。",
+        "我喜欢学习。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_5411",
+      "char": "向",
+      "pinyin": "xiàng",
+      "pinyin_plain": "xiang",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "口",
+      "stroke_count": 6,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示朝着某个方向",
+      "words": [
+        "向上",
+        "方向",
+        "向前",
+        "方向"
+      ],
+      "sentences": [
+        "天天向上。",
+        "太阳向上升。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_6674",
+      "char": "晴",
+      "pinyin": "qíng",
+      "pinyin_plain": "qing",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "日",
+      "stroke_count": 12,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "天气好、无云",
+      "words": [
+        "晴天",
+        "天晴",
+        "晴天",
+        "晴朗"
+      ],
+      "sentences": [
+        "雨后天晴。",
+        "今天是晴天。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_6570",
+      "char": "数",
+      "pinyin": "shǔ",
+      "pinyin_plain": "shu",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "攵",
+      "stroke_count": 13,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示逐个清点",
+      "words": [
+        "数数",
+        "数一数",
+        "数数",
+        "数字"
+      ],
+      "sentences": [
+        "我们数一数。",
+        "数到十。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    },
+    {
+      "_id": "ch_5168",
+      "char": "全",
+      "pinyin": "quán",
+      "pinyin_plain": "quan",
+      "tone": 0,
+      "is_polyphone": false,
+      "polyphone_readings": [],
+      "radical": "入",
+      "stroke_count": 6,
+      "structure": "独体",
+      "stroke_order_ref": null,
+      "meaning": "表示完整、全部",
+      "words": [
+        "全部",
+        "全家",
+        "全家",
+        "全部"
+      ],
+      "sentences": [
+        "我全会。",
+        "全都不一样。"
+      ],
+      "pictograph": null,
+      "glyph": null,
+      "image_ref": null,
+      "audio_ref": null,
+      "grade": 1,
+      "level": "grade1",
+      "difficulty": 1,
+      "tags": [
+        "常用"
+      ],
+      "similar_chars": [],
+      "antonym": null,
+      "synonyms": [],
+      "unit_refs": [],
+      "status": "published",
+      "version": 1,
+      "created_at": "2026-10-10T00:00:00.000Z",
+      "updated_at": "2026-10-10T00:00:00.000Z"
+    }
+  ]
+}

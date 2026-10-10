@@ -1,0 +1,77 @@
+{
+  "_comment": "内容来源与许可清单 —— 开源项目的法定义务（见 docs/01-产品规划/04-免费开放与开源策略.md 第五章）。未在此登记来源的资产不得入库。",
+  "self_authored": [
+    {
+      "path": "characters/grade-1.json",
+      "kind": "自编",
+      "license": "CC BY-SA 4.0",
+      "note": "60 个一年级常用字的释义、组词、例句、字源说明均为本项目自编，不含任何教材映射或出版物汇编内容。"
+    },
+    {
+      "path": "lessons/units.json",
+      "kind": "自编",
+      "license": "CC BY-SA 4.0",
+      "note": "自编单元按主题与字形规律组织，不复制任何出版物的单元顺序与课文标题。"
+    },
+    {
+      "path": "lessons/lessons.json",
+      "kind": "自编",
+      "license": "CC BY-SA 4.0",
+      "note": "关卡编排自拟。"
+    },
+    {
+      "path": "poems/required-75.json",
+      "kind": "自编 + 公有领域原文",
+      "license": "CC BY-SA 4.0",
+      "note": "古诗原文属公有领域（不构成著作权客体）；逐字注音、白话翻译、赏析与背景为本项目自编。"
+    },
+    {
+      "path": "stories/stories.json",
+      "kind": "自编",
+      "license": "CC BY-SA 4.0",
+      "note": "儿歌为原创。"
+    },
+    {
+      "path": "readings/readings.json",
+      "kind": "自编",
+      "license": "CC BY-SA 4.0",
+      "note": "识字短文全部自编：每篇只用本项目字库中已收录的字（覆盖率 ≥75%，其余为家长带读的生字），逐句注音与白话翻译亦为自编。不复制任何出版物的读本内容。"
+    },
+    {
+      "path": "badges/badges.json",
+      "kind": "自编",
+      "license": "CC BY-SA 4.0",
+      "note": "徽章名称与条件自拟。"
+    }
+  ],
+  "third_party": [
+    {
+      "name": "汉字拼音数据 pinyin-data",
+      "source": "https://github.com/mozillazg/pinyin-data",
+      "license": "MIT",
+      "usage": "校对字条拼音与声调（离线校对，不随分发）",
+      "registered": true
+    },
+    {
+      "name": "笔顺数据 hanzi-writer-data",
+      "source": "https://github.com/chanind/hanzi-writer-data",
+      "license": "CC BY-SA 4.0 / MIT（各字条不同，见上游署名）",
+      "usage": "书写笔顺练习（S-11）",
+      "registered": true
+    },
+    {
+      "name": "古诗数据集 chinese-poetry",
+      "source": "https://github.com/chinese-poetry/chinese-poetry",
+      "license": "MIT",
+      "usage": "校对古诗原文。**古诗原文本身属公有领域**，不构成著作权客体。",
+      "registered": true
+    }
+  ],
+  "forbidden": [
+    {
+      "kind": "教材映射数据",
+      "reason": "出版社对教材单元编排享有汇编权，不得复制其单元顺序与课文标题",
+      "action": "一律不使用；单元改由自编（见 content/lessons/units.json）"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+# 说明：构建上下文为仓库根（deploy/api/docker-compose.yml 的 context: ../..）。
+# Docker 默认读取「上下文根」的 .dockerignore；本文件按约定放在 apps/api/ 下。
+# 若需让 Docker 真正采用，请同时使用 BuildKit 的 <Dockerfile>.dockerignore 约定
+# （即 apps/api/Dockerfile.dockerignore）。当前 Dockerfile 采用显式 COPY，
+# 只复制 requirements.txt / app / content / scripts/seed，因此构建上下文已被收敛。
+
+# 依赖与构建产物
+node_modules
+**/node_modules
+dist
+**/dist
+build
+.pnpm-store
+
+# 版本控制与 IDE
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+
+# 密钥与环境（绝不进镜像）
+.env
+.env.*
+*.pem
+*.key
+secrets
+**/secrets
+
+# Python 缓存与虚拟环境
+**/__pycache__
+*.pyc
+*.pyo
+.venv
+venv
+.pytest_cache
+.mypy_cache
+
+# 日志
+*.log
+logs
+**/logs

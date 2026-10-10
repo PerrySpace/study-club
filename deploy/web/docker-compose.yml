@@ -1,0 +1,52 @@
+# ============================================================================
+# deploy/web/docker-compose.yml —— web 端**单服务独立编排**
+#
+# 设计：
+#   - 只含 web 一个 service（与 api/mongo 各自独立编排，互不牵连）
+#   - network_mode: host —— 容器直接使用宿主网络；nginx 监听 WEB_PORT
+#   - 构建期传入 VITE_* 能力开关与接口地址（见根 .env.example）
+#
+# 用法：
+#   WEB_PORT=8080 docker compose -f deploy/web/docker-compose.yml up -d --build
+#   或： scripts/web/up.sh
+# ============================================================================
+
+name: study-club-web
+
+services:
+  web:
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
+        VITE_CDN_BASE: ${VITE_CDN_BASE:-}
+        VITE_ENABLE_INVITE_AUTH: ${VITE_ENABLE_INVITE_AUTH:-true}
+        # 准入放量控制：true = 必须凭邀请码；false = 免码开放
+        VITE_ENABLE_INVITE_REQUIRED: ${VITE_ENABLE_INVITE_REQUIRED:-true}
+        VITE_ENABLE_INVITE_OFFLINE_VERIFY: ${VITE_ENABLE_INVITE_OFFLINE_VERIFY:-true}
+        VITE_ENABLE_CLOUD_PROFILE: ${VITE_ENABLE_CLOUD_PROFILE:-false}
+        VITE_ENABLE_E2E_ENCRYPTION: ${VITE_ENABLE_E2E_ENCRYPTION:-true}
+        VITE_ENABLE_CONTENT_API: ${VITE_ENABLE_CONTENT_API:-false}
+        VITE_ENABLE_REMOTE_CONTENT: ${VITE_ENABLE_REMOTE_CONTENT:-false}
+        VITE_ENABLE_STATS: ${VITE_ENABLE_STATS:-false}
+        VITE_ENABLE_CLOUD_ASSESSMENT: ${VITE_ENABLE_CLOUD_ASSESSMENT:-false}
+        # ⛔ 掩藏能力：保持 false（不打包 + 不可达 + 不可调）
+        VITE_ENABLE_ACCOUNT_AUTH: ${VITE_ENABLE_ACCOUNT_AUTH:-false}
+        VITE_ENABLE_PAYMENT: ${VITE_ENABLE_PAYMENT:-false}
+        VITE_ENABLE_MINIPROGRAM: ${VITE_ENABLE_MINIPROGRAM:-false}
+        VITE_ENABLE_NATIVE_APP: ${VITE_ENABLE_NATIVE_APP:-false}
+    image: study-club-web:latest
+    container_name: study-club-web
+    # host 网络：nginx 直接监听宿主端口，无需端口映射（也不能与 ports 同时使用）
+    network_mode: host
+    environment:
+      WEB_PORT: ${WEB_PORT:-8080}
+      APP_ENV: ${APP_ENV:-production}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:${WEB_PORT:-8080}/ >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

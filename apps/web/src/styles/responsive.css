@@ -1,0 +1,117 @@
+/**
+ * 三档响应式 —— 外壳栅格来自 packages/tokens/responsive.css（直接用，勿改）；
+ * 本文件只补 Web 端的内容栅格工具类。
+ *
+ * 手机单列 / iPad 双列 / 桌面三列：**大屏加栏数，不放大单个元素**（02-2 §3.5）。
+ */
+@import '../../../../packages/tokens/src/responsive.css';
+
+/* 内容栅格：手机 1 列，iPad+ 2 列，桌面 3 列 */
+.grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: 1fr;
+}
+
+.grid--2 {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* 双列表在多保持两列（如报告页图表） */
+  .grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 字卡学习页：手机单列 → iPad+「字卡 + 说明」并排 */
+.lesson-layout {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .lesson-layout {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/*
+ * 学习阶段（看一看 / 听一听 / 读一读 / 写一写）的分栏比例：**左字形略窄**。
+ *
+ * 左栏只放一个字，字形本身不需要多宽 —— 1:1 分配会让左边空出一大片，
+ * 反而把右边的解释挤到折行。0.85:1.15 让两边视觉重量接近。
+ */
+@media (min-width: 768px) {
+  .lesson-layout--study {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+}
+
+/*
+ * 闯关页（答题）单独一套布局：**一列居中，不并排**。
+ *
+ * 为什么不复用上面的双栏：
+ *   ① 答题是**单任务** —— 一道题 + 四个选项，拆成两栏会让题面和选项被割裂，
+ *      视线要在两处之间来回跳（启蒙人群尤其吃不消）；
+ *   ② 反馈必须紧贴选项下方，孩子点完要**立刻**看到对错，不该跑到侧栏去；
+ *   ③ 并排会让题目被压到半宽，而选项汉字需要足够大的方形热区。
+ * 收一列 + 限宽居中后，视觉重心回到题目本身。
+ */
+.quiz-layout {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: minmax(0, 1fr);
+  /* 720px：容下 4 个并排选项（每格约 160px）又不让汉字选项显得稀疏 */
+  max-width: 720px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* 古诗页：手机单栏；iPad+ 左诗文右注释（保留竖排版式的可能） */
+.poem-layout {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .poem-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/*
+ * 表单页（登录 / 注册 / 引导建档案）：宽屏上不要把输入框拉成一条。
+ *
+ * 外壳的内容列在桌面档是 880px（--content-max），一个 4 字段表单铺满 880px
+ * 会明显失衡 —— 输入框长得像横条、视觉重心散掉。这里在内容列**内部**再收一列并居中。
+ * 480px 是「昵称 + 口令 + 二次确认」这类短表单的舒适宽度，手机上被 max-width 让位、不生效。
+ */
+.form-page {
+  width: 100%;
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+/* 引导页带一个大标题区，比纯表单稍宽一些更稳 */
+.form-page--wide {
+  max-width: 560px;
+}

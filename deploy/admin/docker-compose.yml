@@ -1,0 +1,40 @@
+# ============================================================================
+# deploy/admin/docker-compose.yml —— 管理后台**单服务独立编排**
+#
+# 设计：
+#   - 只含 admin 一个 service（与 web / api / mongo 各自独立编排，互不牵连）
+#   - network_mode: host —— 容器直接使用宿主网络；nginx 监听 ADMIN_PORT
+#   - 构建期只需一个变量：VITE_API_BASE_URL（后台不打包任何能力开关）
+#
+# ⚠️ 安全提醒（05-1 §十）：
+#   后台**不应暴露到公网**。若服务器有公网 IP，请用防火墙 / 反代限源 IP，
+#   或只在需要时 `scripts/admin/up.sh` 临时起、用完 `scripts/admin/down.sh` 关。
+#
+# 用法：
+#   ADMIN_PORT=8081 docker compose -f deploy/admin/docker-compose.yml up -d --build
+#   或： scripts/admin/up.sh
+# ============================================================================
+
+name: study-club-admin
+
+services:
+  admin:
+    build:
+      context: ../..
+      dockerfile: apps/admin/Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
+    image: study-club-admin:latest
+    container_name: study-club-admin
+    # host 网络：nginx 直接监听宿主端口，无需端口映射（也不能与 ports 同时使用）
+    network_mode: host
+    environment:
+      ADMIN_PORT: ${ADMIN_PORT:-8081}
+      APP_ENV: ${APP_ENV:-production}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:${ADMIN_PORT:-8081}/ >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

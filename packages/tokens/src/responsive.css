@@ -1,0 +1,95 @@
+/**
+ * @study-club/tokens —— 三档响应式外壳
+ * 一份 DOM，靠栅格区域切换：手机「导航在下」/ iPad「导航在左窄栏」/ 桌面「导航在左宽栏」。
+ */
+
+.app-shell {
+  display: grid;
+  grid-template-areas:
+    'topbar'
+    'main'
+    'nav';
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  min-height: 100dvh;
+  background: var(--color-bg);
+}
+
+.app-shell__topbar {
+  grid-area: topbar;
+  min-height: var(--topbar-height);
+}
+
+.app-shell__main {
+  grid-area: main;
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: var(--space-md);
+  padding-bottom: calc(var(--tap-primary) + var(--space-lg));
+}
+
+.app-shell__nav {
+  grid-area: nav;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.app-shell--plain {
+  grid-template-areas:
+    'topbar'
+    'main';
+  grid-template-rows: auto 1fr;
+}
+
+/* ---- iPad / 平板：左侧窄导航栏 ---- */
+@media (min-width: 768px) {
+  .app-shell {
+    grid-template-areas: 'nav topbar' 'nav main';
+    grid-template-columns: var(--nav-width-rail) 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .app-shell__main {
+    padding: var(--space-lg);
+  }
+  .app-shell__nav {
+    padding-bottom: 0;
+  }
+  .app-shell--plain {
+    grid-template-areas: 'topbar' 'main';
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- 桌面：左侧宽导航栏，内容区居中且限制最大宽度 ---- */
+@media (min-width: 1280px) {
+  .app-shell {
+    grid-template-columns: var(--nav-width-full) 1fr;
+  }
+
+  /*
+   * ⚠️ 桌面档**必须**把 plain 外壳的列数重新钉回 1 列，否则整个页面会塌进 240px。
+   *
+   * 原因：本块上方的 `.app-shell { grid-template-columns: var(--nav-width-full) 1fr }`
+   * 与 ≥768px 块里的 `.app-shell--plain { grid-template-columns: 1fr }`
+   * **特异性完全相同**（都是单类选择器），而媒体查询只是条件、不参与特异性比较 ——
+   * 于是「写在后面的赢」，桌面档一律拿到 `240px 1fr` 两列。
+   * 可是 plain 外壳的 `grid-template-areas` 只有 'topbar' 'main' 一列的名字，
+   * 于是 topbar 与 main 双双被塞进第一列（240px），页面缩成左侧一条。
+   * 实测表现：/login、/register、/lesson/*、/poem/*、/onboarding 在 1440px 下
+   * 内容宽度只有约 190px（1440px 宽屏上）。
+   *
+   * plain 页（登录 / 注册 / 关卡 / 古诗 / 引导）**本来就没有侧边导航**，
+   * 任何时候都该是单列，所以这里显式重钉。
+   */
+  .app-shell--plain {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* hover 一律只在指针设备生效（触屏上 :hover 会粘住） */
+@media (hover: hover) {
+  .card-hoverable:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+}

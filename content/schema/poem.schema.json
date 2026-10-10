@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://study-club/schema/poem.schema.json",
+  "title": "古诗",
+  "type": "object",
+  "required": [
+    "_id", "title", "dynasty", "author", "lines", "full_text", "audio_ref", "appreciation",
+    "background", "key_characters", "grade", "unit_ref", "theme_tags", "difficulty", "source",
+    "status", "created_at", "updated_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_id": { "type": "string" },
+    "title": { "type": "string", "minLength": 1 },
+    "dynasty": { "type": "string", "minLength": 1 },
+    "author": { "type": "string", "minLength": 1 },
+    "lines": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["text", "pinyin", "meaning"],
+        "additionalProperties": false,
+        "properties": {
+          "text": { "type": "string", "minLength": 1 },
+          "pinyin": { "type": "string", "minLength": 1 },
+          "meaning": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "full_text": { "type": "string", "minLength": 2 },
+    "audio_ref": { "type": ["string", "null"] },
+    "appreciation": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "background": { "type": ["string", "null"] },
+    "key_characters": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1 } },
+    "grade": { "type": "integer", "minimum": 1, "maximum": 6 },
+    "unit_ref": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["unit_id", "grade", "unit_name"],
+          "additionalProperties": false,
+          "properties": {
+            "unit_id": { "type": "string" },
+            "grade": { "type": "integer" },
+            "unit_name": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "theme_tags": {
+      "type": "array",
+      "items": { "enum": ["思乡", "写景", "咏物", "爱国", "送别", "边塞", "哲理", "节日"] }
+    },
+    "difficulty": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "source": { "enum": ["课标必背", "蒙学经典", "拓展"] },
+    "status": { "enum": ["draft", "pending_review", "published", "offline", "deleted"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}
