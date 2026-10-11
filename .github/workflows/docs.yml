@@ -6,6 +6,8 @@ on:
     branches: [master]
     paths:
       - 'website/**'
+      # 工作流自身的改动也触发一次，便于验证部署链路
+      - '.github/workflows/docs.yml'
   workflow_dispatch:
 
 permissions:
@@ -31,9 +33,15 @@ jobs:
 
       # website/ 是自包含的 VitePress 项目（不在 pnpm workspace 内），
       # 因此在 website 目录内用 npm 安装与构建，最稳妥。
+      # package-lock.json 在 Windows 上生成，rollup / esbuild 的平台原生包
+      # 只解析了 win32 版本；Linux runner 上会因 npm 的 optional 依赖解析
+      # 缺陷（npm/cli#4828）缺失 linux 原生二进制而导致构建失败。
+      # 故此处丢弃 lock、按 package.json 重新解析，以装到匹配当前平台的包。
       - name: Install dependencies
         working-directory: website
-        run: npm install
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: Build
         working-directory: website
