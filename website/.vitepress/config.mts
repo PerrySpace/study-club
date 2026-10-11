@@ -1,10 +1,10 @@
 import { defineConfig } from 'vitepress'
 
 // 仓库地址：**主仓库在 Gitee**，GitHub 为镜像。
-// ⚠️ TODO：把 REPO_MIRROR 里的 __GITHUB_OWNER__ 换成 GitHub 用户名/组织名（仅此一处）。
-//    注意 GitHub 镜像的仓库名须同为 `study-club`，否则需同步改 .github/workflows/docs.yml 的 DOCS_BASE。
+// 主仓库：https://gitee.com/perry-space/study-club
+// 镜像仓库名与主仓库一致（study-club），故 .github/workflows/docs.yml 的 DOCS_BASE 保持 /study-club/。
 const REPO = 'https://gitee.com/perry-space/study-club'
-const REPO_MIRROR = 'https://github.com/__GITHUB_OWNER__/study-club'
+const REPO_MIRROR = 'https://github.com/PerrySpace/study-club'
 const DEMO = 'https://study.perryspace.club'
 
 export default defineConfig({
