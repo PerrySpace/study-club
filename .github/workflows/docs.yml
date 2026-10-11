@@ -29,7 +29,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       # website/ 是自包含的 VitePress 项目（不在 pnpm workspace 内），
       # 因此在 website 目录内用 npm 安装与构建，最稳妥。
