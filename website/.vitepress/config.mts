@@ -18,6 +18,9 @@ export default defineConfig({
   base: process.env.DOCS_BASE ?? '/',
   cleanUrls: true,
 
+  // 本目录的 README.md 是开发说明，不是站点页面，排除出构建。
+  srcExclude: ['README.md'],
+
   // 固定浅色主题：VitePress 无 'force-light'，false = 不启用暗色、隐藏主题切换。
   appearance: false,
 
