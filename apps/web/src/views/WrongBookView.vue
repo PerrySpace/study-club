@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * WrongBookView —— 错题本与重练（S-06）。
- * 答错即入本；答对则标记为已解决（由 learning store 维护，本地写 IndexedDB）。
+ * 答错即入本；答对则标记为已解决（由 learning store 维护，数据持久化在服务端）。
  */
 import { computed, onMounted, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';

@@ -57,7 +57,7 @@ async def lifespan(app: FastAPI):
         await init_indexes(db)
         # 运行配置：DB 有值读 DB，没有则写默认值（需求：配置启动检查 DB）
         await runtime_config.load_config(SettingsRepository(db))
-    except Exception as exc:  # noqa: BLE001 - 数据库暂不可用不应阻断进程（前端可降级）
+    except Exception as exc:  # noqa: BLE001 - 数据库暂不可用不应阻断进程启动
         print(f"[startup] 索引/配置初始化失败（MongoDB 可能未就绪）：{exc}")
     yield
     await close_client()
@@ -67,7 +67,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="study-club API",
         version="1.0.0",
-        description="小学课内识字 + 古诗文的云端后台（本地优先，非必需依赖）。",
+        description="小学课内识字 + 古诗文的云端后台。",
         lifespan=lifespan,
     )
 

@@ -1,6 +1,6 @@
 /**
  * 通用组件样式（跨 base/biz 组件复用的少数工具类）。
- * 命名：kebab-case / BEM，只用 class 选择器（兼容将来 uni-app 迁移，见 06-1 §2.9.4）。
+ * 命名：kebab-case / BEM，只用 class 选择器（跨端友好，不依赖元素标签选择器）。
  */
 
 .stack {

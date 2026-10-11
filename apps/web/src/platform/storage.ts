@@ -2,9 +2,8 @@
  * 偏好存储适配器（localStorage）—— 本文件是 apps/web 中**唯一**允许出现
  * `localStorage` 的地方（见 06-1 §2.8.2、§2.9.1）。
  *
- * ⚠️ 重要变更：IndexedDB 适配器（`IndexedDbStorageAdapter`）已**整体删除**。
- * 学习数据与内容全部改为服务端存储，浏览器不再持有任何业务数据。
- * 现在 localStorage 只允许承载四类键，且仅此四类：
+ * 学习数据与内容全部存在服务端，浏览器不持有任何业务数据；
+ * localStorage 只允许承载四类键，且仅此四类：
  *   ① 会话 Token（`sc.session`）；
  *   ② 少量纯 UI 偏好（`sc.currentChild` 之类），丢了最多是重选一次，不含任何学习记录；
  *   ③ 设备标识（`sc.deviceId`）—— 见 `ensureDeviceId()`，用来把同一账号的
@@ -14,8 +13,8 @@
  * 任何「以本地为主存储」的新键都属于违规。
  *
  * 为什么不干脆把 Token 也挪到别处：Token 必须是同步可读的
- * （路由守卫在首个 tick 就要判断登录态），而 IndexedDB / Cache Storage 都是异步的，
- * 用它们会导致「进页面闪一下登录页再跳回来」。所以 Token 留在 localStorage，
+ * （路由守卫在首个 tick 就要判断登录态），而浏览器侧可行的替代（Cache Storage 等）
+ * 都是异步的，用它们会导致「进页面闪一下登录页再跳回来」。所以 Token 留在 localStorage，
  * 这是刻意保留的唯一例外 —— 而且它只是凭据，不含任何儿童数据。
  */
 

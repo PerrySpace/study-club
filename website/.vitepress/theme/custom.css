@@ -1,0 +1,36 @@
+/* 品牌黄浅色主题覆盖 —— 学习俱乐部
+ * 品牌主色 #f4b942（加深 #eaa92e / 浅 #ffd166）。
+ * brand-1 用于正文链接，取加深值以保证在白色背景上的对比度。 */
+
+:root {
+  --vp-c-brand-1: #b07d0a;
+  --vp-c-brand-2: #eaa92e;
+  --vp-c-brand-3: #f4b942;
+  --vp-c-brand-soft: rgba(244, 185, 66, 0.16);
+
+  /* 按钮：浅黄底 + 深色文字，保证可读性 */
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: #3d2f07;
+  --vp-button-brand-bg: #f4b942;
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: #3d2f07;
+  --vp-button-brand-hover-bg: #eaa92e;
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: #3d2f07;
+  --vp-button-brand-active-bg: #d99a1f;
+}
+
+/* 首页 Hero 标题使用品牌黄渐变 */
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #f4b942 30%, #ffd166);
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #f4b942 50%, #ffd166 50%);
+  --vp-home-hero-image-filter: blur(44px);
+}
+
+/* 自定义容器与提示统一使用品牌黄点缀 */
+:root {
+  --vp-custom-block-tip-border: #f4b942;
+  --vp-custom-block-tip-text: #6b4d0a;
+  --vp-custom-block-tip-bg: rgba(244, 185, 66, 0.12);
+}

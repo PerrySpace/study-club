@@ -18,6 +18,11 @@ dist-ssr
 build
 *.tsbuildinfo
 
+# 用户文档站（VitePress）构建缓存与产物
+website/.vitepress/cache
+website/.vitepress/.temp
+website/.vitepress/dist
+
 # 环境与密钥（绝不入库）
 .env
 .env.*

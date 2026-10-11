@@ -3,8 +3,8 @@
  * ReportView —— 家长报告（S-13 / P-01）。
  *
  * ⚠️ 所有统计口径都来自**服务端**（`GET /learning/state` 的 progress + 报告接口的 trend）。
- * 旧版在这里用 `listAnswerRecords(500)` 把明细拉到本地再算正确率 —— 那既有采样上限
- * （超过 500 条就不准），又和服务端算的 `progress.accuracy` 不是同一套分母。
+ * 客户端不拉明细自行统计 —— 那样既有采样上限（条数封顶后不准），
+ * 又和服务端算的 `progress.accuracy` 不是同一套分母。
  */
 import { computed, onMounted, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';

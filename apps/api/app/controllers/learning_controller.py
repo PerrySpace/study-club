@@ -454,7 +454,7 @@ async def list_review_states(
     items = [
         {
             **serialize(d),
-            # 与前端约定：本地复合键形态，便于 IndexedDB 时代的调用点平滑迁移
+            # 与前端约定：复合键形态
             "_id": f"{child_oid}:{d.get('character_id')}",
             "child_id": str(child_oid),
         }
@@ -505,7 +505,7 @@ async def list_answer_records(
 
 
 # ---------------------------------------------------------------------------
-# 数据可迁移性（P0：唯一不依赖任何服务的方式 —— 但导出源改为服务端真源）
+# 数据可迁移性（导出源为服务端真源；导出/导入作为备份与迁移手段）
 # ---------------------------------------------------------------------------
 SCHEMA_VERSION = 1
 
@@ -513,7 +513,7 @@ SCHEMA_VERSION = 1
 async def export_bundle(repos: Repositories, account_id: ObjectId, child_id: str) -> dict:
     """导出该孩子的完整学习数据包（JSON 可直接落盘，也可再导入）。
 
-    ⚠️ 与「本地优先」版本的差异：导出源从 IndexedDB 改为服务端真源。
+    导出源为服务端真源。
     这让「数据可迁移」这条 P0 承诺在服务端存储下依然成立 ——
     用户的数据不因我们换了存储位置而变得更难带走。
     """

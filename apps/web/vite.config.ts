@@ -8,10 +8,10 @@ import { VitePWA } from 'vite-plugin-pwa';
  * apps/web 构建配置。
  *
  * 关键点：
- *  1. 内容随包构建：`content/**` 位于仓库根，需把 fs.allow 放宽到仓库根，
- *     否则 Vite dev server 会拒绝加载 `../../../../content/*.json`。
- *  2. PWA：`registerType: 'autoUpdate'`，预缓存内容 JSON 与字体；
- *     **不缓存任何 API 响应**（后端只是可选增强，离线时须静默降级）。
+ *  1. 内容由服务端提供（经 `/content/*` 接口）；`content/**` 位于仓库根，
+ *     仅用于种子导入与本地开发，故把 fs.allow 放宽到仓库根。
+ *  2. PWA：`registerType: 'autoUpdate'`，预缓存应用外壳与字体；
+ *     **不缓存任何 API 响应**（数据以服务端为准，避免陈旧内容）。
  *  3. 三档断点由 packages/tokens 的 CSS 变量与 TS 常量提供，此处不写魔法数字。
  */
 export default defineConfig({
@@ -24,7 +24,7 @@ export default defineConfig({
       manifest: {
         name: '学习俱乐部',
         short_name: '学习俱乐部',
-        description: '小学 1–6 年级课内识字 + 古诗文启蒙，本地优先、离线可用。',
+        description: '小学 1–6 年级课内识字 + 古诗文启蒙。',
         lang: 'zh-CN',
         start_url: '/',
         scope: '/',

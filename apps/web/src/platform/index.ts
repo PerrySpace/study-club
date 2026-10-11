@@ -5,10 +5,9 @@
  * 业务代码此后只通过 `usePlatform()` / `useCore()` 访问平台能力，
  * **不再出现任何浏览器 API**。
  *
- * ⚠️ 与「本地优先」版本的差异：
- *   - `storage`（IndexedDB）已移除，只剩 `preference`（仅存会话 Token）
- *   - 仓储由 `LocalRepository` 换成 `ApiRepository` —— 服务端是唯一真源
- *   - 内容源只剩 `HttpSource`（无随包 / 远端静态兜底）
+ * 平台上下文只暴露 `preference`（会话 Token / 设备标识 / UI 偏好），不暴露业务数据存储。
+ *   - 仓储由 `ApiRepository` 提供 —— 服务端是唯一真源
+ *   - 内容源为 `HttpSource`
  *   - 因此 **ApiClient 成为必需**：没有后端地址就没有可用产品，
  *     启动时直接给出可诊断的错误，而不是让用户面对一个空壳页面。
  */

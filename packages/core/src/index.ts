@@ -8,8 +8,7 @@
  * 本包只提供：类型、常量、能力开关、纯算法、仓储接口与实现、内容源、Pinia 领域 store。
  * 平台实现由各外壳在 apps/&lt;shell&gt;/src/platform/ 注入。
  *
- * ⚠️ 存储口径已变更（见 02-4 修订）：**服务端是唯一真源**，
- * 本包不再提供任何 IndexedDB / localStorage 实现 ——
+ * ⚠️ 数据口径：**服务端是唯一真源**，本包不提供任何本地存储实现 ——
  * `repositories/remote.ts` 的 `ApiRepository` 是 `ProgressRepository` 的唯一实现。
  */
 

@@ -4,8 +4,8 @@
  * 只负责「哪些字到期」与入口；真正的复习会话复用 LessonView（/lesson/due）。
  *
  * ⚠️ 「哪些字算到期」由**服务端**判定（`state.due_reviews` / `progress.due_count`）。
- * 旧版在客户端用 `isDue()` 自己比时间，与服务端的判定必然会有微妙差异
- * （时区、下次复习时间的取整、服务端补算），家长会在两个页面上看到不同的数字。
+ * 客户端不自己比时间 —— 两端各算一份必然会有微妙差异（时区、下次复习时间的取整、
+ * 服务端补算），家长会在不同页面上看到不同的数字。
  */
 import { computed, onMounted, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';

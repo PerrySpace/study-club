@@ -15,7 +15,7 @@ export function usePlatform() {
 
   return {
     platform: core.platform,
-    // 注意：这里**没有** storage。浏览器不再保存任何业务数据（IndexedDB 适配器已删除），
+    // 注意：这里**没有** storage。浏览器不再保存任何业务数据，
     // preference 仅用于会话 Token 与少量 UI 偏好，需要业务存储请走 core.repositories。
     preference: core.platform.preference,
     http: core.platform.http,

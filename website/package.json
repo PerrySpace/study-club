@@ -1,0 +1,17 @@
+{
+  "name": "@study-club/website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.5.0"
+  },
+  "dependencies": {
+    "@esbuild/win32-x64": "^0.21.5",
+    "@rollup/rollup-win32-x64-msvc": "^4.64.5"
+  }
+}

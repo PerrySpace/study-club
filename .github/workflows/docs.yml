@@ -1,0 +1,63 @@
+name: Docs
+
+on:
+  push:
+    # 本仓库默认分支为 master（见 CONTRIBUTING 的分支模型）
+    branches: [master]
+    paths:
+      - 'website/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # website/ 是自包含的 VitePress 项目（不在 pnpm workspace 内），
+      # 因此在 website 目录内用 npm 安装与构建，最稳妥。
+      - name: Install dependencies
+        working-directory: website
+        run: npm install
+
+      - name: Build
+        working-directory: website
+        # DOCS_BASE 说明：GitHub Pages 项目站点部署在 /<repo>/ 子路径下，
+        # 故构建时把 base 设为 /study-club/；改用自定义域名或根路径部署时改为 /。
+        env:
+          DOCS_BASE: /study-club/
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/.vitepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

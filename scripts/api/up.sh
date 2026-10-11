@@ -2,7 +2,7 @@
 # 启动 api 容器（host 网络，监听 API_PORT，默认 8000）。
 #
 # 依赖：MongoDB 已在宿主的 MONGO_PORT 上就绪（scripts/db/start.sh）。
-# 说明：api 是「可选增强」——即使它没起来，前端仍可完整使用（本地优先）。
+# 说明：api 为云端后台；前端登录后依赖它拉取内容与学习数据。
 set -euo pipefail
 
 source "$(dirname "$0")/../lib/common.sh"

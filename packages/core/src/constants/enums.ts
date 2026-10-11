@@ -30,8 +30,8 @@ export type DeviceFormType = (typeof DEVICE_FORM)[keyof typeof DEVICE_FORM];
  * 题型 —— key 与取值都以后端 `content_controller.QUESTION_STEMS` 为准。
  * 客户端按 `type` 决定渲染方式（图片 / 音频 / 语音输入 / 笔顺 / 古诗）。
  *
- * ⚠️ 与旧版的差异：`stroke-order` 已更正为 `stroke`（后端实际取值），
- * 并补上了 `meaning-choice`、`speak`。改 key/取值前先同步后端字典，
+ * ⚠️ 取值使用后端实际下发的 `stroke`（注意不是 `stroke-order`），
+ * 另有 `meaning-choice`、`speak`。改 key/取值前先同步后端字典，
  * 否则会出现「前端能渲染但后端不下发」这类静默失效。
  */
 export const QUESTION_TYPE = {

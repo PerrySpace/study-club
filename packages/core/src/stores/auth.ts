@@ -1,9 +1,8 @@
 /**
  * auth store —— 账号会话（**服务端唯一身份**）。
  *
- * ⚠️ 与旧版的分野：这里不再有「先不注册，纯本机」的本地身份模式。
- * 存储口径已改为「彻底服务端、必须先登录」，`LocalIdentity` / `IDENTITY_MODE` 一并移除，
- * 因此不再有 `chooseMode()`；能用的前提就是有 `Session`。
+ * 身份一律由服务端签发：不存在「先不注册、纯本机」的本地身份模式，
+ * 因此没有 `LocalIdentity` / `IDENTITY_MODE` / `chooseMode()`；能用的前提就是有 `Session`。
  *
  * 登录态的判定口径（重要）：
  *   - `isAuthenticated` **只看 `session`**，不看 `account`。

@@ -27,7 +27,7 @@ Python 3.12 + FastAPI + MongoDB（motor 异步）。职责按 [docs/README.md](.
 
 ### ⛔ 掩藏（不注册任何路由，调不到）
 
-手机号/短信 OTP、微信授权登录、账号绑定、支付与订阅、推送与设备、多角色 RBAC（`/admin/roles`、`/admin/users`）。
+手机号/短信 OTP、微信授权登录、账号绑定、支付与订阅、推送与设备（以上**需企业主体**）；多角色 RBAC（`/admin/roles`、`/admin/users`，属**本期不做**，与企业主体无关）。
 契约与类型保留，代码不启用——见 `tests/test_routes.py` 的断言。
 
 ## 二、本地运行（不装 Docker 也能跑）

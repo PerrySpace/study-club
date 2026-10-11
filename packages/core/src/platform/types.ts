@@ -151,7 +151,7 @@ export interface SpeechAdapter {
 
 export interface PlatformContext {
   /**
-   * ⚠️ 已移除 `storage`（IndexedDB 集合存储）。
+   * 平台上下文只暴露 `preference`（凭据与 UI 偏好），不暴露业务数据存储。
    * 学习数据已全部服务端化，浏览器不再持有业务数据；
    * 外壳只暴露 `preference`，且它**只承载会话 Token**。
    */
