@@ -6,6 +6,7 @@ import { defineConfig } from 'vitepress'
 const REPO = 'https://gitee.com/perry-space/study-club'
 const REPO_MIRROR = 'https://github.com/PerrySpace/study-club'
 const DEMO = 'https://study.perryspace.club'
+const SITE = 'https://perryspace.github.io/study-club/'
 
 export default defineConfig({
   title: '学习俱乐部',
@@ -23,6 +24,19 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
     ['meta', { name: 'theme-color', content: '#f4b942' }],
+    // 社交分享卡片：链接被转发到微信 / 微博 / X 等平台时用于生成摘要。
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: '学习俱乐部 — 跟着课本学汉字' }],
+    [
+      'meta',
+      {
+        property: 'og:description',
+        content:
+          '面向小学 1–6 年级的课内识字与古诗文启蒙应用，免费开放、开源、可自托管。',
+      },
+    ],
+    ['meta', { property: 'og:url', content: SITE }],
+    ['meta', { name: 'twitter:card', content: 'summary' }],
   ],
 
   themeConfig: {
