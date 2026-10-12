@@ -53,7 +53,7 @@ def test_unknown_code_defaults_to_400():
 
 
 def test_biz_exception_defaults():
-    exc = E.BizException(E.INVITE_INVALID, "邀请码或口令不正确")
+    exc = E.BizException(E.INVITE_INVALID, "邀请码或密码不正确")
     assert exc.code == 40103
     assert exc.http_status == 401
     assert exc.errors is None
@@ -66,4 +66,4 @@ def test_biz_exception_with_field_errors():
 
 
 def test_unified_message_constant():
-    assert E.UNIFIED_AUTH_MESSAGE == "邀请码或口令不正确"
+    assert E.UNIFIED_AUTH_MESSAGE == "邀请码或密码不正确"

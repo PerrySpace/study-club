@@ -1,7 +1,7 @@
 """身份域仓储：账号 / 邀请码 / 恢复码 / 设备会话。
 
 「彻底服务端」之后这些集合承担全部身份状态，且**每一步都要能审计**。
-口令与邀请码只以哈希形式出现在这里，明文一律不落库。
+密码与邀请码只以哈希形式出现在这里，明文一律不落库。
 """
 
 from __future__ import annotations
@@ -116,7 +116,7 @@ class AccountRepository(BaseRepository):
         pipeline.append({"$unset": "_has_children"})
         rows = await self.db["accounts"].aggregate(pipeline).to_list(length=limit)
         for row in rows:
-            # 口令/密文相关字段一律不出口
+            # 密码/密文相关字段一律不出口
             row.pop("passcode_hash", None)
             row.pop("sync_key_salt", None)
         return rows, total
@@ -148,7 +148,7 @@ class AccountRepository(BaseRepository):
         ⚠️ **字段白名单在控制器层**（`admin_controller`）：这里只负责落库，
         不做业务判断。`passcode_hash` / `invite_code_hash` / `sync_key_salt`
         绝不能出现在 `patch` 里 —— 改登录凭据必须走各自的专用方法，
-        否则会绕过口令哈希校验与登录锁定逻辑。
+        否则会绕过密码哈希校验与登录锁定逻辑。
         """
         if not patch:
             return await self.exists({"_id": account_id})

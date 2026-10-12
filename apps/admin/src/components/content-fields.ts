@@ -18,8 +18,7 @@ export type FieldKind =
   | 'image'
   | 'audio'
   | 'stroke'
-  | 'poem-lines'
-  | 'reading-sentences';
+  | 'poem-lines';
 
 export interface FieldDef {
   /** 字段名（snake_case，与内容包一致） */

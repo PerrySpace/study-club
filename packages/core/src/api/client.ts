@@ -301,7 +301,7 @@ export class ApiClient {
   }
 
   // ---------------- 内容（登录后可见） ----------------
-  /** 一次性引导：清单 + 字库 + 古诗 + 单元 + 关卡 + 故事 + 徽章。 */
+  /** 一次性引导：清单 + 字库 + 古诗 + 单元 + 关卡 + 识字短文 + 徽章。 */
   contentBootstrap(grade: number, includeFullChars = true): Promise<Record<string, unknown>> {
     return this.request('GET', '/content/bootstrap', {
       params: { grade, include_full_chars: includeFullChars },

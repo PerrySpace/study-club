@@ -5,7 +5,7 @@
 但运行时真源是 MongoDB。导入是**幂等 upsert**，可以随时重跑。
 
 导入的两类数据：
-1. 内容文档（characters/poems/units/lessons/stories/badges/readings）
+1. 内容文档（characters/poems/units/lessons/stories/badges）
 2. 素材文件（content/assets/**）→ 复制进 ASSET_DIR 并登记 assets 集合
 """
 
@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 from ..core import errors as E
 from ..core.config import settings
@@ -22,6 +22,14 @@ from ..core.datetimes import normalize_dates
 from ..models.content import ContentImportRequest
 from ..repositories import Repositories
 from ..repositories.content_registry import IMPORT_SOURCES, COUNT_KEYS, import_source_for
+# ⛔ 关卡重算**刻意复用 seed 的实现**，而不是在请求路径里再写一套：
+#    生成规则（分桶 / 每关字数 / overrides / 清理旧关）只允许有一处真源，
+#    两份实现一定会漂移，而漂移的症状是「后台 14 关、客户端 13 关」这种极难定位的偏差。
+from ..seed.importer import rebuild_lessons as _rebuild_lessons
+
+#: 会改变**关卡编排**的内容集合 —— 动到它们就必须重算关卡。
+#: 判断依据是 `lesson_generator.generate_lessons` 的入参：字库 / 古诗 / 识字短文。
+LESSON_SOURCE_COLLECTIONS: frozenset[str] = frozenset({"characters", "poems", "stories"})
 
 
 def _now() -> datetime:
@@ -35,6 +43,23 @@ def repo_root() -> Path:
         if (candidate / "content").is_dir():
             return candidate
     return Path.cwd()
+
+
+async def rebuild_lessons_for(
+    repos: Repositories, collections: Iterable[str]
+) -> dict | None:
+    """内容变了就**立刻重算关卡**；动的集合与关卡无关时什么都不做。
+
+    为什么要挂在所有写入路径上：关卡是**派生数据**（孩子的学习地图读的就是它），
+    而内容集合只是它的输入。只写内容不重算关卡，孩子端就等于什么都没变化 ——
+    运营会以为「导入失败」，实际上数据早就进库了（2026-10-12 真实踩过）。
+
+    传进来的 `collections` 用集合名（`characters`/`poems`/`stories`）。
+    返回 `None` 表示「与关卡无关，没重算」，让调用方能区分「没做」与「做了但 0 条」。
+    """
+    if not (set(collections) & LESSON_SOURCE_COLLECTIONS):
+        return None
+    return await _rebuild_lessons(repos.db, repo_root())
 
 
 def _read_items(path: Path) -> list[dict]:
@@ -65,7 +90,6 @@ def _repository_for(repos: Repositories, collection: str):
         "lessons": repos.lessons,
         "stories": repos.stories,
         "badges": repos.badges,
-        "readings": repos.readings,
     }
     repo = spec_map.get(collection)
     if repo is None:
@@ -211,6 +235,14 @@ async def run_import(repos: Repositories, req: ContentImportRequest) -> dict:
         results.append(await import_assets(repos, root, dry_run=req.dry_run))
 
     if not req.dry_run:
+        # ⭐ 关卡重算**必须紧跟内容写入**：孩子端地图读的是 `lessons`，
+        #    而它是派生数据。以前这一步只存在于 `deploy`（seed）里，
+        #    于是「后台导入完 → 孩子端毫无变化 → 以为导入失败」。
+        #    重算会把「按当前库内内容应有哪些关卡」整份算出来（含清理旧关），
+        #    并把结果并进返回体，让后台能直接显示「新增/更新/清理了几关」。
+        lessons_result = await rebuild_lessons_for(repos, [r["collection"] for r in results])
+        if lessons_result is not None:
+            results.append(lessons_result)
         await refresh_manifest(repos)
 
     return {

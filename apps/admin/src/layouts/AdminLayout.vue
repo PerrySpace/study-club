@@ -22,9 +22,9 @@ const menu = [
   { index: '/users', label: '用户', icon: 'User' },
   { index: '/invites', label: '邀请码', icon: 'Ticket' },
   { index: '/characters', label: '字库', icon: 'Collection' },
-  { index: '/readings', label: '识字短文', icon: 'Document' },
   { index: '/poems', label: '古诗', icon: 'Notebook' },
-  { index: '/stories', label: '故事 / 儿歌', icon: 'Reading' },
+  // 孩子端第三条线的内容（集合名仍是 `stories`，孩子端叫「识字短文」）。
+  { index: '/stories', label: '识字短文', icon: 'Reading' },
   { index: '/config', label: '站点配置', icon: 'Setting' },
 ];
 
@@ -47,7 +47,8 @@ async function handleLogout(): Promise<void> {
   <el-container class="admin-shell">
     <el-aside class="admin-aside" :width="'var(--admin-aside-width)'">
       <div class="brand">
-        <span class="brand-dot" />
+        <!-- logo-mark.png 自带白色圆角底（圆角外透明）：深色侧栏上是圆角白卡 -->
+        <img class="brand-logo" src="/logo-mark.png" alt="study-club" />
         <div>
           <strong>study-club</strong>
           <small>内容后台 · 单管理员</small>
@@ -103,11 +104,9 @@ async function handleLogout(): Promise<void> {
   border-bottom: 1px solid rgb(255 255 255 / 8%);
 }
 
-.brand-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #67c23a;
+.brand-logo {
+  width: 32px;
+  height: 32px;
   flex: none;
 }
 

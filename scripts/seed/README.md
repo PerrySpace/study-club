@@ -20,7 +20,7 @@ scripts/seed/seed.sh --mongo-uri mongodb://localhost:27017/study_club
 
 ## ⭐ 内容优先级：初始化用仓库，库里有数据就用库里的
 
-内容型集合（`characters / poems / stories / readings / curriculum_units / badges`）
+内容型集合（`characters / poems / stories / curriculum_units / badges`）
 按下面两条规则决定行为：
 
 | 情况 | 模式 | 行为 |
@@ -95,7 +95,7 @@ scripts/seed/seed.sh --only assets     # 导入 09_assets.json
   需要导入时在本机/服务器上现场签发 + `scripts/seed/seed.sh --only invites` 即可。
   ⚠️ `01_invites.json` 里的「示例批次」是**演示数据，其明文码不存在**，无法用于注册；
   要测试注册请先签发真码（见 `scripts/api/README` 或根 README 快速开始）。
-- **账号种子不放明文口令**：`passcode_hash` 留空（不可登录），或用 `scripts/api/hash-password.sh` 生成后填入；
+- **账号种子不放明文密码**：`passcode_hash` 留空（不可登录），或用 `scripts/api/hash-password.sh` 生成后填入；
   也可在**本地副本**里写 `passcode` 字段，导入器会哈希后入库且不留明文。
 - 内容变更的主路径是改 `content/` 里的 JSON（Git 版本管理），本目录只负责「把内容推进数据库」。
 - ⚠️ **库里已有数据的集合不会被仓库覆盖**（见上面「内容优先级」）——

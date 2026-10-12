@@ -36,9 +36,6 @@ def test_api_prefix_applied():
         "/api/v1/content/lessons/{lesson_id}/questions",
         "/api/v1/content/stories",
         "/api/v1/content/badges",
-        # 识字短文（阅读承接：用已学字编的读本）
-        "/api/v1/content/readings",
-        "/api/v1/content/readings/{reading_id}",
         # 素材下发（公开：<img>/<audio> 无法携带 Authorization）
         "/api/v1/assets/{asset_id}",
         # 认证

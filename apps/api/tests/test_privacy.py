@@ -1,4 +1,4 @@
-"""隐私红线：统计禁止个人标识、儿童档案拒收敏感字段、口令强度。"""
+"""隐私红线：统计禁止个人标识、儿童档案拒收敏感字段、密码强度。"""
 
 from __future__ import annotations
 
@@ -46,7 +46,7 @@ def test_child_create_ok_minimal():
     assert child.daily_time_limit_min == 20
 
 
-# --------------------------- 口令强度 ---------------------------
+# --------------------------- 密码强度 ---------------------------
 def test_passcode_too_short():
     with pytest.raises(E.BizException) as exc:
         validate_passcode("1234")

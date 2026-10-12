@@ -40,7 +40,7 @@ async def register(
     request: Request,
     repos: Repositories = Depends(get_repos),
 ):
-    """统一注册：用户名/手机号二选一 + 口令（邀请码按开关可选）。"""
+    """统一注册：用户名/手机号二选一 + 密码（邀请码按开关可选）。"""
     client_id = body.client.client_id if body.client else None
     data = await auth_controller.register(repos, body, _client(request, client_id))
     return ok(data, http_status=201)

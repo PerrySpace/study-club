@@ -1,7 +1,7 @@
 """单管理员后台控制器（MVC —— Controller 层）。
 
 不做 RBAC：只有「是/不是管理员」两种身份（见 05-1）。所有写操作记入 audit_logs。
-审计不记录明文邀请码/口令/密文载荷——`diff` 只记元数据（03-1 §7.1）。
+审计不记录明文邀请码/密码/密文载荷——`diff` 只记元数据（03-1 §7.1）。
 
 **一套通用 CRUD 覆盖 6 类内容**：差异（集合名 / id 规则 / 必填字段 / 可搜索字段）
 全部来自 `repositories/content_registry.py` 的**数据**，因此新增一类内容不需要改本文件。
@@ -308,7 +308,7 @@ async def get_user(repos: Repositories, account_id: str) -> dict:
 # ---------------------------------------------------------------------------
 # 可编辑字段白名单。刻意**不含**：
 #   - `passcode_hash` / `invite_code_hash`：改登录凭据必须走各自专用方法，
-#     否则会绕过口令哈希校验与登录锁定；
+#     否则会绕过密码哈希校验与登录锁定；
 #   - `sync_key_salt`：端到端加密密钥盐，一改就再也解不开历史密文；
 #   - `role`：单管理员后台没有多角色体系（05-1 §1.3），开放它等于凭空造 RBAC。
 _USER_EDITABLE_FIELDS = ("display_name", "avatar_key", "access_tier")
@@ -699,6 +699,20 @@ def _strip_internal(payload: dict[str, Any]) -> dict[str, Any]:
     return {k: v for k, v in payload.items() if k not in ("_id", "created_at", "updated_at", "created_by", "reviewed_by", "reviewed_at")}
 
 
+async def _after_content_write(repos: Repositories, collection: str) -> None:
+    """单条内容写入（新增 / 编辑 / 下架 / 删除）之后的**两件必做事**。
+
+    两件都是「改完能立刻被看见」的前提，缺一个就会出现「改了没反应」：
+
+    1. **重算关卡** —— 关卡是派生数据（由字库 / 古诗 / 识字短文算出），
+       孩子端地图读的也是关卡而不是内容本身。不重算，改了内容等于没改。
+    2. **刷新清单版本** —— `/health` 与客户端看到的 `content_version` 不变，
+       客户端就不会重拉内容，于是「库里改了、客户端还是旧的」会伪装成缓存问题。
+    """
+    await content_import_controller.rebuild_lessons_for(repos, [collection])
+    await content_import_controller.refresh_manifest(repos)
+
+
 async def create_content(
     repos: Repositories, collection: str, payload: dict[str, Any], actor: dict, ip: str
 ) -> dict:
@@ -741,6 +755,7 @@ async def create_content(
         diff={"id": doc_id},
         ip=ip,
     )
+    await _after_content_write(repos, spec.collection)
     return serialize(doc)
 
 
@@ -774,18 +789,18 @@ async def update_content(
         diff={"fields": sorted(patch.keys())},
         ip=ip,
     )
+    await _after_content_write(repos, spec.collection)
     return serialize(saved or {**existing, **patch})
 
 
 # 谁可能「指向」一条内容：这些集合的 `character_ids` 装的是别的内容 id
-# （识字关装字 id、古诗关装诗 id、故事关装故事 id；短文与单元装字 id）。
+# （识字关装字 id、古诗关装诗 id、故事关装故事 id；单元装字 id）。
 # ⚠️ 三元组是（Repositories 属性名, 集合名, 字段）——**这两个名字不一样**：
 #    单元在 Repositories 上是 `units`，集合名却叫 `curriculum_units`，
 #    混用会在查引用时直接 AttributeError（测试已钉住）。
 _REFERENCE_FIELDS: tuple[tuple[str, str, str], ...] = (
     ("lessons", "lessons", "character_ids"),
     ("units", "curriculum_units", "character_ids"),
-    ("readings", "readings", "character_ids"),
 )
 
 
@@ -798,7 +813,7 @@ async def references_for(repos: Repositories, collection: str, doc_id: str) -> l
     """
     counts: dict[str, dict[str, Any]] = {}
 
-    if collection in ("characters", "poems", "stories", "readings"):
+    if collection in ("characters", "poems", "stories"):
         for repo_key, coll_name, field in _REFERENCE_FIELDS:
             n = await getattr(repos, repo_key).count({field: doc_id})
             if n:
@@ -862,6 +877,9 @@ async def delete_content(
             target_id=doc_id,
             ip=ip,
         )
+        # ⚠️ 下架也要重算关卡 + 刷版本：它同样改变了「哪些内容参与生成」，
+        #    漏掉这一步的症状是「下架了但孩子端还在练」。
+        await _after_content_write(repos, spec.collection)
         return {"deleted": True, "id": doc_id, "hard": False, "references": []}
 
     references = await references_for(repos, collection, doc_id)
@@ -890,7 +908,8 @@ async def delete_content(
     )
     # ⚠️ 清单计数与 content_version 必须跟着变：否则 `/health` 停在旧版本、
     #    客户端不重拉，「库里删了、客户端还显示着」会伪装成缓存问题。
-    await content_import_controller.refresh_manifest(repos)
+    #    同理，删了内容还得重算关卡 —— 悬空引用正是靠这一步收敛的。
+    await _after_content_write(repos, spec.collection)
     return {"deleted": True, "id": doc_id, "hard": True, "references": references}
 
 
@@ -948,16 +967,12 @@ def content_template(collection: str) -> dict:
 
 
 # 导入时**自动重算**、手改无效的字段。在模板里显式标注，避免运营对着它反复改。
+# 只列**当前仍有模板可下载的类型**（字库 / 古诗）会命中的字段名：
+# 标错一个名字不会报错，只会让运营对着一个「改了没反应」的字段空试（已踩过）。
 _DERIVED_FIELDS = frozenset(
     {
-        "pinyin_plain",
-        "word_count",
-        "character_ids",
-        "character_chars",
-        "new_character_chars",
-        "text",
-        "full_text",
-        "full_pinyin",
-        "version",
+        "pinyin_plain",  # 汉字：由 pinyin 推导
+        "full_text",  # 古诗：由 lines 拼接
+        "version",  # 任何内容：更新时自增
     }
 )

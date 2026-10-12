@@ -29,7 +29,7 @@ export function trackOf(lesson: Lesson | undefined | null): Track {
   return raw === 'poem' || raw === 'story' ? raw : 'literacy';
 }
 
-/** 关卡承载的内容 id（古诗=诗 id，故事=故事 id）。 */
+/** 关卡承载的内容 id（古诗=诗 id，识字短文=短文 id）。 */
 export function contentIdOf(lesson: Lesson): string {
   return lesson.character_ids[0] ?? '';
 }

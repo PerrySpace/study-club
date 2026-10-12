@@ -26,7 +26,6 @@ _ASSET_FIELDS_CHARACTER = {
 _ASSET_FIELDS_POEM = {"audio_ref": "audio_url"}
 _ASSET_FIELDS_STORY = {"audio_ref": "audio_url"}
 _ASSET_FIELDS_BADGE = {"icon_ref": "icon_url"}
-_ASSET_FIELDS_READING = {"audio_ref": "audio_url", "image_ref": "image_url"}
 
 # 题型 → 题面。客户端按 type 决定渲染方式（图片 / 音频 / 语音输入 / 笔顺）。
 QUESTION_STEMS: dict[str, str] = {
@@ -214,25 +213,8 @@ async def get_story(repos: Repositories, story_id: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# 识字短文（阅读承接）
+# 单元
 # ---------------------------------------------------------------------------
-async def list_readings(repos: Repositories, skip: int, limit: int) -> tuple[list[dict], int]:
-    docs, total = await repos.readings.paginate(
-        {"status": "published"},
-        sort=[("grade", 1), ("difficulty", 1), ("order", 1)],
-        skip=skip,
-        limit=limit,
-    )
-    return await _attach_asset_urls(repos, docs, _ASSET_FIELDS_READING), total
-
-
-async def get_reading(repos: Repositories, reading_id: str) -> dict:
-    doc = await repos.readings.find_one({"_id": reading_id})
-    if doc is None:
-        raise E.BizException(E.CONTENT_NOT_FOUND, "短文不存在")
-    return (await _attach_asset_urls(repos, [doc], _ASSET_FIELDS_READING))[0]
-
-
 async def list_units(repos: Repositories) -> list[dict]:
     return await repos.units.list_published(limit=500)
 
@@ -348,8 +330,6 @@ async def bootstrap(repos: Repositories, grade: int, include_full_chars: bool = 
     lessons = await repos.lessons.list_published(limit=1000)
     badges = await list_badges(repos)
     stories = await repos.stories.list_published(limit=500)
-    readings = await repos.readings.list_published(limit=500)
-    readings = await _attach_asset_urls(repos, readings, _ASSET_FIELDS_READING)
 
     # ⚠️ build_filter 的 grade 是**等值**条件，而这里要的是「该年级及以下」的学习池。
     # 客户端固定传 `grade=6` 意图是「一次拉全量」（见 core 的 CONTENT_FETCH_MAX_GRADE），
@@ -379,7 +359,6 @@ async def bootstrap(repos: Repositories, grade: int, include_full_chars: bool = 
         "units": units,
         "lessons": lessons,
         "stories": stories,
-        "readings": readings,
         "badges": badges,
         "game_types": list(GAME_TYPES),
         # 玩法配置随内容包一起下发：客户端「一次启动请求」就能拿到

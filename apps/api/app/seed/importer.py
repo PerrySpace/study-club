@@ -18,7 +18,7 @@
 
 ## ⭐ 内容优先级：初始化用仓库，库里有数据就用库里的
 
-内容型集合（`characters / poems / stories / readings / curriculum_units / badges`）
+内容型集合（`characters / poems / stories / curriculum_units / badges`）
 分两种模式（判定见 `import_spec`）：
 
 - **`repo-first`（仓库优先）**：集合为空（= 首次部署初始化）时全量灌入；
@@ -85,7 +85,6 @@ PRUNABLE_COLLECTIONS: frozenset[str] = frozenset(
         "characters",
         "poems",
         "stories",
-        "readings",
         "curriculum_units",
         "lessons",
         "badges",
@@ -207,7 +206,7 @@ def _upsert_filter(doc: dict, unique_key: str | None) -> dict | None:
 
 
 def _prepare_document(spec: dict, doc: dict) -> dict:
-    """落库前的字段处理：账号口令占位由 seed 生成 Argon2 哈希，明文不入库。"""
+    """落库前的字段处理：账号密码占位由 seed 生成 Argon2 哈希，明文不入库。"""
     prepared = normalize_dates(dict(doc))
     if spec.get("collection") == "accounts":
         plain = prepared.pop("passcode", None)
@@ -380,11 +379,33 @@ async def import_dir(
     return results
 
 
+#: 关卡 spec 的仓库相对路径 —— seed 与「后台写入后重算」共用同一份配置，
+#: 免得 `chars_per_lesson` / overrides 在两处各写一遍又慢慢漂移。
+LESSONS_SPEC_REL = Path("scripts") / "seed" / "data" / "09_lessons.json"
+
+
 def _find_repo_root(start: Path) -> Path:
     for candidate in [start, *start.parents]:
         if (candidate / "content").is_dir():
             return candidate
     return start
+
+
+async def rebuild_lessons(db: AsyncIOMotorDatabase, repo_root: Path) -> dict:
+    """按**库内内容**重算关卡 —— 与 seed 用的是同一份 spec 和同一套实现。
+
+    ## 为什么需要它（2026-10-12 真实事故）
+
+    关卡是**派生数据**（由字库 / 古诗 / 识字短文算出），孩子的学习地图读的也是它。
+    但「后台导入内容」只写内容集合、**不重算关卡**，于是运营导完字库后
+    孩子端一条新关卡都没有，看上去像「导入失败」—— 内容其实早就进库了。
+    以前只有跑一次 `deploy`（seed）才会重算，**导入与生效之间隔了一次发布**。
+
+    所以写入路径（后台导入 / 增删改内容）改完内容后调用本函数，
+    让「改了 → 立刻生效」成立。派生型集合恒为重算 + 清理旧关（见 `import_spec`）。
+    """
+    spec = load_spec(repo_root / LESSONS_SPEC_REL)
+    return await import_spec(db, spec, repo_root)
 
 
 async def run(

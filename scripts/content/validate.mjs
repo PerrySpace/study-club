@@ -46,7 +46,6 @@ function sha256(buf) {
 const SCHEMA_BY_DIR = {
   characters: 'character.schema.json',
   poems: 'poem.schema.json',
-  readings: 'reading.schema.json',
   lessons: 'lesson.schema.json',
   stories: 'story.schema.json',
   badges: 'badge.schema.json',

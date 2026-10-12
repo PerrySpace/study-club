@@ -19,7 +19,6 @@ from .content import (
     ContentManifestRepository,
     LessonRepository,
     PoemRepository,
-    ReadingRepository,
     StoryRepository,
     UnitRepository,
 )
@@ -60,7 +59,6 @@ class Repositories:
         self.lessons = LessonRepository(db)
         self.stories = StoryRepository(db)
         self.badges = BadgeRepository(db)
-        self.readings = ReadingRepository(db)
         self.assets = AssetRepository(db)
         self.manifest = ContentManifestRepository(db)
 
@@ -104,7 +102,6 @@ class Repositories:
             "lessons": await self.lessons.count(),
             "stories": await self.stories.count(),
             "badges": await self.badges.count(),
-            "readings": await self.readings.count(),
             "assets": await self.assets.count({"status": "active"}),
         }
 
@@ -123,7 +120,6 @@ __all__ = [
     "LessonRepository",
     "StoryRepository",
     "BadgeRepository",
-    "ReadingRepository",
     "AssetRepository",
     "ContentManifestRepository",
     "ChildRepository",

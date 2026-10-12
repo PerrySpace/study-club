@@ -51,12 +51,6 @@ const router = createRouter({
           meta: { title: '字库' },
         },
         {
-          path: 'readings',
-          name: 'readings',
-          component: () => import('@/views/ReadingsView.vue'),
-          meta: { title: '识字短文' },
-        },
-        {
           path: 'poems',
           name: 'poems',
           component: () => import('@/views/PoemsView.vue'),
@@ -66,7 +60,7 @@ const router = createRouter({
           path: 'stories',
           name: 'stories',
           component: () => import('@/views/StoriesView.vue'),
-          meta: { title: '故事 / 儿歌' },
+          meta: { title: '识字短文' },
         },
         {
           path: 'config',

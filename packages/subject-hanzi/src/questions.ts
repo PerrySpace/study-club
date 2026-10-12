@@ -36,9 +36,19 @@ function pickDistractors(
   count: number,
 ): string[] {
   const same = pool.filter((c) => c._id !== target._id);
-  // 优先形近字 / 同难度字，避免「一眼就能排除」的假题
-  const similar = same.filter((c) => target.similar_chars.includes(c.char));
-  const rest = same.filter((c) => !target.similar_chars.includes(c.char));
+  // 优先形近字 / 同难度字，避免「一眼就能排除」的假题。
+  //
+  // ⛔ 必须 `?? []`：`similar_chars` 在**后台导入的内容**里经常整片缺失
+  //    （那是运营手工整理的表格，不会填「形近字」这种派生字段），而
+  //    `db-first` 会保留库内版本、不会用仓库内容覆盖它。一旦直接读
+  //    `target.similar_chars.includes(...)`，本函数就在 Array.filter 里抛
+  //    TypeError，调用链 `startQuiz → generateQuestions` 整个中断 ——
+  //    表现为「点『开始闯关』毫无反应、永远到不了结果页」，且**识字线全线
+  //    如此**（运营从表格导入的内容常常整片缺该字段）。
+  //    形近字只是「干扰项优先用谁」的优化，缺了退化成随机取字，完全可接受。
+  const targetSimilar = target.similar_chars ?? [];
+  const similar = same.filter((c) => targetSimilar.includes(c.char));
+  const rest = same.filter((c) => !targetSimilar.includes(c.char));
   const ordered = [...shuffle(similar), ...shuffle(rest)];
   const values: string[] = [];
   for (const c of ordered) {

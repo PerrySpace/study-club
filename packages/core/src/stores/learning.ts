@@ -102,6 +102,13 @@ export const useLearningStore = defineStore('learning', () => {
    * 「下次复习时间 / 间隔天数 / 新解锁徽章」返回。
    *
    * 注意：这里**不**在本地推算下一次复习时间，直接展示 `result.next_review_at`。
+   *
+   * ⛔ **本地计分必须发生在 `await` 之前**：一个孩子答对没答对，在本地按下选项那一刻
+   *    就已经确定了，跟这次上报成不成功毫无关系。曾经把 `+1` 放在 `await` 之后，
+   *    结果服务端一返回 5xx（`POST /learning/answer` 返回 5xx 时），
+   *    异常把后面的累加整段跳过 ⇒ 结果页恒显示「答对 0 / 6、正确率 0%、最高连对 0」，
+   *    孩子明明答对了好几题却一颗星都没有。上报失败只该影响「服务端有没有记上」，
+   *    不该反过来篡改孩子的成绩。
    */
   async function submitAnswer(params: {
     childId: string;
@@ -111,6 +118,11 @@ export const useLearningStore = defineStore('learning', () => {
     responseMs: number;
   }): Promise<AnswerResult> {
     const { childId, question, answer, isCorrect, responseMs } = params;
+
+    if (isCorrect) sessionCorrect.value += 1;
+    else sessionWrong.value += 1;
+    sessionIndex.value += 1;
+
     const result = await useCore().repositories.progress.submitAnswer({
       child_id: childId,
       character_id: question.character_id,
@@ -123,10 +135,6 @@ export const useLearningStore = defineStore('learning', () => {
       session_id: sessionId.value,
       occurred_at: new Date().toISOString(),
     });
-
-    if (isCorrect) sessionCorrect.value += 1;
-    else sessionWrong.value += 1;
-    sessionIndex.value += 1;
 
     // 首页进度条要立刻反映，避免「答完了但进度没动」的错觉；
     // 权威值仍以服务端为准，下次 loadState 会覆盖。

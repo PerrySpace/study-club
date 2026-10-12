@@ -1,6 +1,6 @@
 """认证与身份请求模型（04-1 §二 / 02-5 §三）。
 
-口令字段同时接受 `pin`（文档用词）与 `passcode`（前端 client.ts 用词）——
+密码字段同时接受 `pin`（文档用词）与 `passcode`（前端 client.ts 用词）——
 契约要求「字段只增不改不删」，用别名兼容比强制一端改名更稳妥。
 """
 
@@ -22,7 +22,7 @@ class InviteVerifyRequest(BaseModel):
 
 
 class _PasscodeMixin(BaseModel):
-    """口令字段兼容：pin 与 passcode 二选一。"""
+    """密码字段兼容：pin 与 passcode 二选一。"""
 
     pin: str | None = None
     passcode: str | None = None

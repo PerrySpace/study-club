@@ -1,7 +1,7 @@
-"""安全原语 —— 口令哈希、JWT、邀请码哈希/编码、Ed25519 验签、限流。
+"""安全原语 —— 密码哈希、JWT、邀请码哈希/编码、Ed25519 验签、限流。
 
 设计依据 02-5 §四 安全设计：
-- 口令：Argon2id（argon2-cffi），明文不落日志、不入库
+- 密码：Argon2id（argon2-cffi），明文不落日志、不入库
 - 邀请码：只存 SHA-256 哈希；码为 12 位 Crockford Base32（60 bit 熵）
 - 会话：短期 Access Token（JWT）+ 可吊销的 Refresh Token（只存哈希）
 - 防护：恒定时间比较、限流、失败锁定
@@ -29,7 +29,7 @@ from .config import settings
 from .errors import TOKEN_EXPIRED, TOKEN_INVALID, BizException
 
 # ---------------------------------------------------------------------------
-# 口令（Argon2id）
+# 密码（Argon2id）
 # ---------------------------------------------------------------------------
 # 参数取 OWASP 建议的「平衡档」，单次哈希约几十毫秒，适合登录频率。
 _ph = PasswordHasher(time_cost=3, memory_cost=65536, parallelism=2)
@@ -41,7 +41,7 @@ def hash_passcode(plain: str) -> str:
 
 
 def verify_passcode(plain: str, hashed: str) -> bool:
-    """校验口令。任何异常都视为不匹配，绝不把哈希细节泄漏出去。"""
+    """校验密码。任何异常都视为不匹配，绝不把哈希细节泄漏出去。"""
     if not hashed:
         return False
     try:

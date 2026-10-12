@@ -16,7 +16,8 @@ from pathlib import Path
 
 import pytest
 
-from app.controllers import admin_controller
+from app.controllers import admin_controller, content_import_controller
+from app.controllers.content_import_controller import rebuild_lessons_for as _real_rebuild_lessons_for
 from app.core import errors as E
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -66,6 +67,20 @@ class _FakeRepo:
     async def delete_one(self, flt: dict) -> int:
         return 1 if self.docs.pop(flt.get("_id"), None) is not None else 0
 
+    async def exists(self, flt: dict) -> bool:
+        return any(_matches(d, flt) for d in self.docs.values())
+
+    async def insert_one(self, doc: dict) -> str:
+        self.docs[doc["_id"]] = dict(doc)
+        return doc["_id"]
+
+    async def save(self, doc_id: str, patch: dict) -> dict | None:
+        doc = self.docs.get(doc_id)
+        if doc is None:
+            return None
+        doc.update(patch)
+        return dict(doc)
+
 
 class _FakeManifest:
     def __init__(self) -> None:
@@ -88,13 +103,13 @@ class _FakeAudit:
 
 class _FakeRepos:
     def __init__(self, **collections: list[dict]) -> None:
-        for key in ("characters", "poems", "units", "lessons", "stories", "badges", "readings"):
+        for key in ("characters", "poems", "units", "lessons", "stories", "badges"):
             setattr(self, key, _FakeRepo(collections.get(key)))
         self.manifest = _FakeManifest()
         self.audit_logs = _FakeAudit()
 
     async def content_counts(self) -> dict:
-        return {key: len(getattr(self, key).docs) for key in ("characters", "poems", "readings")}
+        return {key: len(getattr(self, key).docs) for key in ("characters", "poems")}
 
 
 @pytest.fixture
@@ -103,7 +118,7 @@ def repos() -> _FakeRepos:
         characters=[
             {"_id": "ch_1", "char": "水", "status": "published", "grade": 1},
             {"_id": "ch_2", "char": "火", "status": "published", "grade": 1},
-            # 没有任何关卡/单元/短文引用它 —— 用于验证「无人引用时不必 force」
+            # 没有任何关卡/单元引用它 —— 用于验证「无人引用时不必 force」
             {"_id": "ch_3", "char": "山", "status": "published", "grade": 1},
         ],
         lessons=[
@@ -117,6 +132,23 @@ def repos() -> _FakeRepos:
 # ---------------------------------------------------------------------------
 # 默认语义：软删（下架）
 # ---------------------------------------------------------------------------
+@pytest.fixture(autouse=True)
+def lesson_rebuilds(monkeypatch) -> list[list[str]]:
+    """替掉「重算关卡」这一步（它需要真实 DB，那条路径由 `test_seed_importer` 用假 DB 覆盖）。
+
+    这里只关心**写内容之后有没有触发重算** —— 这是「改完孩子端能不能立刻看到」的关键：
+    关卡是派生数据，不重算就等于没改（`.workbuddy/memory` 里记的 2026-10-12 事故）。
+    """
+    calls: list[list[str]] = []
+
+    async def _fake(_repos, collections):
+        calls.append(list(collections))
+        return {"collection": "lessons", "created": 0, "updated": 0, "stale_removed": 0, "total": 0}
+
+    monkeypatch.setattr(content_import_controller, "rebuild_lessons_for", _fake)
+    return calls
+
+
 @pytest.mark.asyncio
 async def test_default_delete_is_offline_and_keeps_doc(repos: _FakeRepos):
     """不带参数时**必须是下架** —— 既有调用方（后台「下架」按钮）语义不能被改掉。"""
@@ -129,11 +161,55 @@ async def test_default_delete_is_offline_and_keeps_doc(repos: _FakeRepos):
 
 
 @pytest.mark.asyncio
-async def test_default_delete_does_not_bump_manifest(repos: _FakeRepos):
-    """下架不改 published 计数，因此不该进版本号（否则客户端每次都白重拉）。"""
+async def test_default_delete_bumps_manifest_and_rebuilds(repos: _FakeRepos, lesson_rebuilds):
+    """⭐ 下架同样要进版本号 + 重算关卡。
+
+    ⚠️ 这里**改过一次结论**：原测试断言「下架不改计数，因此不该进版本号」，
+    理由是「否则客户端每次都白重拉」。但那个理由站不住 ——
+    下架就是把 `status` 置为 `offline`，**published 计数确实变了**；
+    而客户端是按 `content_version` 决定要不要重拉内容的。
+    不刷版本号的直接后果是：**运营下架了，孩子端还在练它**。
+    这也是「改了没生效」这一类问题的同一个根因。
+    """
     before = repos.manifest.doc["content_version"]
     await admin_controller.delete_content(repos, "characters", "ch_1", ACTOR, "127.0.0.1")
-    assert repos.manifest.doc["content_version"] == before
+
+    assert repos.manifest.doc["content_version"] != before, "下架改变了 published 计数，必须进版本号"
+    assert lesson_rebuilds == [["characters"]], "下架后要重算关卡，否则孩子端还是旧关卡"
+
+
+@pytest.mark.asyncio
+async def test_create_and_update_content_trigger_lesson_rebuild(repos: _FakeRepos, lesson_rebuilds):
+    """⭐ 单条内容的「新增 / 编辑」同样要重算关卡 + 刷版本。
+
+    这是运营最常用的两个动作：加一个字、改一个字的年级。若只在「导入」时重算，
+    他们马上会再问一次「我明明改了，孩子端怎么没变」。
+    """
+    created = await admin_controller.create_content(
+        repos, "characters", {"char": "木", "grade": 1, "status": "published"}, ACTOR, "127.0.0.1"
+    )
+    assert created["_id"].startswith("ch_"), "汉字 id 由字符派生（ch_<codepoint>）"
+
+    await admin_controller.update_content(
+        repos, "characters", "ch_3", {"grade": 2}, ACTOR, "127.0.0.1"
+    )
+    assert repos.characters.docs["ch_3"]["grade"] == 2
+    assert lesson_rebuilds == [["characters"], ["characters"]]
+
+
+@pytest.mark.asyncio
+async def test_rebuild_is_skipped_for_unrelated_collections():
+    """拿掉这道闸，改一个徽章就要重算全站关卡（几千条），纯属浪费。
+
+    这里刻意用**没被打桩的真身**：与关卡无关的集合应当在碰数据库之前就返回 None，
+    因此连 repos 都不需要有 `db` 属性。
+    """
+
+    class _NoDb:
+        pass
+
+    assert await _real_rebuild_lessons_for(_NoDb(), ["badges"]) is None
+    assert await _real_rebuild_lessons_for(_NoDb(), []) is None
 
 
 # ---------------------------------------------------------------------------

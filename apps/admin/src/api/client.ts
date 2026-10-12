@@ -6,7 +6,7 @@
  * 因此后台自带一个薄封装，只做三件事：拼 baseURL、解信封、带 admin Token。
  *
  * 约定与 apps/web 保持一致：非 2xx 但响应体仍是合法业务信封时**不抛网络错**，
- * 而是解出业务 code 抛 ApiError —— 否则「口令错误」会被显示成「网络异常」。
+ * 而是解出业务 code 抛 ApiError —— 否则「密码错误」会被显示成「网络异常」。
  */
 
 export interface ApiEnvelope<T> {
@@ -38,7 +38,7 @@ export class NetworkError extends Error {
   }
 }
 
-/** 后端未配置管理员口令时的业务码（镜像 apps/api/app/core/errors.py）。 */
+/** 后端未配置管理员密码时的业务码（镜像 apps/api/app/core/errors.py）。 */
 export const FEATURE_DISABLED = 40302;
 export const FORBIDDEN = 40301;
 export const TOKEN_EXPIRED = 40101;

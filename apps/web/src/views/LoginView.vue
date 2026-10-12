@@ -1,13 +1,13 @@
 <script setup lang="ts">
 /**
- * LoginView —— 账号（用户名 / 手机号）+ 口令登入。
+ * LoginView —— 账号（用户名 / 手机号）+ 密码登入。
  *
  * 统一账号入口，`identifier` 可填**用户名或手机号**；邀请码是注册页的字段（见 RegisterView）。
  * 没有「先不注册，直接使用」的出口 —— 身份一律由服务端签发。
  *
- * 「记住账号与口令」：勾选后把 identifier / passcode 存本机 localStorage 并回填。
+ * 「记住账号与密码」：勾选后把 identifier / passcode 存本机 localStorage 并回填。
  * 会话本身本来就会持久化（下次打开直接进学习页），这个选项只影响**登出之后**
- * 或换到登入页时要不要重新输一遍。口令明文只落在本机、不上传 —— 详见
+ * 或换到登入页时要不要重新输一遍。密码明文只落在本机、不上传 —— 详见
  * platform/storage.ts 的 readLoginMemory 注释（含取舍说明）。
  */
 import { computed, onMounted, ref } from 'vue';
@@ -30,7 +30,7 @@ const toast = useToast();
 const identifier = ref('');
 const passcode = ref('');
 const submitting = ref(false);
-/** 记住账号与口令：默认开（家庭设备，省得每次重输）。 */
+/** 记住账号与密码：默认开（家庭设备，省得每次重输）。 */
 const remember = ref(true);
 
 onMounted(() => {
@@ -56,7 +56,7 @@ async function submit(): Promise<void> {
   submitting.value = true;
   try {
     await auth.login(identifier.value.trim(), passcode.value);
-    // 成功才写记忆：输错了不该把错口令记下来
+    // 成功才写记忆：输错了不该把错密码记下来
     writeLoginMemory(
       remember.value ? { identifier: identifier.value.trim(), passcode: passcode.value } : null,
     );
@@ -65,8 +65,8 @@ async function submit(): Promise<void> {
     await router.replace(redirect || { name: 'home' });
   } catch (err) {
     if (err instanceof BizError) {
-      // 统一错误信息，不区分「账号不存在 / 口令错误」（防枚举，见 02-5 §四）。
-      toast.error(err.message || '账号或口令不正确');
+      // 统一错误信息，不区分「账号不存在 / 密码错误」（防枚举，见 02-5 §四）。
+      toast.error(err.message || '账号或密码不正确');
     } else {
       toast.error('登入失败，请检查网络后重试');
     }
@@ -95,7 +95,7 @@ async function submit(): Promise<void> {
         </label>
 
         <label class="field">
-          <span class="field__label">口令</span>
+          <span class="field__label">密码</span>
           <input
             v-model="passcode"
             class="field__input tap"
@@ -113,13 +113,13 @@ async function submit(): Promise<void> {
         <label class="remember">
           <input v-model="remember" class="remember__box" type="checkbox" />
           <span class="remember__text">
-            记住账号与口令
+            记住账号与密码
             <span class="remember__note">只存在本机浏览器，不上传；公共设备请勿勾选</span>
           </span>
         </label>
 
         <p class="notice text-sm">
-          忘记口令只能靠注册时抄写的<strong>恢复码</strong>重置，我们无法帮你找回口令。
+          忘记密码只能靠注册时抄写的<strong>恢复码</strong>重置，我们无法帮你找回密码。
         </p>
       </div>
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# 生成 ADMIN_PASSWORD_HASH —— Argon2id 口令哈希（与后端 core/security.py 参数一致）。
+# 生成 ADMIN_PASSWORD_HASH —— Argon2id 密码哈希（与后端 core/security.py 参数一致）。
 # 优先用本机 python3；缺少 argon2-cffi 时回退到 api 容器内执行。
-# 用法：scripts/api/hash-password.sh   然后按提示输入口令（不回显）。
+# 用法：scripts/api/hash-password.sh   然后按提示输入密码（不回显）。
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -26,12 +26,12 @@ ph = PasswordHasher(time_cost=3, memory_cost=65536, parallelism=2)
 print(ph.hash(os.environ["PASSCODE"]))'
 
 read_password() {
-  # 已由环境提供口令时直接采用（供流水线 / 自动化调用，避免交互式 read 挂住）。
+  # 已由环境提供密码时直接采用（供流水线 / 自动化调用，避免交互式 read 挂住）。
   if [ -n "${PASSCODE:-}" ]; then
     return 0
   fi
   local p1 p2
-  printf '请输入管理员口令: ' >&2
+  printf '请输入管理员密码: ' >&2
   read -rs p1
   printf '\n请再次输入确认: ' >&2
   read -rs p2
@@ -41,7 +41,7 @@ read_password() {
     exit 1
   fi
   if [ -z "$p1" ]; then
-    log_error "口令不能为空"
+    log_error "密码不能为空"
     exit 1
   fi
   PASSCODE="$p1"
@@ -82,8 +82,8 @@ main() {
   # ⚠️ 必须带【单引号】。
   # Argon2 哈希形如 $argon2id$v=19$m=65536,t=3,p=2$<salt>$<digest>，含有大量 `$`。
   # Docker Compose 会用 dotenv 解析 .env / env_file，**未加引号时会把 `$m`、`$xxxx`
-  # 当成变量引用替换成空串**，哈希被悄悄改坏，表现为「口令明明对，却一直返回
-  # 40301 管理员口令不正确」。dotenv 对**单引号值不做变量插值**，因此这个写法是安全的。
+  # 当成变量引用替换成空串**，哈希被悄悄改坏，表现为「密码明明对，却一直返回
+  # 40301 管理员密码不正确」。dotenv 对**单引号值不做变量插值**，因此这个写法是安全的。
   printf '\n把下面这一行（含单引号）整行替换进仓库根 .env：\n\n' >&2
   printf "ADMIN_PASSWORD_HASH='%s'\n\n" "$hash" >&2
   log_info "改完执行 scripts/api/restart.sh 让 api 重新读取" >&2

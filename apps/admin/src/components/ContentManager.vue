@@ -319,7 +319,12 @@ async function onFileChange(event: Event): Promise<void> {
       return;
     }
     const res = await adminApi.importContent(props.collection, docs, { publish: true });
-    ElMessage.success(`导入完成：新增 ${res.created} / 更新 ${res.updated}`);
+    // 导入会顺带重算关卡（服务端做）—— 把它一并报出来，否则运营不知道为什么
+    // 「导入成功了」孩子端却像是没动静（改完能立刻看到，是这一步的功劳）。
+    const lessons = res.results.find((r) => r.collection === 'lessons');
+    let msg = `导入完成：新增 ${res.created} / 更新 ${res.updated}`;
+    if (lessons) msg += `；关卡已重算（新增 ${lessons.created} / 更新 ${lessons.updated}）`;
+    ElMessage.success(msg);
     await Promise.all([load(), loadGradeCounts()]);
   } catch (err) {
     reportError(err, '导入失败（请检查 JSON 格式与字段）');
@@ -361,7 +366,7 @@ function openCreate(): void {
   for (const f of props.fields) {
     if (f.name in formValues.value) continue;
     if (f.derived) continue;
-    formValues.value[f.name] = f.kind === 'list' || f.kind === 'poem-lines' || f.kind === 'reading-sentences' ? [] : '';
+    formValues.value[f.name] = f.kind === 'list' || f.kind === 'poem-lines' ? [] : '';
   }
   editorVisible.value = true;
 }
@@ -384,7 +389,7 @@ function buildPayload(): Record<string, unknown> {
     if (f.derived) continue;
     const v = formValues.value[f.name];
     if (v === '' || v === undefined) {
-      payload[f.name] = f.kind === 'list' || f.kind === 'poem-lines' || f.kind === 'reading-sentences' ? [] : null;
+      payload[f.name] = f.kind === 'list' || f.kind === 'poem-lines' ? [] : null;
       continue;
     }
     payload[f.name] = f.kind === 'number' ? Number(v) : v;
@@ -527,6 +532,8 @@ defineExpose({ load, loadGradeCounts });
       <br />
       导入只写数据库、不回写仓库；但<b>已导入的内容不会再被发布清掉</b>
       —— 库里有数据时以数据库为准（只补缺，不覆盖、不删除）。
+      内容（字库 / 古诗 / 识字短文）导入或编辑后<b>会自动重算关卡</b>，孩子端立刻生效，
+      不必等下一次发布。
     </p>
 
     <div v-if="withGrade && effectiveGradeTabs.length" class="grade-tabs">

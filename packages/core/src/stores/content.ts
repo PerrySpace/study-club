@@ -19,7 +19,6 @@ import type {
   CurriculumUnit,
   Lesson,
   Poem,
-  Reading,
   Story,
 } from '../types/content';
 import { TRACKS } from '../algorithms/lessons';
@@ -131,19 +130,6 @@ export const useContentStore = defineStore('content', () => {
     return bundle.value.stories.filter((s) => s.status === 'published');
   }
 
-  /**
-   * 识字短文（阅读承接）。
-   *
-   * 只做「按年级 + 难度」的粗筛；**「读不读得下来」由学科包判定**
-   * （`rankPassages`，按已学字覆盖率排序）—— 那里需要 SRS 的已学字集合，
-   * 属于学科逻辑，不该下沉到 core 的内容 store。
-   */
-  function readingsOfGrade(grade: number): Reading[] {
-    return bundle.value.readings
-      .filter((r) => r.status === 'published' && r.grade <= grade)
-      .sort((a, b) => a.difficulty - b.difficulty || a.order - b.order);
-  }
-
   function badges(): Badge[] {
     return bundle.value.badges.filter((b) => b.status === 'active').sort((a, b) => a.order - b.order);
   }
@@ -164,7 +150,6 @@ export const useContentStore = defineStore('content', () => {
     candidateNewCharacterIds,
     poemsOfGrade,
     stories,
-    readingsOfGrade,
     badges,
   };
 });

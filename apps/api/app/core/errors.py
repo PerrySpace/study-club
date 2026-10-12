@@ -21,7 +21,7 @@ INVITE_INVALID = 40103  # 邀请码无效/已用尽/已吊销/已过期（统一
 PASSCODE_INVALID = 40104
 ACCOUNT_LOCKED = 40105
 RECOVERY_INVALID = 40106
-ACCOUNT_INVALID = 40107  # 账号（用户名/手机号）不存在或口令错误（统一错误信息，防枚举）
+ACCOUNT_INVALID = 40107  # 账号（用户名/手机号）不存在或密码错误（统一错误信息，防枚举）
 
 FORBIDDEN = 40301
 FEATURE_DISABLED = 40302
@@ -75,10 +75,10 @@ ERR_CODE_HTTP: dict[int, int] = {
     STORAGE_UNAVAILABLE: 500,
 }
 
-# 统一错误信息（防枚举）：邀请码无效 / 已用尽 / 口令错误一律用它。
-UNIFIED_AUTH_MESSAGE = "邀请码或口令不正确"
-# 账号登录统一文案（防枚举）：用户名/手机号不存在 与 口令错误 一律用它。
-UNIFIED_ACCOUNT_MESSAGE = "账号或口令不正确"
+# 统一错误信息（防枚举）：邀请码无效 / 已用尽 / 密码错误一律用它。
+UNIFIED_AUTH_MESSAGE = "邀请码或密码不正确"
+# 账号登录统一文案（防枚举）：用户名/手机号不存在 与 密码错误 一律用它。
+UNIFIED_ACCOUNT_MESSAGE = "账号或密码不正确"
 
 
 def http_status_for(code: int) -> int:

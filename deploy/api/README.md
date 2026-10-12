@@ -71,7 +71,7 @@ docker compose -f deploy/api/docker-compose.yml up -d
 - `JWT_SECRET`：部署时必须替换（`openssl rand -hex 32`）。
 - `ADMIN_PASSWORD_HASH`：用 `scripts/api/hash-password.sh` 生成。
 - `INVITE_SIGNING_PRIVATE_KEY` / `INVITE_SIGNING_PUBLIC_KEY`：用 `scripts/api/gen-invite-keys.sh` 生成。
-- 端到端加密**没有服务端密钥**：密钥由用户口令在客户端派生，服务端只存密文（见 02-5 §4.5）。
+- 端到端加密**没有服务端密钥**：密钥由用户密码在客户端派生，服务端只存密文（见 02-5 §4.5）。
 
 ## 初始化数据
 

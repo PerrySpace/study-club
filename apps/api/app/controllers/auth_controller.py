@@ -1,7 +1,7 @@
-"""认证控制器（MVC —— Controller 层）—— 邀请码 + 自设口令的注册/登入/刷新/恢复/注销（02-5 §三、§四）。
+"""认证控制器（MVC —— Controller 层）—— 邀请码 + 自设密码的注册/登入/刷新/恢复/注销（02-5 §三、§四）。
 
 安全要点：
-- 口令 Argon2id；邀请码只存 SHA-256 哈希
+- 密码 Argon2id；邀请码只存 SHA-256 哈希
 - 失败信息统一（防枚举）；限流 + 失败锁定
 - Refresh Token 只存哈希，可吊销
 - 恢复码仅返回一次，服务端只存哈希
@@ -44,15 +44,15 @@ _PHONE_RE = re.compile(r"^1[3-9]\d{9}$")
 
 
 # ---------------------------------------------------------------------------
-# 口令强度
+# 密码强度
 # ---------------------------------------------------------------------------
 def validate_passcode(pin: str | None) -> None:
     """≥6 位，不接受纯连续/纯重复数字（家长易用与安全的折中，见 02-5 §3.1）。"""
     if not pin or len(pin) < 6:
         raise E.BizException(
             E.PARAM_INVALID,
-            "口令不合规",
-            errors=[{"field": "pin", "reason": "口令至少 6 位"}],
+            "密码不合规",
+            errors=[{"field": "pin", "reason": "密码至少 6 位"}],
         )
     if pin.isdigit():
         digits = [int(c) for c in pin]
@@ -62,8 +62,8 @@ def validate_passcode(pin: str | None) -> None:
         if ascending or descending or same:
             raise E.BizException(
                 E.PARAM_INVALID,
-                "口令不合规",
-                errors=[{"field": "pin", "reason": "口令不能是连续或重复的数字"}],
+                "密码不合规",
+                errors=[{"field": "pin", "reason": "密码不能是连续或重复的数字"}],
             )
 
 
@@ -201,7 +201,7 @@ async def register(repos: Repositories, req, client: ClientContext) -> dict:
     )
 
     # ⚠️ 「一码一账号」是刻意的身份模型（02-5 §2.2 / §3.4）：邀请码即账号的登录标识，
-    #    家庭内部共用「同一码 + 同一口令」进同一个档案空间；需要隔离就再发一个码。
+    #    家庭内部共用「同一码 + 同一密码」进同一个档案空间；需要隔离就再发一个码。
     #    因此 accounts.invite_code_hash 上有唯一索引。这里必须先做一次**显式前置校验**——
     #    否则重复注册会撞唯一索引，把 pymongo.DuplicateKeyError 抛成 500「服务内部错误」，
     #    既泄漏了数据库约束、又让用户看到一个无法理解的错误（02-5 §4.4 要求统一文案防枚举）。
@@ -303,7 +303,7 @@ async def _finish_login(
     unified: str,
     error_code: int,
 ) -> dict:
-    """登录共用后半程：锁定检查 → 口令校验 → 失败计数 → 签发会话。
+    """登录共用后半程：锁定检查 → 密码校验 → 失败计数 → 签发会话。
 
     两条登录通道（邀请码 / 账号）共用它，保证安全语义完全一致：
     统一文案防枚举、失败锁定、成功清零。
@@ -338,7 +338,7 @@ async def _finish_login(
 
 
 # ---------------------------------------------------------------------------
-# 恢复码重置口令
+# 恢复码重置密码
 # ---------------------------------------------------------------------------
 async def reset_passcode(repos: Repositories, req) -> dict:
     validate_passcode(req.resolved_passcode)
@@ -351,7 +351,7 @@ async def reset_passcode(repos: Repositories, req) -> dict:
         recovery["account_id"], passcode_hash=hash_passcode(req.resolved_passcode or ""), now=now
     )
     await repos.recovery_codes.mark_used(recovery["_id"], now=now)
-    # 重置口令会改变端到端加密密钥派生结果，客户端须重新派生（服务端不持有密钥）
+    # 重置密码会改变端到端加密密钥派生结果，客户端须重新派生（服务端不持有密钥）
     return {"account_id": str(recovery["account_id"]), "reset_at": to_iso(now)}
 
 

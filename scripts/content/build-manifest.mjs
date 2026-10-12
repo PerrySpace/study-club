@@ -28,7 +28,6 @@ const TRACKED = [
   { path: 'lessons/units.json', key: 'units' },
   { path: 'lessons/lessons.json', key: 'lessons' },
   { path: 'stories/stories.json', key: 'stories' },
-  { path: 'readings/readings.json', key: 'readings' },
   { path: 'badges/badges.json', key: 'badges' },
 ];
 

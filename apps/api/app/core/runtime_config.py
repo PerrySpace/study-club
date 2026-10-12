@@ -129,6 +129,20 @@ def _normalize_grades_and_validate(value: Any) -> list[dict[str, Any]]:
     return cleaned
 
 
+# 可写入的配置键白名单 —— **唯一真源**。
+#
+# 为什么要提到模块级：这份清单有两个消费方，必须同时对得上 ——
+#   ① `update_config` 用它过滤补丁（不在表里的一律忽略）；
+#   ② 后台请求模型 `models.admin.SiteConfigUpdate` 必须把每个键都声明成字段。
+# ② 一旦漏声明，模型的 `extra="ignore"` 会把它**静默丢弃**：请求体里明明带着、
+# 控制器 `model_dump()` 里却没有，表现是「保存成功、刷新后一字未变」，
+# 而 runtime_config 自己的单测全绿（因为它是被直接调用的，从没经过模型）。
+# `grades` 就这么丢过一次。提成常量后，测试可以直接比对两层，防止再次漏。
+UPDATABLE_KEYS: frozenset[str] = frozenset(
+    {"require_invite", "registration_open", "announcement", "defaults", "gameplay", "grades"}
+)
+
+
 def _now() -> datetime:
     return datetime.now(timezone.utc)
 
@@ -272,13 +286,16 @@ def gameplay_config() -> dict[str, Any]:
 
 
 async def update_config(repo: Any, patch: dict[str, Any]) -> dict[str, Any]:
-    """合并并落库，随后刷新缓存。只接受白名单字段，其余忽略。"""
+    """合并并落库，随后刷新缓存。只接受白名单字段（`UPDATABLE_KEYS`），其余忽略。
+
+    `None` 值一律跳过：调用方用 `model_dump(exclude_none=True)` 表达「这个字段没传」，
+    真要写入 `null` 的场景（如清空公告）走空串，不走 `None`。
+    """
     global _cache
     current = _normalize(get_config())
-    allowed = {"require_invite", "registration_open", "announcement", "defaults", "gameplay", "grades"}
     merged = dict(current)
     for key, value in patch.items():
-        if key not in allowed or value is None:
+        if key not in UPDATABLE_KEYS or value is None:
             continue
         if key in ("defaults", "gameplay") and isinstance(value, dict):
             merged[key] = {**current[key], **value}

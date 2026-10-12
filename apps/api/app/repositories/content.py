@@ -251,19 +251,6 @@ class StoryRepository(_ContentCollectionRepository):
     default_sort = (("level", 1), ("grade", 1))
 
 
-class ReadingRepository(_ContentCollectionRepository):
-    """识字短文（阅读承接）。
-
-    与 Story 的区别：Story 是"给孩子听/读的故事"，Reading 是**按已学字覆盖率分级**
-    的短文 —— 每篇都标注 `character_ids`（用到的字），客户端据此判断
-    「这篇里孩子已经认识几个字」，只推覆盖率够高的那几篇。
-    这是主流识字产品「认字之后有东西可读」的关键一环：读不了 = 白学。
-    """
-
-    collection = "readings"
-    default_sort = (("grade", 1), ("difficulty", 1), ("order", 1))
-
-
 class BadgeRepository(_ContentCollectionRepository):
     collection = "badges"
     default_sort = (("order", 1),)

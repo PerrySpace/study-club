@@ -29,13 +29,7 @@
       "path": "stories/stories.json",
       "kind": "自编",
       "license": "CC BY-SA 4.0",
-      "note": "儿歌为原创。"
-    },
-    {
-      "path": "readings/readings.json",
-      "kind": "自编",
-      "license": "CC BY-SA 4.0",
-      "note": "识字短文全部自编：每篇只用本项目字库中已收录的字（覆盖率 ≥75%，其余为家长带读的生字），逐句注音与白话翻译亦为自编。不复制任何出版物的读本内容。"
+      "note": "识字短文与儿歌均为原创，不含任何出版物读本内容。"
     },
     {
       "path": "badges/badges.json",
@@ -55,7 +49,7 @@
     {
       "name": "笔顺数据 hanzi-writer-data",
       "source": "https://github.com/chanind/hanzi-writer-data",
-      "license": "CC BY-SA 4.0 / MIT（各字条不同，见上游署名）",
+      "license": "CC BY-SA 4.0 / MIT（各字条不同，见原数据集署名）",
       "usage": "书写笔顺练习（S-11）",
       "registered": true
     },

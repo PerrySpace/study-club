@@ -92,7 +92,7 @@ export interface InviteBatchInput {
    *
    * 邀请码就是账号的登录标识：`accounts.invite_code_hash` 上有唯一索引，
    * 一个码只能激活一个账号（02-5 §2.2 / 03-1 §3.1）。家庭内部共用
-   * 「同一码 + 同一口令」进同一个档案空间；需要数据隔离就再发一个码。
+   * 「同一码 + 同一密码」进同一个档案空间；需要数据隔离就再发一个码。
    *
    * 字段保留在契约里是为了不破坏「字段只增不改不删」，但**不再由界面设置**。
    */
@@ -217,7 +217,16 @@ export interface ContentImportPayload {
 }
 
 export interface ContentImportResult {
-  results: Array<{ collection: string; total: number; created: number; updated: number }>;
+  results: Array<{
+    collection: string;
+    total: number;
+    created: number;
+    updated: number;
+    /** 派生型集合（lessons）重算时清掉的旧关数 */
+    stale_removed?: number;
+    /** 镜像型集合的导入模式：repo-first（初始化灌入）/ db-first（库优先，只补缺） */
+    mode?: string;
+  }>;
   total: number;
   created: number;
   updated: number;
@@ -480,7 +489,7 @@ export interface AdminUserReport {
 // 接口
 // ---------------------------------------------------------------------------
 export const adminApi = {
-  // 登录（口令 → admin JWT）
+  // 登录（密码 → admin JWT）
   login: (password: string) =>
     request<AdminLoginResult>('POST', '/admin/login', { data: { password } }),
 

@@ -8,5 +8,4 @@
 export * from './pinyin';
 export * from './questions';
 export * from './reading';
-export * from './passage';
 export * from './stage';

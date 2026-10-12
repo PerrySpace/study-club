@@ -46,7 +46,7 @@ export type Track = (typeof TRACKS)[number];
 
 export const TRACK_LABEL: Record<Track, string> = {
   literacy: '识字',
-  story: '故事',
+  story: '识字短文',
   poem: '古诗',
 };
 
@@ -224,7 +224,7 @@ function relinkUnlocks(lessons: GeneratedLesson[]): GeneratedLesson[] {
   }));
 }
 
-/** 生成一条线（识字 / 故事 / 古诗）下的全部关卡。 */
+/** 生成一条线（识字 / 识字短文 / 古诗）下的全部关卡。 */
 function generateTrack(
   track: Track,
   grade: number,

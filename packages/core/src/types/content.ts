@@ -149,7 +149,7 @@ export interface Lesson {
   unit_id: string | null;
   status: ContentStatus;
   created_at: string;
-  /** 内容线：识字 / 故事 / 古诗 —— 客户端学习地图按它分三块。 */
+  /** 内容线：识字 / story（孩子端叫识字短文）/ 古诗 —— 客户端学习地图按它分三块。 */
   track?: 'literacy' | 'story' | 'poem';
   /** 运营自定义的关卡名（无覆盖时为自动标签名）。 */
   tag_label?: string;
@@ -169,56 +169,6 @@ export interface Story {
   unlock_after_lesson_ids: string[];
   word_count: number;
   status: ContentStatus;
-}
-
-export interface ReadingSentence {
-  text: string;
-  pinyin: string;
-  meaning: string;
-}
-
-/**
- * 识字短文（阅读承接）—— 只用**孩子学过的字**写的短句/短文。
- *
- * 为什么单开一类内容而不是复用 Story：Story 是"故事"，长短与生字量都不受控；
- * 识字短文的核心约束是**可读性**——`character_chars` 里每个字都必须能对上字库，
- * 客户端据此算出「这篇里孩子已经认识几个字」，只推覆盖率够高的那几篇。
- * 认字之后没有读得下来的东西，是识字产品最典型的断裂（学完就忘），
- * 竞品普遍用"每本只用学过的字编、十来个字一本"的读本来接住这一步。
- */
-export interface Reading {
-  _id: string;
-  title: string;
-  /** sentence = 单句起步读本；passage = 多句短文 */
-  type: 'sentence' | 'passage';
-  level: LevelType;
-  grade: number;
-  difficulty: number;
-  order: number;
-  theme: string;
-  sentences: ReadingSentence[];
-  /** 全文（不含拼音/释义），用于整篇朗读与字数统计 */
-  text: string;
-  full_pinyin: string;
-  /** 文中出现、且已在字库中的字（按 _id）—— 覆盖率按它算 */
-  character_ids: string[];
-  /** 文中出现的全部去重字面（含尚未入字库的），用于高亮与"生字"提示 */
-  character_chars: string[];
-  /**
-   * 文中出现、但**尚未收录进字库**的汉字字面 —— 家长带读时留意这几个。
-   *
-   * 存字面而不是 `ch_` id：这些字还没有字条，压根没有 id 可存
-   * （覆盖率 = `character_ids.length / character_chars.length`）。
-   */
-  new_character_chars: string[];
-  word_count: number;
-  image_ref: string | null;
-  audio_ref: string | null;
-  /** 给家长的导读（怎么用这篇） */
-  tips: string;
-  status: ContentStatus;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface Badge {
@@ -259,7 +209,6 @@ export interface ContentBundle {
   units: CurriculumUnit[];
   lessons: Lesson[];
   stories: Story[];
-  readings: Reading[];
   badges: Badge[];
 }
 
@@ -276,6 +225,5 @@ export const EMPTY_BUNDLE: ContentBundle = {
   units: [],
   lessons: [],
   stories: [],
-  readings: [],
   badges: [],
 };

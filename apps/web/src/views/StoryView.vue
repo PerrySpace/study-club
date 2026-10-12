@@ -1,13 +1,17 @@
 <script setup lang="ts">
 /**
- * StoryView —— 故事关（S-07 阅读承接，挂在地图「故事」线上）。
+ * StoryView —— 识字短文关（S-07 阅读承接，挂在地图第三条线上）。
+ *
+ * ⚠️ 页面与路由名仍是 `story`，孩子端展示名是「识字短文」：集合名 `stories`
+ * 与关卡线 key `story` 都是接口与数据的一部分，改它们要动库与客户端缓存，
+ * 而这条线的语义本就是「认完字就读得下来的短文本」。改的是**叫法**，不是数据。
  *
  * ## 为什么要有这一页
- * 地图的故事线本来就存在（关卡由内容包自动生成），但点进去后跳的是**识字闯关页**，
- * 而故事关的 `character_ids` 里装的是故事 id 而不是字 id —— 于是必然落到
+ * 地图的第三条线本来就存在（关卡由内容包自动生成），但点进去后跳的是**识字闯关页**，
+ * 而这条线的 `character_ids` 里装的是短文 id 而不是字 id —— 于是必然落到
  * 「这里暂时没有可练的字」的空状态。**线上有关卡，点了却进不去**，流程到这里就断了。
  *
- * 故事关的完成方式与识字关不同：它不是「答对几题」，而是**读没读下来**。
+ * 它的完成方式与识字关不同：不是「答对几题」，而是**读没读下来**。
  * 因此星星按「跟读通过的句数」给，读完本身至少给 1 颗（读完了就该有奖励，
  * 而不是因为没有跟读就判 0 星 —— 那会让孩子觉得「读了也白读」）。
  *
@@ -57,7 +61,7 @@ const story = computed<Story | null>(
   () => content.bundle.stories.find((s) => s._id === storyId.value) ?? null,
 );
 
-/** 故事线（本年级）的全部关卡 —— 用来定位「我是第几关」与「下一关」。 */
+/** 识字短文线（本年级）的全部关卡 —— 用来定位「我是第几关」与「下一关」。 */
 const trackLessons = computed<Lesson[]>(() =>
   current.value
     ? content
@@ -210,7 +214,7 @@ async function load(): Promise<void> {
     try {
       await learning.loadChildData(child._id);
     } catch {
-      toast.warn('已学字记录加载失败，故事里的字会按「还没学过」展示');
+      toast.warn('已学字记录加载失败，短文里的字会按「还没学过」展示');
     }
   }
 }
@@ -234,8 +238,8 @@ watch(() => [current.value?._id, storyId.value] as const, resetAndLoad);
   <section class="learn-page">
     <div v-if="!story" class="learn-page__body learn-page__body--center">
       <BaseEmpty
-        title="找不到这个故事"
-        description="内容包可能已更新，或这个故事已被下架。"
+        title="找不到这篇短文"
+        description="内容可能已更新，或这篇短文已被下架。"
         icon="📖"
       >
         <BaseButton @click="goBackToMap">回到地图</BaseButton>
@@ -250,18 +254,18 @@ watch(() => [current.value?._id, storyId.value] as const, resetAndLoad);
       />
       <LevelResult
         :stars="stars"
-        title="这个故事读完啦"
+        title="这篇短文读完啦"
         :subtitle="`跟读通过 ${readOk.size} / ${lines.length} 句`"
         :stats="[
           { label: '句子', value: lines.length },
           { label: '跟读通过', value: readOk.size },
         ]"
         :badges="newBadges"
-        note="故事里的字已进入复习计划，下次打开首页就能练。"
+        note="短文里的字已进入复习计划，下次打开首页就能练。"
         :has-next="Boolean(next)"
-        next-label="下一个故事"
+        next-label="下一篇短文"
         :show-retry="false"
-        :done-text="'故事都读完啦，回地图看看别的方向。'"
+        :done-text="'短文都读完啦，回地图看看别的方向。'"
         :track-links="[
           { key: 'literacy', label: '去识字闯关' },
           { key: 'poem', label: '去古诗闯关' },
@@ -282,7 +286,7 @@ watch(() => [current.value?._id, storyId.value] as const, resetAndLoad);
             <SpeakButton
               :text="story.text"
               :rate="sentenceRate()"
-              label="听整个故事"
+              label="听整篇短文"
               variant="primary"
             />
           </div>
@@ -296,7 +300,7 @@ watch(() => [current.value?._id, storyId.value] as const, resetAndLoad);
         />
 
         <!--
-          句子的列表在内容区内部滚动：故事有十几句，一屏放不完是正常的；
+          句子的列表在内容区内部滚动：短文有十几句，一屏放不完是正常的；
           但「听 / 跟读」是逐句操作，滚到哪句就练哪句，所以列表自己滚不影响操作。
         -->
         <BaseCard title="一句一句读">

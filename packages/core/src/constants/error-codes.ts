@@ -14,13 +14,13 @@ export const ERROR_CODE = {
   TOKEN_INVALID: 40102,
   /** 邀请码无效 / 已用尽 / 已吊销 / 已过期（统一错误信息，防枚举） */
   INVITE_INVALID: 40103,
-  /** 口令错误 */
+  /** 密码错误 */
   PASSCODE_INVALID: 40104,
   /** 账号已锁定（连续错误达阈值） */
   ACCOUNT_LOCKED: 40105,
   /** 恢复码无效 */
   RECOVERY_INVALID: 40106,
-  /** 账号不存在或口令错误（用户名/手机号登录的统一错误信息，防枚举） */
+  /** 账号不存在或密码错误（用户名/手机号登录的统一错误信息，防枚举） */
   ACCOUNT_INVALID: 40107,
 
   /** 权限不足 */

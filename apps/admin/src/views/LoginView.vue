@@ -14,15 +14,15 @@ const password = ref('');
 const loading = ref(false);
 const errorMessage = ref('');
 
-/** 后端未配置管理员口令时的排查提示（对应 FEATURE_DISABLED）。 */
+/** 后端未配置管理员密码时的排查提示（对应 FEATURE_DISABLED）。 */
 const notConfigured =
-  '后端未配置管理员口令：请在仓库根 .env 里设置 ADMIN_PASSWORD_HASH（用 scripts/api/hash-password.sh 生成），然后重启 api 容器。';
+  '后端未配置管理员密码：请在仓库根 .env 里设置 ADMIN_PASSWORD_HASH（用 scripts/api/hash-password.sh 生成），然后重启 api 容器。';
 
 async function handleSubmit(): Promise<void> {
   errorMessage.value = '';
   const value = password.value.trim();
   if (!value) {
-    errorMessage.value = '请输入管理员口令';
+    errorMessage.value = '请输入管理员密码';
     return;
   }
 
@@ -51,6 +51,8 @@ async function handleSubmit(): Promise<void> {
   <div class="login-page">
     <el-card class="login-card" shadow="never">
       <div class="login-head">
+        <!-- 白卡上 logo 圆角外的透明区域露出卡片本身，视觉上就是一个纯图形 -->
+        <img class="login-logo" src="/logo-mark.png" alt="study-club" />
         <h1>study-club</h1>
         <p>内容后台 · 单管理员</p>
       </div>
@@ -61,7 +63,7 @@ async function handleSubmit(): Promise<void> {
             v-model="password"
             type="password"
             size="large"
-            placeholder="请输入管理员口令"
+            placeholder="请输入管理员密码"
             show-password
             autofocus
             :disabled="loading"
@@ -119,6 +121,12 @@ async function handleSubmit(): Promise<void> {
   margin: 0;
   font-size: 20px;
   letter-spacing: 0.5px;
+}
+
+.login-logo {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
 }
 
 .login-head p {

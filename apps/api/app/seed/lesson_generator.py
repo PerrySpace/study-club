@@ -30,7 +30,9 @@ from ..core.runtime_config import GRADE_MAX
 DEFAULT_CHARS_PER_LESSON = 6
 
 TRACKS = ("literacy", "story", "poem")
-TRACK_LABEL = {"literacy": "识字", "story": "故事", "poem": "古诗"}
+# 展示名与 core 的 `TRACK_LABEL` 必须逐字一致：两份实现会互相校验（test_lessons_parity）。
+# `story` 这条线对孩子叫「识字短文」，但 key 仍是 story（数据与接口的一部分）。
+TRACK_LABEL = {"literacy": "识字", "story": "识字短文", "poem": "古诗"}
 
 
 def _grade_of(item: dict[str, Any]) -> int:

@@ -10,6 +10,7 @@ from __future__ import annotations
 import pytest
 
 from app.core import runtime_config as rc
+from app.models.admin import SiteConfigUpdate
 
 
 def test_grade_max_is_wide_enough():
@@ -162,3 +163,110 @@ def test_config_normalize_always_produces_grades_key():
 def test_public_config_includes_grades():
     """免登录 `/config` 必须带 grades：注册页在建账号之前就要选年级。"""
     assert "grades" in rc.default_config()
+
+
+# ---------------------------------------------------------------------------
+# 请求模型 ↔ runtime_config 白名单（真实事故的回归）
+# ---------------------------------------------------------------------------
+def test_request_model_declares_every_updatable_key():
+    """`SiteConfigUpdate` 必须声明 `UPDATABLE_KEYS` 的**每一个**键。
+
+    真实事故：`grades` 在 runtime_config 里已支持、后台前端在传、客户端在读，
+    唯独请求模型没声明。模型是 `extra="ignore"`，于是 Pydantic 把 `grades`
+    **静默丢弃** —— 运营在设置页加好年级、点保存、提示成功，刷新后配置一字未变，
+    而且审计日志里的 `fields` 也不含它，排查时毫无线索。
+
+    为什么上面那一堆单测抓不到：它们全都**直接调 runtime_config**，
+    永远不会经过请求模型。只有把两层对起来才能暴露，所以在这里钉住。
+    """
+    declared = set(SiteConfigUpdate.model_fields)
+    missing = rc.UPDATABLE_KEYS - declared
+    assert not missing, (
+        f"runtime_config 支持但请求模型未声明，会被 extra='ignore' 静默丢弃：{sorted(missing)}。"
+        "新增配置项时请同时改 models/admin.py 与 runtime_config.UPDATABLE_KEYS。"
+    )
+
+
+def test_request_model_keeps_grades():
+    """模型必须原样保留 `grades` —— 回归上面那次静默丢弃。"""
+    payload = [{"id": 7, "label": "七年级", "enabled": True}]
+    dump = SiteConfigUpdate(grades=payload).model_dump(exclude_none=True)
+    assert dump.get("grades") == payload
+
+
+def test_request_model_drops_unrelated_fields_but_not_grades():
+    """`extra="ignore"` 的本意是「后台回传多余字段时不报错」，不是「丢配置项」。
+
+    这条用例把两侧都钉住：陌生键要放行（否则前端加一个展示字段就 422），
+    认识的键一个都不能丢。
+    """
+    dump = SiteConfigUpdate.model_validate(
+        {"grades": [{"id": 1, "label": "一年级"}], "unknown_preview_field": True}
+    ).model_dump(exclude_none=True)
+    assert "unknown_preview_field" not in dump
+    assert dump["grades"] == [{"id": 1, "label": "一年级"}]
+
+
+@pytest.mark.asyncio
+async def test_update_config_persists_grades_via_request_model():
+    """完整链路（前端表单 → 请求模型 → update_config → 落库 + 刷缓存）。
+
+    不含 HTTP 层，但这正是运营真实走的那条路；上面那次事故就断在第一跳。
+    """
+
+    class _FakeSettingsRepo:
+        """最小假仓储：只实现 runtime_config 用到的那两个方法。"""
+
+        def __init__(self) -> None:
+            self.doc: dict | None = None
+
+        async def get_site(self) -> dict | None:
+            return self.doc
+
+        async def save_site(self, doc: dict, *, now) -> None:  # noqa: ANN001 - 鸭子类型
+            self.doc = dict(doc)
+
+    rc._cache = None
+    repo = _FakeSettingsRepo()
+    await rc.load_config(repo)
+    try:
+        patch = SiteConfigUpdate(
+            grades=[{"id": 0, "label": "学龄前"}, {"id": 7, "label": "七年级"}]
+        ).model_dump(exclude_none=True)
+        await rc.update_config(repo, patch)
+
+        assert rc.enabled_grade_labels() == {0: "学龄前", 7: "七年级"}
+
+        # 落库的那份也必须带上 —— 只刷进程缓存的话，重启又回到旧年级表
+        saved = await repo.get_site()
+        assert saved is not None
+        assert [g["id"] for g in saved["grades"]] == [0, 7]
+    finally:
+        rc._cache = None
+
+
+@pytest.mark.asyncio
+async def test_update_config_rejects_invalid_grades_with_value_error():
+    """写入侧非法值必须**报错**（由路由转成 40001），而不是静默回落默认年级表。
+
+    静默回落的后果是「我明明保存了怎么又变回一年级」，且运营拿不到任何提示。
+    """
+
+    class _FakeSettingsRepo:
+        def __init__(self) -> None:
+            self.doc: dict | None = None
+
+        async def get_site(self) -> dict | None:
+            return self.doc
+
+        async def save_site(self, doc: dict, *, now) -> None:  # noqa: ANN001 - 鸭子类型
+            self.doc = dict(doc)
+
+    rc._cache = None
+    repo = _FakeSettingsRepo()
+    await rc.load_config(repo)
+    try:
+        with pytest.raises(ValueError):
+            await rc.update_config(repo, {"grades": [{"id": 999, "label": "越界"}]})
+    finally:
+        rc._cache = None

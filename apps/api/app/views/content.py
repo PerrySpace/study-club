@@ -166,27 +166,6 @@ async def get_story(
     return ok(await content_controller.get_story(repos, story_id))
 
 
-# ----------------------------- 识字短文（阅读承接） -----------------------------
-# 与故事的区别：短文按「已学字覆盖率」筛选推荐，客户端读之前就能知道认不认得全。
-@router.get("/readings")
-async def list_readings(
-    page: PageParams = Depends(page_params),
-    account: dict = Depends(get_current_account),
-    repos: Repositories = Depends(get_repos),
-):
-    items, total = await content_controller.list_readings(repos, page.skip, page.page_size)
-    return paged(items, page=page.page, page_size=page.page_size, total=total)
-
-
-@router.get("/readings/{reading_id}")
-async def get_reading(
-    reading_id: str,
-    account: dict = Depends(get_current_account),
-    repos: Repositories = Depends(get_repos),
-):
-    return ok(await content_controller.get_reading(repos, reading_id))
-
-
 # ----------------------------- 单元 -----------------------------
 @router.get("/units")
 async def list_units(

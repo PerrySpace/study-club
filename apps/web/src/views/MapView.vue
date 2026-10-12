@@ -2,12 +2,12 @@
 /**
  * MapView —— 学习地图（S-01）：**两层**结构。
  *
- *   第 1 层：三选一（识字 / 故事 / 古诗）—— 见 TrackPicker
+ *   第 1 层：三选一（识字 / 识字短文 / 古诗）—— 见 TrackPicker
  *   第 2 层：该类型的闯关链路图 —— 见 TrackCanvas
  *
  * ## 为什么改成两层
  * 之前把所有关卡按单元混成一条列表，两个问题：
- *   ① 孩子（尤其不识字的孩子）无法判断「该学识字还是该读故事」，
+ *   ① 孩子（尤其不识字的孩子）无法判断「该学识字还是该读短文」，
  *      等于让他自己做决策；
  *   ② 关卡一多就是一屏列表，**没有「旅程感」**，看不出走了多远。
  * 先选方向、再看路之后，每一屏的语义都单一且清楚。
@@ -75,7 +75,7 @@ const lessons = computed<Lesson[]>(() => {
 const TRACK_TITLE: Record<string, string> = {
   literacy: '识字',
   poem: '古诗',
-  story: '故事',
+  story: '识字短文',
 };
 
 const activeTitle = computed(() =>

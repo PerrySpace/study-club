@@ -15,8 +15,8 @@ from app.controllers import admin_controller
 from app.models.admin import UserBulkStatusRequest, UserProfileUpdate
 from app.repositories import content_registry as CR
 
-# 已支持模板下载的内容类型。字库/古诗/短文是本轮明确要求补模板的三类。
-TEMPLATED = ("characters", "poems", "readings")
+# 已支持模板下载的内容类型。字库/古诗是本轮明确要求补模板的两类。
+TEMPLATED = ("characters", "poems")
 
 
 # ---------------------------------------------------------------------------
@@ -65,10 +65,18 @@ def test_template_sample_id_follows_prefix(collection: str):
 
 def test_template_marks_derived_fields():
     """派生字段（导入时自动重算）必须标 derived，否则运营会手动改这些字段。"""
-    template = admin_controller.content_template("readings")
-    derived = {f["name"] for f in template["fields"] if f["derived"]}
-    # 短文里最容易踩的：手改正文与 character_chars 不一致，导入时被正文覆盖
-    assert {"text", "character_chars", "new_character_chars", "word_count"} <= derived
+    # 古诗的 full_text 由 lines 推导；汉字库里 pinyin_plain 由 pinyin 推导
+    poems_derived = {
+        f["name"] for f in admin_controller.content_template("poems")["fields"] if f["derived"]
+    }
+    assert "full_text" in poems_derived
+
+    char_derived = {
+        f["name"]
+        for f in admin_controller.content_template("characters")["fields"]
+        if f["derived"]
+    }
+    assert "pinyin_plain" in char_derived
 
 
 def test_template_rejects_unknown_collection():

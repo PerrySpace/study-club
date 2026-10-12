@@ -135,13 +135,19 @@ async function choose(option: string): Promise<void> {
   // 命中学字库时才写入复习状态/错题本，避免污染识字 SRS。
   const matched = content.charByText.get(q.char);
   if (child && matched) {
-    await learning.submitAnswer({
-      childId: child._id,
-      question: { ...q, character_id: matched._id },
-      answer: option,
-      isCorrect: isCorrect.value,
-      responseMs: Date.now() - questionStartedAt.value,
-    });
+    // 上报尽力而为：失败只意味着云端少了这条明细，本页的判分/星星早已落定。
+    // ⛔ 必须 try/catch —— 否则一次 5xx 会变成未捕获的 Promise 拒绝，界面上毫无提示。
+    try {
+      await learning.submitAnswer({
+        childId: child._id,
+        question: { ...q, character_id: matched._id },
+        answer: option,
+        isCorrect: isCorrect.value,
+        responseMs: Date.now() - questionStartedAt.value,
+      });
+    } catch (err) {
+      console.error('[poem] 答题上报失败', err);
+    }
   } else if (!matched) {
     toast.show('这个字暂不在字库中，仅在本页练习，不计入复习计划', 'info', 3000);
   }
@@ -265,7 +271,7 @@ function goTrack(key: string): void {
         :done-text="'古诗都学完啦，回地图看看别的方向。'"
         :track-links="[
           { key: 'literacy', label: '去识字闯关' },
-          { key: 'story', label: '去故事闯关' },
+          { key: 'story', label: '去读短文' },
         ]"
         @next="goNext"
         @retry="retry"

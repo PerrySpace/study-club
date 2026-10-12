@@ -68,7 +68,7 @@ class _FakeCollection:
 
 
 class _FakeDB:
-    """假 db：既能预置数据（模拟「上游集合已导入」），也能接收写入。"""
+    """假 db：既能预置数据（模拟「其它集合已先行导入」），也能接收写入。"""
 
     def __init__(self, data: dict[str, list[dict]] | None = None):
         self._cols = {k: _FakeCollection(v) for k, v in (data or {}).items()}
@@ -259,6 +259,40 @@ async def test_derived_lessons_are_always_pruned(repo_root: Path):
     assert "ls_obsolete" not in ids
     assert set(ids) == {"literacy:1:1", "literacy:1:2"}
     assert result["stale_removed"] == 1
+
+
+@pytest.mark.asyncio
+async def test_rebuild_lessons_uses_repo_spec(repo_root: Path):
+    """⭐ 后台写入后重算关卡（`rebuild_lessons`）：必须读**仓库里那份** 09_lessons.json。
+
+    为什么钉住：后台导入 / 增删改内容后要把「关卡」这一派生数据重算一遍，
+    否则孩子端地图毫无变化（内容进了库，孩子却看不见）。重算**不能另抄一套配置** ——
+    每关几个字、overrides 在哪、生成到哪个年级，都只能有一处真源，
+    否则「后台 14 关、客户端 13 关」这类偏差会再次出现。
+    """
+    (repo_root / "scripts" / "seed" / "data" / "09_lessons.json").write_text(
+        json.dumps(
+            {
+                "collection": "lessons",
+                "generated": "lessons",
+                "chars_per_lesson": 6,
+                "overrides": "scripts/seed/data/lesson_overrides.json",
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    db = _FakeDB({"characters": _chars(12), "poems": [], "stories": []})
+    # 预置一条「上一批」的旧关卡：重算后必须被清掉（派生型恒重算 + 清理）
+    db["lessons"]._docs.append({"_id": "literacy:1:99", "status": "published"})
+
+    result = await importer.rebuild_lessons(db, repo_root)
+
+    ids = [d["_id"] for d in db["lessons"]._docs]
+    assert result["collection"] == "lessons"
+    assert set(ids) == {"literacy:1:1", "literacy:1:2"}, "12 字 / 每关 6 字 = 2 关，旧关必须清掉"
+    assert result["stale_removed"] == 1
+    assert db["lessons"]._docs[0]["tag_label"] == "数字宝宝", "override 应生效（证明读的是仓库那份 spec）"
 
 
 def test_mirror_and_derived_partition():

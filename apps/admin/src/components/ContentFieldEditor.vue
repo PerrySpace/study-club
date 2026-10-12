@@ -123,16 +123,6 @@ function removeLine(index: number): void {
   commitLines(currentLines().filter((_, i) => i !== index));
 }
 
-/** 按正文统计字数 —— 覆盖率门槛（≥75%）是运营最该盯的指标，编辑时要能立刻看到。 */
-function countChars(): void {
-  const text = currentLines()
-    .map((l) => l.text.trim())
-    .filter(Boolean)
-    .join('');
-  const unique = new Set(text.replace(/[^一-鿿]/g, '')).size;
-  ElMessage.success(`正文 ${text.length} 字，去重汉字 ${unique} 个`);
-}
-
 async function uploadAndSelect(file: File): Promise<void> {
   try {
     const asset = await adminApi.uploadAsset(file, { type: 'image' });
@@ -224,8 +214,8 @@ const numberValue = computed<number>({
     />
   </div>
 
-  <!-- 诗句 / 句子 -->
-  <div v-else-if="['poem-lines', 'reading-sentences'].includes(field.kind)" class="lines-field">
+  <!-- 诗句 -->
+  <div v-else-if="field.kind === 'poem-lines'" class="lines-field">
     <div v-for="(line, index) in currentLines()" :key="index" class="lines-field__row">
       <span class="lines-field__no">{{ index + 1 }}</span>
       <el-input v-model="line.text" placeholder="正文（必填）" style="flex: 2" />
@@ -235,12 +225,9 @@ const numberValue = computed<number>({
     </div>
     <div class="lines-field__actions">
       <el-button size="small" @click="addLine">加一行</el-button>
-      <el-button size="small" text type="primary" @click="countChars">
-        统计字数
-      </el-button>
     </div>
     <p class="form-tip">
-      拼音与释义可留空（客户端会退化为只读正文），但**逐句朗读与家长导读**依赖它们，建议补齐。
+      拼音与释义可留空（客户端会退化为只读正文），但**逐句朗读与填字游戏**依赖它们，建议补齐。
     </p>
   </div>
 

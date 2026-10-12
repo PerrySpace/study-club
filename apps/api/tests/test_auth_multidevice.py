@@ -71,7 +71,7 @@ def _client(client_id: str | None) -> ClientContext:
 
 @pytest.fixture(autouse=True)
 def _skip_passcode_check(monkeypatch):
-    """口令校验走真实 Argon2 会很慢，且与本用例无关 —— 直接放行。"""
+    """密码校验走真实 Argon2 会很慢，且与本用例无关 —— 直接放行。"""
     monkeypatch.setattr(A, "verify_passcode", lambda *args, **kwargs: True)
 
 

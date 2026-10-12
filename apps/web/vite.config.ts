@@ -20,7 +20,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
-      includeAssets: ['favicon.svg', 'icons.svg', 'robots.txt'],
+      includeAssets: ['favicon.png', 'logo-192.png', 'logo-512.png', 'icons.svg', 'robots.txt'],
       manifest: {
         name: '学习俱乐部',
         short_name: '学习俱乐部',
@@ -32,10 +32,11 @@ export default defineConfig({
         orientation: 'any',
         theme_color: '#ffd76b',
         background_color: '#f5fff8',
+        // 品牌图标为 PNG（设计稿 JPG 派生，含白底留白，天然满足 maskable 安全区）
         icons: [
-          { src: 'pwa-192.svg', sizes: '192x192', type: 'image/svg+xml', purpose: 'any' },
-          { src: 'pwa-512.svg', sizes: '512x512', type: 'image/svg+xml', purpose: 'any' },
-          { src: 'pwa-512.svg', sizes: '512x512', type: 'image/svg+xml', purpose: 'maskable' },
+          { src: 'logo-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'logo-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: 'logo-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {

@@ -163,7 +163,8 @@ REGISTRY: dict[str, ContentTypeSpec] = {
     "stories": ContentTypeSpec(
         key="stories",
         collection="stories",
-        label="故事",
+        # 孩子端叫「识字短文」（地图第三条线），但集合名与 key 仍是 stories/story。
+        label="识字短文",
         id_prefix="story_",
         id_source="title",
         required_on_create=("title", "text"),
@@ -183,56 +184,6 @@ REGISTRY: dict[str, ContentTypeSpec] = {
         default_sort=(("order", 1),),
         unique_fields=("code",),
     ),
-    "readings": ContentTypeSpec(
-        key="readings",
-        collection="readings",
-        label="识字短文",
-        id_prefix="rd_",
-        id_source="title",
-        required_on_create=("title", "text"),
-        searchable=("title", "text"),
-        filters=("status", "grade", "level"),
-        default_sort=(("grade", 1), ("difficulty", 1), ("order", 1)),
-        field_docs=(
-            ("title", "短文标题。必填；_id 由它派生（rd_<slug>），改题等于换一条记录"),
-            ("type", "sentence 单句起步 / passage 多句短文。决定客户端是一句一读还是整篇呈现"),
-            ("level", "难度层级：easy/mid/hard"),
-            ("grade", "年级。0 = 学龄前；缺省归入「未分级」（客户端不下发）。关卡按内容**自身年级**分桶生成，填错年级等于把它放进别的年级的关卡"),
-            ("difficulty", "难度分 1–5"),
-            ("order", "同级内排序，小的靠前"),
-            ("theme", "主题，如 校园/自然/家庭"),
-            ("sentences", "句子数组，元素为 {text,pinyin,meaning}。text 必填，逐句朗读与高亮逐字都靠它"),
-            ("text", "全文（不含拼音释义）。必填；导入时会用 sentences 重建，客户端按它算字数与覆盖率"),
-            ("full_pinyin", "全文拼音（空格分隔）"),
-            ("character_ids", "文中出现、且已在字库的字的 _id 数组。**覆盖率 = 本数组长度 / character_chars 长度**，客户端据此只推覆盖率 ≥75% 的短文"),
-            ("character_chars", "文中出现的全部去重汉字字面（含未入字库的），数组元素必须与正文逐字一致"),
-            ("new_character_chars", "文中的生字字面。导入时按正文自动核对，改这里没用（以正文为准）"),
-            ("word_count", "字数，导入时自动统计"),
-            ("image_ref", "短文配图的素材 id。**必填的期望项**：正文有图才读得下去，配图优先用字义联想图。可空但强烈建议填"),
-            ("audio_ref", "整篇朗读音频素材 id。留空时客户端按句用 TTS 朗读"),
-            ("tips", "给家长的导读：怎么带读、可以问什么问题"),
-            ("status", "状态：draft/pending_review/published/offline"),
-        ),
-        template_sample=(
-            ("_id", "rd_xiao-xi-de-yu"),
-            ("title", "小雨滴"),
-            ("type", "passage"),
-            ("level", "easy"),
-            ("grade", 1),
-            ("difficulty", 1),
-            ("order", 1),
-            ("theme", "自然"),
-            ("sentences", [
-                {"text": "小雨滴落到地上。", "pinyin": "xiǎo yǔ dī luò dào dì shàng", "meaning": "小小的雨点落下来"},
-                {"text": "小草绿了。", "pinyin": "xiǎo cǎo lǜ le", "meaning": "小草变绿了"},
-                {"text": "我打开伞。", "pinyin": "wǒ dǎ kāi sǎn", "meaning": "我把伞撑开"},
-            ]),
-            ("text", "小雨滴落到地上。小草绿了。我打开伞。"),
-            ("image_ref", "as_0123456789abcdef"),
-            ("tips", "问孩子：「小雨滴是什么形状的？」再让他找出文里的「绿」。"),
-            ("status", "published"),
-        ),
-    ),
 }
 
 # 内容清单的计数键 → 集合名（与 ContentManifest.counts 对齐）
@@ -243,7 +194,6 @@ COUNT_KEYS: dict[str, str] = {
     "lessons": "lessons",
     "stories": "stories",
     "badges": "badges",
-    "readings": "readings",
 }
 
 
@@ -283,7 +233,6 @@ IMPORT_SOURCES: tuple[ImportSource, ...] = (
     ImportSource(collection="lessons", path="content/lessons/lessons.json"),
     ImportSource(collection="stories", path="content/stories/stories.json"),
     ImportSource(collection="badges", path="content/badges/badges.json"),
-    ImportSource(collection="readings", path="content/readings/readings.json"),
 )
 
 

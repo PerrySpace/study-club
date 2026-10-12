@@ -1,6 +1,6 @@
 {
   "collection": "stories",
-  "feature": "故事与儿歌",
+  "feature": "识字短文（短文 / 儿歌）",
   "source": "content/stories/stories.json",
   "strip_wrapper": true,
   "unique_key": "_id"

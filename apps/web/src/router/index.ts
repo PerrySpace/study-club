@@ -98,7 +98,7 @@ const ALL_ROUTES: RouteRecordRaw[] = [
     path: '/story/:storyId',
     name: 'story',
     component: () => import('@/views/StoryView.vue'),
-    meta: { title: '故事阅读', plain: true, oneScreen: true },
+    meta: { title: '识字短文', plain: true, oneScreen: true },
   },
   {
     path: '/review',

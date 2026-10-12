@@ -363,7 +363,7 @@ async function doDeleteAccount(): Promise<void> {
           <strong>昵称：</strong>{{ auth.account?.display_name || '—' }}
         </p>
         <p class="text-sm text-muted">
-          邀请码身份不含手机号、微信与实名信息；密码为自设口令，服务端只存哈希。
+          邀请码身份不含手机号、微信与实名信息；密码由你自己设置，服务端只存哈希。
         </p>
       </div>
       <template #footer>

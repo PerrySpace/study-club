@@ -19,8 +19,6 @@ LESSONS = "lessons"
 ASSETS = "assets"
 STORIES = "stories"
 BADGES = "badges"
-# 识字短文（阅读承接）：只用**已学字**编写的短句/短文，认完字就有东西可读
-READINGS = "readings"
 
 LEARNING_RECORDS = "learning_records"
 ANSWER_RECORDS = "answer_records"
@@ -48,5 +46,4 @@ CONTENT_PATHS: dict[str, str] = {
     LESSONS: "content/lessons/lessons.json",
     STORIES: "content/stories/stories.json",
     BADGES: "content/badges/badges.json",
-    READINGS: "content/readings/readings.json",
 }

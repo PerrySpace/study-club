@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * RegisterView —— 账号注册（用户名 / 手机号二选一 + 自设口令）。
+ * RegisterView —— 账号注册（用户名 / 手机号二选一 + 自设密码）。
  *
  * ⚠️ 恢复码**仅显示一次**，必须强制抄写确认（01-3 I-13）。
  * 邀请码退为**可选**字段，是否必填由能力开关 `enableInviteRequired` 决定。
@@ -86,7 +86,7 @@ async function submit(): Promise<void> {
     return;
   }
   if (passcode.value !== passcode2.value) {
-    toast.warn('两次输入的口令不一致');
+    toast.warn('两次输入的密码不一致');
     return;
   }
   if (!api) {
@@ -164,7 +164,7 @@ function finish(): void {
     </BaseCard>
 
     <template v-else-if="!recoveryCode">
-      <BaseCard title="注册账号" subtitle="用户名或手机号 + 自设口令，二选一即可">
+      <BaseCard title="注册账号" subtitle="用户名或手机号 + 自设密码，二选一即可">
         <div class="stack">
           <label class="field">
             <span class="field__label">
@@ -224,18 +224,18 @@ function finish(): void {
           </label>
 
           <label class="field">
-            <span class="field__label">设置口令（至少 6 位）</span>
+            <span class="field__label">设置密码（至少 6 位）</span>
             <input
               v-model="passcode"
               class="field__input tap"
               type="password"
               autocomplete="new-password"
-              placeholder="忘记口令只能靠恢复码"
+              placeholder="忘记密码只能靠恢复码"
             />
           </label>
 
           <label class="field">
-            <span class="field__label">再次输入口令</span>
+            <span class="field__label">再次输入密码</span>
             <input
               v-model="passcode2"
               class="field__input tap"
@@ -266,7 +266,7 @@ function finish(): void {
         </label>
 
         <p class="text-sm text-muted">
-          忘记口令时，只能凭这串恢复码重置。它不会上传到任何服务器，我们也无法帮你找回。
+          忘记密码时，只能凭这串恢复码重置。它不会上传到任何服务器，我们也无法帮你找回。
         </p>
       </div>
 

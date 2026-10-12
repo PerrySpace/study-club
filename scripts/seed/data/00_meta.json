@@ -9,7 +9,7 @@
     "05_poems.json           古诗（来自 content/poems/required-75.json）",
     "06_curriculum_units.json 自编单元（来自 content/lessons/units.json）",
     "07_lessons.json         关卡（来自 content/lessons/lessons.json）",
-    "08_stories.json         故事与儿歌（来自 content/stories/stories.json）",
+    "07_stories.json         识字短文（短文 / 儿歌，来自 content/stories/stories.json）",
     "09_assets.json          素材（默认空，素材可后续补）",
     "10_manifest.json        内容包清单（来自 content/manifest.json）"
   ],

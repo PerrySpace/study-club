@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     invite_signing_private_key: str = Field(default="", alias="INVITE_SIGNING_PRIVATE_KEY")
     invite_signing_public_key: str = Field(default="", alias="INVITE_SIGNING_PUBLIC_KEY")
 
-    # 单管理员后台口令哈希（Argon2id，见 scripts/api/hash-password.sh）
+    # 单管理员后台密码哈希（Argon2id，见 scripts/api/hash-password.sh）
     admin_password_hash: str = Field(default="", alias="ADMIN_PASSWORD_HASH")
 
     # 邀请码是否必填（注册准入开关）。

@@ -1,14 +1,13 @@
 {
-  "content_version": "1.1.0",
+  "content_version": "1.1.1",
   "min_app_version": "0.1.0",
-  "updated_at": "2026-10-10T05:33:27.117Z",
+  "updated_at": "2026-10-12T05:23:09.837Z",
   "counts": {
     "characters": 83,
     "poems": 3,
     "units": 7,
     "lessons": 14,
     "stories": 5,
-    "readings": 6,
     "badges": 7
   },
   "files": [
@@ -41,12 +40,6 @@
       "checksum": "sha256:c4d87f999db3c3de09b916f42dcd930c118db9f109c4b9570ec433d9e3753515",
       "bytes": 2388,
       "count": 5
-    },
-    {
-      "path": "readings/readings.json",
-      "checksum": "sha256:a42cc103edec145c0b82832a414c763f6a9ab78b2a3557cbc1a2c8a6bd0bd25e",
-      "bytes": 13576,
-      "count": 6
     },
     {
       "path": "badges/badges.json",

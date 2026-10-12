@@ -82,7 +82,7 @@ async def get_current_admin(
     1. 携带 admin 身份 JWT（管理员账号经 /admin/login 获取，role=admin）
     2. 携带 `X-Admin-Password` 头，与 ADMIN_PASSWORD_HASH 做 Argon2 校验
 
-    第二种让「只有口令哈希、没有管理员账号」的部署也能用后台。
+    第二种让「只有密码哈希、没有管理员账号」的部署也能用后台。
     """
     token = _bearer(request, authorization)
     if token:

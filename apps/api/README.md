@@ -16,7 +16,7 @@ Python 3.12 + FastAPI + MongoDB（motor 异步）。职责按 [docs/README.md](.
 | 内容 | `GET /content/characters` `…/by-char/{char}` `…/batch` `…/{id}` `…/{id}/similar` | 汉字 |
 | 内容 | `GET /content/poems` `…/by-char/{char}` `…/{id}` `…/{id}/quiz` | 古诗 |
 | 内容 | `GET /content/units` `…/{id}` · `GET /content/lessons` `…/{id}` `…/{id}/questions` · `GET /content/stories` `…/{id}` · `GET /content/badges` `…/{code}` | 单元/关卡/故事/徽章 |
-| 认证 | `POST /auth/invite/verify` `…/register` `…/login` · `POST /auth/recovery/reset` · `POST /auth/refresh` · `POST /auth/logout` · `GET /auth/me` · `DELETE /auth/account` | 邀请码 + 自设口令 |
+| 认证 | `POST /auth/invite/verify` `…/register` `…/login` · `POST /auth/recovery/reset` · `POST /auth/refresh` · `POST /auth/logout` · `GET /auth/me` · `DELETE /auth/account` | 邀请码 + 自设密码 |
 | 档案 | `GET/POST /children` · `GET/PATCH/DELETE /children/{id}` · `GET /children/{id}/stats` | 儿童档案 |
 | 学习 | `GET /learning/daily-task` · `POST /learning/answer` `…/answer/batch` `…/lesson/complete` · `GET /learning/review/due` `…/wrong-questions` `…/progress` · `POST /learning/wrong-questions/{id}/resolve` | 承接前端上报 |
 | 报告 | `GET /reports/child/{id}/overview` `…/trend` `…/mastery` `…/weak-chars` `…/weekly` | 服务端聚合；无数据时返回 `compute_locally` |
@@ -54,10 +54,10 @@ uvicorn app.main:app --reload --port 8000
 | `JWT_SECRET` | 会话签名密钥，**部署必须替换** |
 | `ACCESS_TOKEN_TTL_MIN` / `REFRESH_TOKEN_TTL_DAYS` | 会话时长 |
 | `INVITE_SIGNING_PRIVATE_KEY` / `INVITE_SIGNING_PUBLIC_KEY` | Ed25519 邀请码签发/验签 |
-| `ADMIN_PASSWORD_HASH` | 单管理员口令哈希（Argon2id） |
+| `ADMIN_PASSWORD_HASH` | 单管理员密码哈希（Argon2id） |
 | `CORS_ORIGINS` | 允许来源，逗号分隔 |
 
-> 端到端加密**没有服务端密钥**：密钥由用户口令在客户端派生，服务端只存密文。若有人要加「数据加密密钥」变量，说明方案被改坏了。
+> 端到端加密**没有服务端密钥**：密钥由用户密码在客户端派生，服务端只存密文。若有人要加「数据加密密钥」变量，说明方案被改坏了。
 
 ## 三、Docker 运行
 
@@ -83,7 +83,7 @@ scripts/seed/seed.sh --drop               # 导入前清空目标集合
 
 ## 五、安全要点
 
-- 口令：**Argon2id**（含盐），明文不落日志、不入库。
+- 密码：**Argon2id**（含盐），明文不落日志、不入库。
 - 邀请码：只存 **SHA-256 哈希**；12 位 Crockford Base32（60 bit 熵）；失败信息统一（防枚举）。
 - 会话：短期 Access（JWT）+ 可吊销的 Refresh（只存哈希）；失败 5 次锁定 15 分钟；按 `client_id` + IP 限流。
 - 恢复码：注册时一次性返回明文，服务端只存哈希。
@@ -100,7 +100,7 @@ app/
 ├── services/          # 业务逻辑 + 纯函数（SRS、徽章、邀请码）
 ├── db/                # 集合名、连接、索引初始化
 └── seed/              # 内容与种子导入器
-tests/                 # pytest：响应、错误码、邀请码、口令哈希、限流、SRS、隐私红线、路由
+tests/                 # pytest：响应、错误码、邀请码、密码哈希、限流、SRS、隐私红线、路由
 ```
 
 ## 七、测试

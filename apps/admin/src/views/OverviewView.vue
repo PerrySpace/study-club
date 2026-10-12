@@ -95,7 +95,7 @@ onMounted(load);
         <el-col :span="4"><el-card shadow="never"><div class="metric"><span>古诗</span><strong>{{ overview.content.poems }}</strong></div></el-card></el-col>
         <el-col :span="4"><el-card shadow="never"><div class="metric"><span>自编单元</span><strong>{{ overview.content.curriculum_units }}</strong></div></el-card></el-col>
         <el-col :span="4"><el-card shadow="never"><div class="metric"><span>关卡</span><strong>{{ overview.content.lessons }}</strong></div></el-card></el-col>
-        <el-col :span="4"><el-card shadow="never"><div class="metric"><span>故事</span><strong>{{ overview.content.stories }}</strong></div></el-card></el-col>
+        <el-col :span="4"><el-card shadow="never"><div class="metric"><span>识字短文</span><strong>{{ overview.content.stories }}</strong></div></el-card></el-col>
         <el-col :span="4"><el-card shadow="never"><div class="metric"><span>徽章</span><strong>{{ overview.content.badges }}</strong></div></el-card></el-col>
       </el-row>
 

@@ -1,4 +1,4 @@
-"""安全原语测试：口令哈希、JWT、邀请码编码、Ed25519 验签、限流。"""
+"""安全原语测试：密码哈希、JWT、邀请码编码、Ed25519 验签、限流。"""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from app.core import security as S
 from app.core.config import settings
 
 
-# --------------------------- 口令 ---------------------------
+# --------------------------- 密码 ---------------------------
 def test_passcode_hash_and_verify():
     hashed = S.hash_passcode("abc123def")
     assert hashed != "abc123def"

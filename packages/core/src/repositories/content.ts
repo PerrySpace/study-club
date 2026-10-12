@@ -68,7 +68,6 @@ export class HttpSource implements ContentSource {
         units?: ContentBundle['units'];
         lessons?: ContentBundle['lessons'];
         stories?: ContentBundle['stories'];
-        readings?: ContentBundle['readings'];
         badges?: ContentBundle['badges'];
       };
       return {
@@ -78,9 +77,6 @@ export class HttpSource implements ContentSource {
         units: res.units ?? [],
         lessons: res.lessons ?? [],
         stories: res.stories ?? [],
-        // 短文是后加的内容类：老后端不返回该字段时给空数组，而不是 undefined，
-        // 免得每个消费点都要写 `?? []`
-        readings: res.readings ?? [],
         badges: res.badges ?? [],
       };
     } catch (err) {

@@ -12,13 +12,13 @@
 | `docker-compose.yml` | `admin` service：`context: ../..`、`dockerfile: apps/admin/Dockerfile`、`network_mode: host`、端口 `ADMIN_PORT`（默认 8081） |
 | `nginx.conf` | SPA history fallback、gzip、静态资源长效缓存、`index.html` 不缓存、`X-Robots-Tag: noindex`、`X-Frame-Options: DENY` |
 
-## 前置条件：必须先配置管理员口令
+## 前置条件：必须先配置管理员密码
 
 后台的登录接口在 `ADMIN_PASSWORD_HASH` 为空时直接返回 `FEATURE_DISABLED`（`40302`），
 **整个后台不可用**。所以第一次用之前：
 
 ```bash
-# 1) 生成 Argon2id 口令哈希（交互式输入，不回显）
+# 1) 生成 Argon2id 密码哈希（交互式输入，不回显）
 scripts/api/hash-password.sh
 
 # 2) 把脚本输出的那一行（⚠️ 含单引号）整行替换进仓库根 .env 的 ADMIN_PASSWORD_HASH
@@ -29,8 +29,8 @@ scripts/api/restart.sh
 
 > ⚠️ **必须带单引号**。Argon2 哈希形如 `$argon2id$v=19$m=65536,t=3,p=2$<salt>$<digest>`，
 > 含大量 `$`；Docker Compose 用 dotenv 解析 `.env` / `env_file`，**不加引号会把 `$m`、`$xxxx`
-> 当成变量引用替换成空串**，哈希被悄悄改坏。症状是「口令明明对，却一直返回
-> `40301 管理员口令不正确`」。dotenv 对单引号值不做插值，所以写成
+> 当成变量引用替换成空串**，哈希被悄悄改坏。症状是「密码明明对，却一直返回
+> `40301 管理员密码不正确`」。dotenv 对单引号值不做插值，所以写成
 > `ADMIN_PASSWORD_HASH='$argon2id$v=19$m=65536,t=3,p=2$...$...'`。
 
 ## 构建与启动

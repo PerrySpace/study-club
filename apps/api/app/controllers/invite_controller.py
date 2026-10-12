@@ -67,7 +67,7 @@ def format_for_delivery(raw_code: str) -> str:
 
 
 def is_usable(invite: dict, now: datetime | None = None) -> bool:
-    """可用性判定（不含口令）：未吊销、未过期、未用尽。"""
+    """可用性判定（不含密码）：未吊销、未过期、未用尽。"""
     now = now or datetime.now(timezone.utc)
     if invite.get("revoked_at") is not None:
         return False

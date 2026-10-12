@@ -40,7 +40,7 @@ fi
 
 if grep -qE '^ADMIN_PASSWORD_HASH=$' "$ENV_FILE"; then
   log_warn "ADMIN_PASSWORD_HASH 为空 —— 单管理员后台不可登录"
-  log_dim "  生成方式： scripts/api/hash-password.sh '你的口令'   然后把输出填入 .env"
+  log_dim "  生成方式： scripts/api/hash-password.sh '你的密码'   然后把输出填入 .env"
 fi
 
 log_info "② 启动全栈"

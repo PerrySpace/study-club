@@ -79,7 +79,6 @@ class _FakeRepos:
         self.lessons = _FakeRepo()
         self.badges = _FakeRepo()
         self.stories = _FakeRepo()
-        self.readings = _FakeRepo()
 
 
 @pytest.fixture
@@ -144,10 +143,3 @@ async def test_bootstrap_poems_not_filtered_by_equality(repos: _FakeRepos):
     assert "build_filter(grade=grade)" not in source, (
         "bootstrap 不得把 grade 直接透传给 build_filter（那是等值语义）"
     )
-
-
-@pytest.mark.asyncio
-async def test_bootstrap_readings_not_grade_limited(repos: _FakeRepos):
-    """短文不做年级过滤（客户端本地按覆盖率再筛），保持现状不被误改。"""
-    await content_controller.bootstrap(repos, grade=6)
-    assert not any(r["kind"] == "page" and r["flt"].get("grade") for r in repos.readings.filters)

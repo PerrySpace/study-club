@@ -59,11 +59,11 @@ def _parse_day(value: str | None, *, end_of_day: bool) -> datetime | None:
 
 @router.post("/login")
 async def admin_login(body: AdminLoginRequest):
-    """用 ADMIN_PASSWORD_HASH 换取管理员 JWT（口令哈希未配置时能力整体不可用）。"""
+    """用 ADMIN_PASSWORD_HASH 换取管理员 JWT（密码哈希未配置时能力整体不可用）。"""
     if not settings.admin_password_hash:
         raise BizException(FEATURE_DISABLED, "管理员后台未配置")
     if not verify_passcode(body.password, settings.admin_password_hash):
-        raise BizException(FORBIDDEN, "管理员口令不正确")
+        raise BizException(FORBIDDEN, "管理员密码不正确")
     token, expires_in = create_access_token("admin", role="admin")
     return ok({"access_token": token, "expires_in": expires_in, "token_type": "Bearer", "role": "admin"})
 
@@ -153,7 +153,13 @@ async def update_site_config(
 ):
     """热更新站点配置：写 DB 并刷新进程缓存，**不需要重启**。"""
     patch = body.model_dump(exclude_none=True)
-    cfg = await runtime_config.update_config(repos.settings, patch)
+    try:
+        cfg = await runtime_config.update_config(repos.settings, patch)
+    except ValueError as exc:
+        # 校验类失败（如 grades 含非法项）走 40001 而不是 500：这是**请求内容**的问题，
+        # 运营能改；报 500 会让后台只看到一句「服务内部错误」，不知道错在哪个字段。
+        # 细节由 `_normalize_grades_and_validate` 给出，直接透传给前端展示。
+        raise BizException(PARAM_INVALID, str(exc)) from exc
     await admin_controller.log_audit(
         repos,
         actor=admin,

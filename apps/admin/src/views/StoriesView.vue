@@ -1,14 +1,15 @@
 <script setup lang="ts">
 /**
- * StoriesView —— 故事 / 儿歌维护（走通用 ContentManager）。
+ * StoriesView —— 识字短文维护（走通用 ContentManager）。
  *
- * 为什么单开一页：`stories` 早就在后端与内容包里（seed 会导入），
- * 却一直没有后台入口 —— 运营导入完故事后**无处查看、无处纠错**，
+ * 这是**孩子端第三条线**的内容页（地图上「识字短文」那个块）。
+ * why 单开一页：`stories` 早就在后端与内容包里（seed 会导入），
+ * 却一直没有后台入口 —— 运营导入完短文后**无处查看、无处纠错**，
  * 只能靠重新导入整包。这里补齐，字段与后端 `content_registry` 的
  * stories spec（`required_on_create=(title, text)`、可筛选 `grade/level`）对齐。
  *
- * 与识字短文的区别：故事的长短与生字量都不受控，用 `highlight_characters`
- * 标出「读的时候要高亮的字」，而不是像短文那样卡覆盖率。
+ * ⚠️ 集合名仍是 `stories`、子类型仍是 `story`/`rhyme` —— 它们是接口与数据的一部分；
+ * 孩子端看到的**叫法**是「识字短文」，儿歌也归在这一类里。
  */
 import ContentManager from '@/components/ContentManager.vue';
 import { LEVEL_OPTIONS, type ColumnDef, type FieldDef } from '@/components/content-fields';
@@ -21,7 +22,7 @@ const fields: FieldDef[] = [
     kind: 'select',
     required: true,
     options: [
-      { value: 'story', label: '故事' },
+      { value: 'story', label: '短文' },
       { value: 'rhyme', label: '儿歌' },
     ],
   },
@@ -66,10 +67,10 @@ const columns: ColumnDef[] = [
 <template>
   <ContentManager
     collection="stories"
-    title="故事 / 儿歌"
-    label="故事"
+    title="识字短文"
+    label="识字短文"
     :fields="fields"
     :columns="columns"
-    hint="故事与儿歌按年级下发（客户端取「孩子年级及以下」）。正文字数不受限，但一行别太长 —— 客户端按行朗读与高亮。"
+    hint="孩子端第三条线的内容（短文 / 儿歌都归这一类）。按年级下发 —— 客户端只取「孩子年级及以下」。导入成功后**会自动重算关卡**，孩子端立刻生效，不必等发布。"
   />
 </template>

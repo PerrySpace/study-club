@@ -557,8 +557,19 @@ function nextCard(): void {
   if (studyIndex.value + 1 < targets.value.length) {
     studyIndex.value += 1;
     studyStep.value = 'look';
-  } else {
+    return;
+  }
+  // ⛔ 出题必须兜底：`startQuiz` 里 `generateQuestions` 会读内容字段
+  //    （`similar_chars` 这类派生字段在后台导入的内容里可能整片缺失）。
+  //    不兜底时异常会直接冒泡出这个 async 点击处理器，`phase` 停在 `study`，
+  //    表现为**点「开始闯关」毫无反应、永远到不了结果页** —— 识字线会整条线
+  //    不可用，而页面上只留一行 console 报错。
+  //    宁可给一句明确提示 + 让用户能退回去重进，也不要静默卡死。
+  try {
     startQuiz();
+  } catch (err) {
+    console.error('[lesson] 出题失败', err);
+    toast.error('题目没准备好，先回地图重进这一关试试');
   }
 }
 
@@ -573,15 +584,9 @@ async function submit(params: {
   const child = current.value;
   if (!child) return;
 
-  const result = await learning.submitAnswer({
-    childId: child._id,
-    question: params.question,
-    answer: params.answer,
-    isCorrect: params.isCorrect,
-    responseMs: Date.now() - questionStartedAt.value,
-  });
-  correctCount.value = learning.sessionCorrect;
-
+  // ⛔ 连对/计分**先落本地**：这一题答对没答对，在按下选项那一刻就确定了，
+  //    跟这次上报成不成功毫无关系。曾经把这段放在 `await` 之后，服务端一 500
+  //    就整段被跳过 ⇒ 结果页恒显示「答对 0 / 6、0%」。
   if (params.isCorrect) {
     combo.value += 1;
     bestCombo.value = Math.max(bestCombo.value, combo.value);
@@ -589,13 +594,30 @@ async function submit(params: {
     combo.value = 0;
   }
 
-  // 服务端会顺带下发新解锁的徽章（可能为空）
-  if (result.newly_earned_badges?.length) {
-    const titles = result.newly_earned_badges
-      .map((b) => b.title)
-      .filter((t): t is string => Boolean(t));
-    if (titles.length) newBadges.value = [...new Set([...newBadges.value, ...titles])];
+  // 上报是「尽力而为」：写不进去只意味着云端少了这条明细（复习状态/错题本晚一点补），
+  // 不影响孩子继续闯关，也不影响结果页的成绩。
+  // ⛔ 必须 try/catch：这里不兜住就是**未捕获的 Promise 拒绝** ——
+  //    控制台只有一行红字、界面上毫无提示，问题会一直从眼皮底下溜过去。
+  try {
+    const result = await learning.submitAnswer({
+      childId: child._id,
+      question: params.question,
+      answer: params.answer,
+      isCorrect: params.isCorrect,
+      responseMs: Date.now() - questionStartedAt.value,
+    });
+    // 服务端会顺带下发新解锁的徽章（可能为空）
+    if (result.newly_earned_badges?.length) {
+      const titles = result.newly_earned_badges
+        .map((b) => b.title)
+        .filter((t): t is string => Boolean(t));
+      if (titles.length) newBadges.value = [...new Set([...newBadges.value, ...titles])];
+    }
+  } catch (err) {
+    console.error('[lesson] 答题上报失败', err);
+    toast.warn('这题没记到云端，成绩先按本机算');
   }
+  correctCount.value = learning.sessionCorrect;
 
   void narrateFeedback(params.question, params.isCorrect);
 }
@@ -669,22 +691,30 @@ async function nextQuestion(): Promise<void> {
 
   const child = current.value;
   if (child && queue.value.length) {
-    const res = await learning.completeLesson({
-      childId: child._id,
-      lessonId: lessonId.value === 'daily' || lessonId.value === 'due' || lessonId.value === 'wrong'
-        ? null
-        : lessonId.value,
-      // 关卡流水记「本次练到的全部字」——含阶段检测抽到的旧字，
-      // 否则关卡记录里的字数会小于孩子实际练过的字数
-      characterIds: Array.from(new Set(queue.value.map((item) => item.question.character_id))),
-      score: correctCount.value,
-      total: queue.value.length,
-    });
-    // 关卡级徽章（服务端口径）；与答题级徽章合并去重
-    const titles = (res.newly_earned_badges ?? [])
-      .map((code) => content.bundle.badges.find((b) => b.code === code)?.title ?? code)
-      .filter(Boolean);
-    if (titles.length) newBadges.value = [...new Set([...newBadges.value, ...titles])];
+    // ⛔ 记流水失败**绝不能挡住结果页**：孩子明明答完了最后一题，
+    //    却因为一次网络抖动/500 停在题目上「点了没反应」，是最糟的体验。
+    //    （古诗 / 故事线早就是 try/catch + toast 的写法，这里补齐对齐。）
+    try {
+      const res = await learning.completeLesson({
+        childId: child._id,
+        lessonId: lessonId.value === 'daily' || lessonId.value === 'due' || lessonId.value === 'wrong'
+          ? null
+          : lessonId.value,
+        // 关卡流水记「本次练到的全部字」——含阶段检测抽到的旧字，
+        // 否则关卡记录里的字数会小于孩子实际练过的字数
+        characterIds: Array.from(new Set(queue.value.map((item) => item.question.character_id))),
+        score: correctCount.value,
+        total: queue.value.length,
+      });
+      // 关卡级徽章（服务端口径）；与答题级徽章合并去重
+      const titles = (res.newly_earned_badges ?? [])
+        .map((code) => content.bundle.badges.find((b) => b.code === code)?.title ?? code)
+        .filter(Boolean);
+      if (titles.length) newBadges.value = [...new Set([...newBadges.value, ...titles])];
+    } catch (err) {
+      console.error('[lesson] 关卡流水写入失败', err);
+      toast.warn('这次成绩没记上，但你已经闯完这一关啦');
+    }
   }
   stars.value = starsForAccuracy(accuracy.value);
   phase.value = 'result';
@@ -1104,7 +1134,7 @@ onUnmounted(() => {
         next-label="下一关"
         :track-links="[
           { key: 'poem', label: '去古诗闯关' },
-          { key: 'story', label: '去故事闯关' },
+          { key: 'story', label: '去读短文' },
         ]"
         @next="goNext"
         @retry="startQuiz"
