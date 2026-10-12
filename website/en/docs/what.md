@@ -49,7 +49,7 @@ Study Club (study-club) is **free, open source and self-hostable**. Current vers
 | **Deploy** | `deploy/`: four independent compose files + nginx reverse proxy |
 | **Core** | `packages/core` (zero-platform, subject-agnostic), `packages/subject-hanzi`, `packages/tokens` |
 
-Content scale (current): characters 83 · poems 3 · units 7 · levels 14 · stories 5 · readings 6 · badges 7.
+Content scale (current): characters 83 · poems 3 · units 7 · levels 14 · stories & rhymes 5 · badges 7.
 
 > ⚠️ **Content volume is the biggest current gap** — the system scales, the content does not yet.
 

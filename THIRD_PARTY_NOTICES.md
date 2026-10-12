@@ -31,7 +31,7 @@
 | [motor](https://github.com/mongodb/motor) / [pymongo](https://github.com/mongodb/mongo-python-driver) | — | Apache-2.0 | 异步 / 同步 MongoDB 驱动 |
 | [pydantic](https://github.com/pydantic/pydantic) | — | MIT | 数据校验与模型 |
 | [pydantic-settings](https://github.com/pydantic/pydantic-settings) | — | MIT | 配置管理 |
-| [argon2-cffi](https://github.com/hynek/argon2-cffi) | — | MIT | Argon2id 口令哈希 |
+| [argon2-cffi](https://github.com/hynek/argon2-cffi) | — | MIT | Argon2id 密码哈希 |
 | [pyjwt](https://github.com/jpadilla/pyjwt) | — | MIT | JWT 会话令牌 |
 | [cryptography](https://github.com/pyca/cryptography) | — | Apache-2.0 OR BSD-3-Clause | Ed25519 邀请码验签等 |
 | [python-multipart](https://github.com/Kludex/python-multipart) | — | Apache-2.0 | 后台素材上传（multipart/form-data） |

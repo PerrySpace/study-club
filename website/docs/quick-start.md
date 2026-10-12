@@ -38,17 +38,17 @@ scripts/seed/seed.sh          # 首次运行：导入内容与初始化数据（
 
 ## 管理后台（可选，内部工具）
 
-管理后台**不在 `up-all.sh` 的默认链路里**，建议按需启动。使用前须先在 `.env` 配置管理员口令：
+管理后台**不在 `up-all.sh` 的默认链路里**，建议按需启动。使用前须先在 `.env` 配置管理员密码：
 
 ```bash
-scripts/api/hash-password.sh  # 交互式生成 Argon2id 口令哈希 → 填入 .env
+scripts/api/hash-password.sh  # 交互式生成 Argon2id 密码哈希 → 填入 .env
 scripts/api/restart.sh        # 让 api 读到新哈希
 scripts/admin/up.sh           # 起后台 → http://localhost:8081/
 ```
 
 > ⚠️ **哈希那一行的单引号不能去掉**：Argon2 哈希含大量 `$`，Docker Compose 的 dotenv
 > 解析未加引号的值时会把 `$m`、`$xxxx` 当变量引用替换成空串，导致
-> 「口令明明对，却一直返回 `40301 管理员口令不正确`」。
+> 「密码明明对，却一直返回 `40301 管理员密码不正确`」。
 >
 > ⚠️ 管理后台是**单人使用的内部工具**，**不要暴露到公网**；不用时 `scripts/admin/down.sh` 关掉即可。
 

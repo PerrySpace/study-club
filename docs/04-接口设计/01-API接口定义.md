@@ -103,7 +103,7 @@
 | --- | --- | --- |
 | `0` | 成功 | — |
 | `400xx` | 请求参数错误 | `40001` 参数校验失败 |
-| `401xx` | 认证失败 | `40101` Token 过期 / `40103` 邀请码或口令不正确 |
+| `401xx` | 认证失败 | `40101` Token 过期 / `40103` 邀请码或密码不正确 |
 | `403xx` | 权限不足 / 能力未启用 | `40301` 无权访问该儿童档案 / `40302` 能力未启用 |
 | `404xx` | 资源不存在 | `40401` 汉字不存在 / `40403` 儿童档案不存在 |
 | `406xx` | 部分成功 | `40601` 批量导入部分失败 |
@@ -118,7 +118,7 @@
 | --- | --- | --- |
 | `40101` | Access Token 过期 | 静默刷新 Token 后重试 |
 | `40102` | Token 无效 | 跳转登录 |
-| `40103` | 邀请码或口令不正确（统一文案，防枚举） | 提示 |
+| `40103` | 邀请码或密码不正确（统一文案，防枚举） | 提示 |
 | `40105` | 账号已锁定 | 提示稍后重试 |
 | `40301` | 无权访问该儿童档案 | 提示并返回档案选择页 |
 | `40401` | 汉字不存在 | 提示 |
@@ -196,7 +196,7 @@ X-Client-Capabilities: record,local_asr,realtime_audio,handwriting,push
 
 ## 三、认证与身份 `/auth`
 
-> 身份方式为**邀请码 + 自设口令**（用户名 + 口令注册登入，邀请码按 `require_invite` 开关可选，见 [02-5 邀请码身份与准入体系](../02-系统架构/05-邀请码身份与准入体系.md)）；手机号 / 短信 OTP、微信授权登录、账号绑定属 ⛔ 掩藏，见 [第十二章](#十二掩藏接口契约保留不注册路由)。
+> 身份方式为**邀请码 + 自设密码**（用户名 + 密码注册登入，邀请码按 `require_invite` 开关可选，见 [02-5 邀请码身份与准入体系](../02-系统架构/05-邀请码身份与准入体系.md)）；手机号 / 短信 OTP、微信授权登录、账号绑定属 ⛔ 掩藏，见 [第十二章](#十二掩藏接口契约保留不注册路由)。
 
 ### 3.1 注册与登入（✅ 当前）
 
@@ -206,12 +206,12 @@ X-Client-Capabilities: record,local_asr,realtime_audio,handwriting,push
 
 | 方法 | 路径 | 说明 | 认证 |
 | --- | --- | --- | --- |
-| POST | `/auth/register` | **统一注册**：用户名 + 口令；邀请码按开关可选 | ❌ |
+| POST | `/auth/register` | **统一注册**：用户名 + 密码；邀请码按开关可选 | ❌ |
 | POST | `/auth/login` | **统一登入**：`identifier` 可填用户名 | ❌ |
 | POST | `/auth/invite/verify` | 仅校验邀请码是否可用（注册前预检，不消耗次数） | ❌ |
-| POST | `/auth/invite/register` | 用邀请码 + 口令注册，创建匿名账号与家庭档案 | ❌ |
-| POST | `/auth/invite/login` | 邀请码 + 口令登入 | ❌ |
-| POST | `/auth/recovery/reset` | 用恢复码重置口令（并重派生加密密钥） | ❌ |
+| POST | `/auth/invite/register` | 用邀请码 + 密码注册，创建匿名账号与家庭档案 | ❌ |
+| POST | `/auth/invite/login` | 邀请码 + 密码登入 | ❌ |
+| POST | `/auth/recovery/reset` | 用恢复码重置密码（并重派生加密密钥） | ❌ |
 | POST | `/auth/refresh` | 刷新 Access Token | ❌ |
 | POST | `/auth/logout` | 退出登录（吊销该设备 Refresh Token） | ✅ |
 | GET | `/auth/me` | 当前账号摘要（家庭昵称、档案数、是否开启端到端加密） | ✅ |
@@ -245,7 +245,7 @@ X-Client-Capabilities: record,local_asr,realtime_audio,handwriting,push
 
 > ⚠️ **四条硬性约定**：
 >
-> 1. **错误信息统一**：邀请码无效、已用尽、口令错误一律返回 `40103`「邀请码或口令不正确」，**绝不区分原因**（防用户与邀请码枚举）。
+> 1. **错误信息统一**：邀请码无效、已用尽、密码错误一律返回 `40103`「邀请码或密码不正确」，**绝不区分原因**（防用户与邀请码枚举）。
 > 2. **`recovery_code` 只返回一次**，服务端只存哈希；前端必须强制用户抄写确认。
 > 3. **限流与锁定**：限流 10 次/10 分钟、连续 5 次失败锁定 15 分钟。
 >    ⚠️ 限流键是**客户端形态指纹**（client/platform/device_form/version 的哈希），
@@ -265,9 +265,9 @@ X-Client-Capabilities: record,local_asr,realtime_audio,handwriting,push
 | GET | `/sync/manifest` | 取云端档案清单与版本（用于增量同步，返回的是**密文块索引**） | ✅ |
 | POST | `/sync/push` | 上传变更（密文） | ✅ |
 | GET | `/sync/pull` | 拉取远端变更（密文） | ✅ |
-| GET | `/sync/salt` | 取 KDF 盐（用于口令派生加密密钥） | ✅ |
+| GET | `/sync/salt` | 取 KDF 盐（用于密码派生加密密钥） | ✅ |
 
-> ⚠️ **服务端只存密文**：`push` / `pull` 的载荷在客户端用「口令 → Argon2id → 密钥」加密，服务端**无法解密**。因此联调时看到的是不可读的 blob，这是设计使然（见 [02-3 §七](../02-系统架构/03-存储与后端策略.md#七数据可迁移性与备份)）。
+> ⚠️ **服务端只存密文**：`push` / `pull` 的载荷在客户端用「密码 → Argon2id → 密钥」加密，服务端**无法解密**。因此联调时看到的是不可读的 blob，这是设计使然（见 [02-3 §七](../02-系统架构/03-存储与后端策略.md#七数据可迁移性与备份)）。
 
 ### 3.3 邀请码管理（✅ 自托管后台）
 
@@ -334,10 +334,8 @@ X-Client-Capabilities: record,local_asr,realtime_audio,handwriting,push
 | GET | `/content/poems/{poem_id}` | 古诗详情（含逐句注音与释义） |
 | GET | `/content/poems/{poem_id}/quiz` | 生成古诗练习题 |
 | GET | `/content/poems/by-char/{char}` | 按汉字反查古诗句 |
-| GET | `/content/stories` | 故事列表 |
-| GET | `/content/stories/{story_id}` | 故事详情 |
-| GET | `/content/readings` | 识字短文列表（按已学字覆盖率推荐） |
-| GET | `/content/readings/{reading_id}` | 短文详情 |
+| GET | `/content/stories` | 识字短文列表（孩子端第三条线，含短文与儿歌） |
+| GET | `/content/stories/{story_id}` | 短文详情 |
 | GET | `/content/units` | 自编单元列表 |
 | GET | `/content/units/{unit_id}` | 单元详情（含字表） |
 | GET | `/content/lessons` | 关卡列表（含解锁状态） |
@@ -607,19 +605,19 @@ X-Client-Capabilities: record,local_asr,realtime_audio,handwriting,push
 
 ## 九、端到端加密同步 `/sync`
 
-见 [3.2](#32-云端档案同步-当前默认关闭--默认端到端加密)。服务端只存 `cipher_payload`，**不做任何解密**；密钥由用户口令在客户端派生。
+见 [3.2](#32-云端档案同步-当前默认关闭--默认端到端加密)。服务端只存 `cipher_payload`，**不做任何解密**；密钥由用户密码在客户端派生。
 
 ---
 
 ## 十、管理后台 `/admin`
 
-**单管理员后台（不做 RBAC）**：所有接口需管理员身份，且写操作记入 `audit_logs`。管理员口令（Argon2id）换管理员 JWT，或使用 `X-Admin-Password` 头。
+**单管理员后台（不做 RBAC）**：所有接口需管理员身份，且写操作记入 `audit_logs`。管理员密码（Argon2id）换管理员 JWT，或使用 `X-Admin-Password` 头。
 
 ### 10.1 登录与概览
 
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
-| POST | `/admin/login` | 用管理员口令换 JWT（口令哈希未配置时能力整体不可用） |
+| POST | `/admin/login` | 用管理员密码换 JWT（密码哈希未配置时能力整体不可用） |
 | GET | `/admin/overview` | 内容完整度 + 素材体量 + 邀请码体量（只读聚合） |
 | GET | `/admin/registry` | 内容类型注册表（后台据此渲染表格与表单） |
 | GET | `/admin/audit-logs` | 操作审计日志 |

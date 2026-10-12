@@ -60,7 +60,7 @@ So I wrote one myself.
 - **Free & open** — no paywall. Capabilities that need a corporate entity (phone/WeChat accounts, payments, mini-program, native app) carry contracts but are **disabled by default, not bundled, not deployed**.
 - **Self-hostable** — Docker Compose, one service per stack (mongo / api / web / admin); a single machine is enough.
 - **Platform-agnostic core** — `packages/core` has zero platform dependencies and is subject-agnostic, leaving room for more subjects later.
-- **A complete learning loop** — learning map · flashcards · levels · daily tasks · spaced review · mistake book · poems · stories · readings · reports · settings.
+- **A complete learning loop** — learning map · flashcards · levels · daily tasks · spaced review · mistake book · poems · stories & rhymes · reports · settings.
 
 ---
 
@@ -150,7 +150,7 @@ Key design docs: [01-1 Overview](./docs/01-产品规划/01-项目概述与定位
 
 **In progress**
 
-- [ ] **Content volume**: characters, poems, readings, stories (the biggest gap today)
+- [ ] **Content volume**: characters, poems, stories & rhymes (the biggest gap today)
 - [ ] Remaining P0 admin pages: poem management, unit & level authoring, bulk import/export
 
 **Planned**

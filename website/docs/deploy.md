@@ -2,7 +2,7 @@
 
 > 本文是面向用户与贡献者的导读，完整设计见 [06-2 发布与更新流程](https://gitee.com/perry-space/study-club/blob/master/docs/06-工程规范/02-发布与更新流程.md) 与 `deploy/*/README.md`（Gitee）。
 
-部署单元就是 `deploy/` 下的 Docker Compose，由 `scripts/` 里的脚本驱动 —— 本机、内网服务器、云主机是**同一套动作**，且**不绑定任何 CI/CD 服务**。最低 1C1G 即可起步。
+部署单元就是 `deploy/` 下的 Docker Compose，由 `scripts/` 里的脚本驱动 —— 本机、局域网服务器、云主机是**同一套动作**，且**不绑定任何 CI/CD 服务**。最低 1C1G 即可起步。
 
 ## 一、四份 compose 的分工
 
@@ -45,7 +45,7 @@ scripts/dev/status.sh           # 查看容器状态与全部访问地址
 | `INVITE_SIGNING_PRIVATE_KEY` / `..._PUBLIC_KEY` | 用 `scripts/api/gen-invite-keys.sh` 生成 |
 | `MONGODB_URI` | host 网络下为 `mongodb://localhost:27017/study_club` |
 
-> ⚠️ `ADMIN_PASSWORD_HASH` 必须用**单引号**包住（Argon2 哈希含大量 `$`，不加引号会被 Compose 的 dotenv 插值改坏，症状是「口令明明对却一直 `40301`」）。
+> ⚠️ `ADMIN_PASSWORD_HASH` 必须用**单引号**包住（Argon2 哈希含大量 `$`，不加引号会被 Compose 的 dotenv 插值改坏，症状是「密码明明对却一直 `40301`」）。
 
 ## 四、改配置怎么生效
 

@@ -27,7 +27,7 @@ features:
   - title: 内容即仓库
     details: 内容以 content/**/*.json 维护并附带 JSON Schema，导入数据库后经接口下发 —— 改内容不必发版。
   - title: 邀请码身份
-    details: 邀请码 + 自设口令完成注册登入，不需要手机号、不需要微信，也不需要企业主体。
+    details: 邀请码 + 自设密码完成注册登入，不需要手机号、不需要微信，也不需要企业主体。
   - title: 可自托管
     details: Docker Compose 分服务独立编排（mongo / api / web / admin），nginx 同源反代，单机即可维护。
   - title: 免费开放

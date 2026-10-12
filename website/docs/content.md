@@ -38,24 +38,25 @@ content/
 ├── poems/required-75.json
 ├── lessons/units.json      # 自编单元
 ├── lessons/lessons.json    # 关卡
-├── stories/stories.json
-├── readings/readings.json  # 识字短文
+├── stories/stories.json    # 识字短文（短文与儿歌）
 └── badges/badges.json
 ```
 
 ### 内容之间的关联
 
-七类内容不是孤立的——**字库是底座**，其余内容通过 `_id` 或字面引用它：
+六类内容不是孤立的——**字库是底座**，其余内容通过 `_id` 或字面引用它：
 
 | 引用方 | 引用字段 | 指向 | 作用 |
 | --- | --- | --- | --- |
 | 单元 | `character_ids` | 汉字 `_id` | 按主题 / 难度把字编成单元 |
 | 关卡 | `character_ids` / `poem_id` / `unit_id` | 汉字 / 古诗 / 单元 | 一关 = 一组字 + 可选一首诗 + 所属单元 |
-| 识字短文 | `character_ids` / `character_chars` | 汉字 `_id` / 字面 | 覆盖率 = 已在字库字数 ÷ 去重字数，只推 ≥ 75% 的短文 |
+| 识字短文 | `highlight_characters` / `unlock_after_lesson_ids` | 汉字字面 / 关卡 `_id` | 高亮已学字、按关卡解锁 |
 | 古诗 | `key_characters` / `unit_ref` | 汉字字面 / 单元 | 诗内生字标注，可反向跳到字卡 |
-| 故事 | `highlight_characters` / `unlock_after_lesson_ids` | 汉字字面 / 关卡 `_id` | 高亮已学字、按关卡解锁 |
 
-> 因此**新增内容时建议按顺序**：汉字 → 单元 → 关卡 / 识字短文 → 故事 / 古诗 → 徽章。引用不到不会报错，但客户端会缺图、缺音或算错覆盖率。
+> 孩子端地图的第三条线叫「识字短文」，对应的内容类型是 `stories`（track key `story`，
+> 子类型 `story` 短文 / `rhyme` 儿歌）—— 集合名与展示名不一致，看代码别只按名字猜。
+
+> 因此**新增内容时建议按顺序**：汉字 → 单元 → 关卡 → 识字短文 / 古诗 → 徽章。引用不到不会报错，但客户端会缺图或缺音。
 
 ## 二、如何新增一条内容
 
@@ -97,8 +98,7 @@ content/
 | 古诗 | 3 |
 | 单元 | 7 |
 | 关卡 | 14 |
-| 故事 | 5 |
-| 识字短文 | 6 |
+| 故事（孩子端「识字短文」线，含儿歌） | 5 |
 | 徽章 | 7 |
 
 > ⚠️ **内容量是当前最大的短板**。系统设计已支撑规模化，但内容尚未达到可用规模；**内容扩容是当前第一优先级**。

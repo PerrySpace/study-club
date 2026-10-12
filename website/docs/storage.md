@@ -34,7 +34,7 @@ MongoDB；浏览器只保留凭据与少量 UI 偏好；内容以仓库内 JSON 
 | `sc.session` | 会话凭据（JWT） | 路由守卫首个 tick 就要判断登录态，必须**同步可读** |
 | `sc.deviceId` | 设备标识 | 服务端按 `client_id` 建 `devices` 记录，区分同账号多设备会话 |
 | `sc.currentChild` | 当前选中的孩子 | 纯 UI 偏好，丢了重选即可 |
-| `sc.loginMemory` | 记住的账号与口令 | 用户显式勾选才写，仅本机、不上传 |
+| `sc.loginMemory` | 记住的账号与密码 | 用户显式勾选才写，仅本机、不上传 |
 
 > ⚠️ **纪律**：数据访问一律走 `packages/core` 的仓储与 API 客户端，组件内不得直接读写存储。
 
@@ -48,7 +48,7 @@ content/
 ├── characters/grade-1.json
 ├── poems/required-75.json
 ├── lessons/units.json     lessons/lessons.json
-├── stories/stories.json   readings/readings.json   badges/badges.json
+├── stories/stories.json   badges/badges.json
 ├── schema/*.schema.json   # JSON Schema（CI 校验 + 后台表单共用）
 └── sources.json           # 数据来源与许可清单
 ```
@@ -78,12 +78,12 @@ content/
 
 | 项 | 设计 |
 | --- | --- |
-| 学习者身份 | 邀请码 + 自设口令（用户名 / 口令至少填一） |
-| 口令存储 | Argon2id（含盐），明文不落日志、不入库 |
+| 学习者身份 | 邀请码 + 自设密码（用户名 / 密码至少填一） |
+| 密码存储 | Argon2id（含盐），明文不落日志、不入库 |
 | 邀请码 / 恢复码 / Refresh | 只存 SHA-256 哈希；失败信息统一以防枚举 |
 | 会话 | 短期 Access（JWT）+ 可吊销 Refresh（只存哈希），按 `client_id` 区分设备 |
 | 防暴力 | 失败 5 次锁定 15 分钟；按 `client_id` + IP 限流 |
-| 管理员 | 口令换管理员 JWT，或 `X-Admin-Password` 头；**服务端二次校验** |
+| 管理员 | 密码换管理员 JWT，或 `X-Admin-Password` 头；**服务端二次校验** |
 
 ## 七、掩藏层：写代码但不启用
 
@@ -103,10 +103,10 @@ content/
 | 层次 | 机制 | 依赖 |
 | --- | --- | --- |
 | **① 导出 / 导入文件** | 导出 `.json`（含 `schema_version`），可导入还原 | ❌ 无 |
-| **② 恢复码** | 注册时一次性返回，忘记口令时重置 | 服务端 |
+| **② 恢复码** | 注册时一次性返回，忘记密码时重置 | 服务端 |
 | **③ 云端家庭档案** | 家庭档案 + 端到端加密：服务端只存密文 | 服务端 |
 
-> **核心原则**：数据主存于服务端，**导出 / 导入是备份手段，不是唯一通路**；端到端加密的云档案默认关闭、密钥由用户口令在客户端派生，**服务端没有解密密钥**。
+> **核心原则**：数据主存于服务端，**导出 / 导入是备份手段，不是唯一通路**；端到端加密的云档案默认关闭、密钥由用户密码在客户端派生，**服务端没有解密密钥**。
 
 ## 九、匿名统计与隐私边界
 

@@ -11,7 +11,7 @@
 | 域 | 管的什么 | 主要集合 |
 | --- | --- | --- |
 | **身份域** | 邀请码身份、设备会话、云端密文、统计与反馈 | `accounts` `invites` `recovery_codes` `devices` `sync_objects` `stats_events` `feedbacks` |
-| **内容域** | 汉字 / 古诗 / 单元 / 关卡 / 故事 / 短文 / 徽章 / 素材 | `characters` `poems` `curriculum_units` `lessons` `stories` `readings` `badges` `assets` |
+| **内容域** | 汉字 / 古诗 / 单元 / 关卡 / 识字短文 / 徽章 / 素材 | `characters` `poems` `curriculum_units` `lessons` `stories` `badges` `assets` |
 | **学习域** | 学习主体与学习过程中产生的数据 | `children` `learning_records` `answer_records` `char_review_states` `wrong_questions` `daily_tasks` `child_badges` |
 | **系统域** | 审计日志、内容包清单、站点运行配置 | `audit_logs` `content_manifest` `app_settings` |
 
@@ -25,7 +25,7 @@
 | --- | --- | --- |
 | `accounts` | 邀请码身份主体，**不存任何身份信息**（无手机号、邮箱、真实姓名） | ✅ |
 | `invites` | 邀请码发放、用量与吊销，**只存哈希** | ✅ |
-| `recovery_codes` | 忘记口令时的自救通道，一次性 | ✅ |
+| `recovery_codes` | 忘记密码时的自救通道，一次性 | ✅ |
 | `devices` | 设备与会话，支撑登录吊销与分端分析 | ✅ 可选 |
 | `sync_objects` | 云端家庭档案密文块，**服务端不可解密** | ✅ 可选（默认关） |
 | `stats_events` | 匿名统计，**只存聚合计数、无个人标识** | ✅ 可选 |
@@ -39,8 +39,7 @@
 | `poems` | 古诗 | 原文取自开源数据集，注音 / 赏析自编 |
 | `curriculum_units` | **自编单元** | 按主题 / 难度编排，**非出版社映射** |
 | `lessons` | 关卡（课程编排） | 关联单元与古诗 |
-| `stories` | 故事与儿歌 | — |
-| `readings` | 识字短文（阅读承接） | 只用已学字编写，覆盖率 ≥ 75% |
+| `stories` | 识字短文（孩子端地图第三条线，含短文与儿歌） | track key 为 `story` |
 | `badges` | 徽章定义 | 数据驱动，可直接新增 |
 | `assets` | 素材（音频 / 图片 / 笔顺） | `copyright` 必填，引用只存 `_ref` |
 
@@ -55,7 +54,7 @@
 | `wrong_questions` | 错题本，同字多次答错累加计数 |
 | `daily_tasks` | 每日任务，用户当天首次进入时懒生成 |
 | `child_badges` | 已获徽章 |
-| `audit_logs` | 操作审计（**绝不记明文码 / 口令 / 密文载荷**） |
+| `audit_logs` | 操作审计（**绝不记明文码 / 密码 / 密文载荷**） |
 | `content_manifest` | 内容包清单（承接 `content/manifest.json`） |
 | `app_settings` | 站点运行配置（单文档 `_id = "site"`，改完即生效） |
 
@@ -66,7 +65,7 @@
 - **内容域集合是内容的唯一真源**：`content/**/*.json` 是导入种子，导入 MongoDB 后由 `/content/*` 接口下发；**内容以 MongoDB 为准**。
 - 浏览器**只保留四类凭据与 UI 偏好键**，不含任何业务数据。
 
-> ⚠️ 云端家庭档案（`sync_objects`）**默认关闭**；开启时**默认端到端加密**，密钥由用户口令在客户端派生（Argon2id），服务端无论如何都解不开。
+> ⚠️ 云端家庭档案（`sync_objects`）**默认关闭**；开启时**默认端到端加密**，密钥由用户密码在客户端派生（Argon2id），服务端无论如何都解不开。
 
 ## 四、数据字典去哪看
 

@@ -54,14 +54,14 @@
 
 ### 认证（✅ 当前）
 
-身份方式为**邀请码 + 自设口令**：用户名 + 口令注册登入，邀请码按 `REQUIRE_INVITE` 开关可选。
+身份方式为**邀请码 + 自设密码**：用户名 + 密码注册登入，邀请码按 `REQUIRE_INVITE` 开关可选。
 
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
-| POST | `/auth/register` | 统一注册：用户名 + 口令，邀请码按开关可选 |
+| POST | `/auth/register` | 统一注册：用户名 + 密码，邀请码按开关可选 |
 | POST | `/auth/login` | 统一登入，`identifier` 可填用户名 |
 | POST | `/auth/invite/verify` | 注册前预检邀请码是否可用（不消耗次数） |
-| POST | `/auth/recovery/reset` | 用恢复码重置口令 |
+| POST | `/auth/recovery/reset` | 用恢复码重置密码 |
 | POST | `/auth/refresh` | 刷新 Access Token |
 | POST | `/auth/logout` | 退出登录（吊销该设备 Refresh Token） |
 | GET | `/auth/me` | 当前账号摘要 |
