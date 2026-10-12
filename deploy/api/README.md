@@ -76,8 +76,14 @@ docker compose -f deploy/api/docker-compose.yml up -d
 ## 初始化数据
 
 ```bash
-scripts/seed/seed.sh                      # 导入全部种子与内容包
+scripts/seed/seed.sh                      # 导入全部种子与内容包（集合为空时全量灌入）
 scripts/seed/seed.sh --only characters    # 只导入某张表
+scripts/seed/seed.sh --force              # 强制以仓库为准（覆盖同名 + 清理库内多余）
 ```
+
+⭐ **内容优先级：初始化时用仓库，库里有数据就用库里的。**
+内容型集合为空时（首次部署）用仓库 `content/` 全量灌入；已有数据时**只补缺 ——
+不覆盖同名、不删除库内多余项**。因此后台「导入 JSON」进来的内容不会再被发布清掉。
+唯一例外是 `--force` / `--drop`（显式声明以仓库为准）。详见 `scripts/seed/README.md`。
 
 内容接口 `GET /api/v1/content/*` 在导入内容包后才有数据。

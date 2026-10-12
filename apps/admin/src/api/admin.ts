@@ -224,6 +224,16 @@ export interface ContentImportResult {
   dry_run: boolean;
 }
 
+/** 删除结果 —— `hard` 区分「下架（软删）」与「物理删除」。 */
+export interface ContentDeleteResult {
+  deleted: boolean;
+  id: string;
+  /** true = 物理删除（不可恢复）；false = 下架（status → offline） */
+  hard: boolean;
+  /** 物理删除时命中的引用；仅在 `force=true` 真正删掉后才有内容 */
+  references: Array<{ collection: string; label: string; count: number }>;
+}
+
 // ---------------------------------------------------------------------------
 // 通用内容文档（与 `AdminCharacter` 同构，字段随集合而异）
 // ---------------------------------------------------------------------------
@@ -550,6 +560,19 @@ export const adminApi = {
       `/admin/content/characters/${encodeURIComponent(id)}`,
     ),
 
+  /**
+   * 真删（物理删除，**不可恢复**）。
+   *
+   * 与 `offlineCharacter` 的差别是语义不是路径：靠 `hard=true` 显式声明意图，
+   * 后端默认行为（不带参数）仍然是下架。被关卡 / 单元 / 短文引用时后端回复
+   * `CONTENT_IN_USE(40903)`；此时要么放弃，要么显式 `force: true` 强制删
+   * ——强制删除会留下悬空引用（关卡指向不存在的字），后果由操作者承担。
+   */
+  deleteCharacter: (id: string, options?: { force?: boolean }) =>
+    request<ContentDeleteResult>('DELETE', `/admin/content/characters/${encodeURIComponent(id)}`, {
+      params: { hard: true, force: options?.force ?? false },
+    }),
+
   // 导入 / 导出（字库按年级）
   exportCharacters: (query: { grade?: number; status?: string; keyword?: string }) =>
     request<ContentExportResult<AdminCharacter>>('GET', '/admin/content/characters/export', {
@@ -593,6 +616,14 @@ export const adminApi = {
     request<{ deleted: boolean; id: string }>(
       'DELETE',
       `/admin/content/${encodeURIComponent(collection)}/${encodeURIComponent(id)}`,
+    ),
+
+  /** 真删（物理删除，**不可恢复**）；被引用时后端回复 40903，可 `force` 强制。 */
+  deleteContent: (collection: string, id: string, options?: { force?: boolean }) =>
+    request<ContentDeleteResult>(
+      'DELETE',
+      `/admin/content/${encodeURIComponent(collection)}/${encodeURIComponent(id)}`,
+      { params: { hard: true, force: options?.force ?? false } },
     ),
 
   exportContent: <T = ContentDoc>(collection: string, query: ContentListQuery) =>

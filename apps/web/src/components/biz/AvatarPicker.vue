@@ -10,16 +10,14 @@
  * 但用户侧上传接口尚未开放（现有素材上传接口属管理端，需 admin 权限），
  * 因此这里暂不渲染上传入口 —— 留一个死按钮比没有按钮更糟。
  */
-import { AVATAR } from '@study-club/core';
+import { AVATAR, avatarImagePath, avatarLabel } from '@study-club/core';
 
 const props = withDefaults(defineProps<{ modelValue: string; size?: number }>(), { size: 56 });
 const emit = defineEmits<{ 'update:modelValue': [string] }>();
 
 const animals = Object.values(AVATAR);
 
-function avatarSrc(key: string): string {
-  return `/avatars/${key}.svg`;
-}
+const avatarSrc = avatarImagePath;
 
 function pick(key: string): void {
   if (key !== props.modelValue) emit('update:modelValue', key);
@@ -35,10 +33,10 @@ function pick(key: string): void {
       class="avatar-picker__item tap"
       :class="{ 'is-active': modelValue === key }"
       :aria-pressed="modelValue === key"
-      :aria-label="`选择头像 ${key}`"
+      :aria-label="`选择头像 ${avatarLabel(key)}`"
       @click="pick(key)"
     >
-      <img :src="avatarSrc(key)" :alt="key" draggable="false" />
+      <img :src="avatarSrc(key)" :alt="avatarLabel(key)" draggable="false" />
     </button>
   </div>
 </template>

@@ -13,12 +13,15 @@
  * 说明），所以「下载模板」按钮与本页展示的字段说明永远是同一份来源。
  */
 import { computed, onMounted, reactive, ref } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 import { adminApi, type ContentDoc, type ContentTemplate } from '@/api/admin';
+import { ApiError, CONTENT_IN_USE } from '@/api/client';
+import { useGradeTabs } from '@/composables/useGradeTabs';
 import { reportError } from '@/utils/error';
 import ContentFieldEditor from './ContentFieldEditor.vue';
 import {
+  gradeText,
   STATUS_OPTIONS,
   type ColumnDef,
   type FieldDef,
@@ -61,6 +64,16 @@ const items = ref<ContentDoc[]>([]);
 const total = ref(0);
 const gradeCounts = ref<Record<string, number>>({});
 const activeGrade = ref<number | undefined>(undefined);
+
+/**
+ * 年级 Tab：调用方显式传入的优先（某些类型要自定义档位），
+ * 否则用**站点配置**派生 —— 年级是运营可配置的，写死清单会让后台新加的年级
+ * （如七年级）在内容页根本不出现（见 `composables/useGradeTabs.ts`）。
+ */
+const { gradeTabs: configuredGradeTabs, loadGradeTabs } = useGradeTabs();
+const effectiveGradeTabs = computed<readonly GradeTab[]>(() =>
+  props.gradeTabs.length ? props.gradeTabs : configuredGradeTabs.value,
+);
 
 const query = reactive({
   status: '',
@@ -172,8 +185,9 @@ function displayValue(row: ContentDoc, col: ColumnDef): string {
     case 'status':
       return statusLabel(raw as string | undefined);
     case 'grade': {
-      const grade = Number(raw ?? 0);
-      return grade > 0 ? `${grade} 年级` : '未分级';
+      // ⛔ 不能写 `Number(raw ?? 0)`：`null`（未分级）会被兜成 0 显示成「学龄前」，
+      //    而 `grade=0` 又会被 `> 0` 判成「未分级」—— 两个方向都会错。
+      return gradeText(raw);
     }
     case 'count': {
       const arr = raw;
@@ -412,6 +426,54 @@ async function offline(row: ContentDoc): Promise<void> {
   }
 }
 
+/**
+ * 真删（物理删除，不可恢复）。
+ *
+ * 为什么不把「下架」直接改成「删除」：两者**风险等级不同** ——
+ * 下架随时能改回来，删除不可恢复。合成一个按钮会让一次手滑变成事故，
+ * 所以各自独立，且删除走更重的二次确认。
+ *
+ * 被关卡 / 单元 / 短文引用时后端回 `CONTENT_IN_USE(40903)`：
+ * 这里把引用明细如实列出来，由使用者决定「放弃」还是「我知道，仍然删除」。
+ */
+async function remove(row: ContentDoc): Promise<void> {
+  const name = displayValue(row, { prop: 'title', label: '标题' });
+  try {
+    await ElMessageBox.confirm(
+      `将物理删除「${name}」，从数据库中移除且不可恢复。若只是想让它不再下发给客户端，请改用「下架」。`,
+      '确认删除？',
+      { type: 'warning', confirmButtonText: '删除', cancelButtonText: '取消' },
+    );
+  } catch {
+    return; // 用户取消
+  }
+  await removeConfirmed(row, name, false);
+}
+
+async function removeConfirmed(row: ContentDoc, name: string, force: boolean): Promise<void> {
+  try {
+    await adminApi.deleteContent(props.collection, row._id, { force });
+    ElMessage.success(`已删除「${name}」`);
+    await Promise.all([load(), loadGradeCounts()]);
+  } catch (err) {
+    if (!force && err instanceof ApiError && err.code === CONTENT_IN_USE) {
+      const detail = (err.errors ?? []).map((item) => item.reason).join('；');
+      try {
+        await ElMessageBox.confirm(
+          `「${name}」仍被引用（${detail || '有关卡或单元在用'}）。删掉之后这些地方会指向不存在的内容，孩子的关卡可能点不进去。仍然删除？`,
+          '该内容仍在使用中',
+          { type: 'warning', confirmButtonText: '仍然删除', cancelButtonText: '放弃' },
+        );
+      } catch {
+        return;
+      }
+      await removeConfirmed(row, name, true);
+      return;
+    }
+    reportError(err, '删除失败');
+  }
+}
+
 // 素材选择回调：把选中的素材 id 写回表单
 function onAssetPicked(fieldName: string, assetId: string | null): void {
   formValues.value[fieldName] = assetId ?? '';
@@ -432,6 +494,8 @@ function onFieldChange(fieldName: string, value: unknown): void {
 onMounted(() => {
   void load();
   void loadGradeCounts();
+  // 未显式传入年级档位时，从站点配置派生（含后台新加的年级）
+  if (props.withGrade && !props.gradeTabs.length) void loadGradeTabs();
 });
 
 defineExpose({ load, loadGradeCounts });
@@ -460,11 +524,14 @@ defineExpose({ load, loadGradeCounts });
       {{ hint }}
       导入按 <span class="mono">_id</span> 幂等 upsert，可放心重跑；导出的文件可直接再次导入或进 git。
       点「下载模板」可拿到字段说明与一条示例。
+      <br />
+      导入只写数据库、不回写仓库；但<b>已导入的内容不会再被发布清掉</b>
+      —— 库里有数据时以数据库为准（只补缺，不覆盖、不删除）。
     </p>
 
-    <div v-if="withGrade && gradeTabs.length" class="grade-tabs">
+    <div v-if="withGrade && effectiveGradeTabs.length" class="grade-tabs">
       <button
-        v-for="tab in gradeTabs"
+        v-for="tab in effectiveGradeTabs"
         :key="String(tab.value)"
         type="button"
         class="grade-tab"
@@ -513,7 +580,7 @@ defineExpose({ load, loadGradeCounts });
           <span v-else>{{ displayValue(row, col) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="120" fixed="right">
+      <el-table-column label="操作" width="160" fixed="right">
         <template #default="{ row }">
           <el-button link type="primary" @click="openEdit(row)">编辑</el-button>
           <el-popconfirm
@@ -523,9 +590,10 @@ defineExpose({ load, loadGradeCounts });
             @confirm="offline(row)"
           >
             <template #reference>
-              <el-button link type="danger" :disabled="row.status === 'offline'">下架</el-button>
+              <el-button link type="warning" :disabled="row.status === 'offline'">下架</el-button>
             </template>
           </el-popconfirm>
+          <el-button link type="danger" @click="remove(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

@@ -29,6 +29,14 @@ import type { LevelType } from '../constants';
 /** 一关默认几个字。 */
 export const DEFAULT_CHARS_PER_LESSON = 6;
 
+/**
+ * 生成关卡的年级上限默认值。
+ *
+ * 取 30 —— 与后端 `runtime_config.GRADE_MAX` 对齐，语义是「不限」：
+ * 内容有多少年级就生成多少。后台把年级扩到 7/8/9 后无需改代码。
+ */
+export const DEFAULT_TARGET_GRADE = 30;
+
 /** 关卡默认标签名（运营可用 override 改）。 */
 export const DEFAULT_LESSON_TAG_LABEL = '综合';
 
@@ -88,6 +96,29 @@ const DEFAULT_CREATED_AT = '1970-01-01T00:00:00.000Z';
 /** 稳定的关卡身份：不受重排影响。 */
 function stableKey(track: Track, grade: number, index: number): string {
   return `${track}:${grade}:${index}`;
+}
+
+/**
+ * 内容**自身**年级。
+ *
+ * ⛔ 只能对「字段缺失」回落 1 —— `??` 正是这个语义（`0` = 学龄前必须保留）。
+ * 服务端 Python 侧曾写成 `item.get("grade") or 1`，`0` 被 falsy 吞掉、
+ * 学龄前内容静默升成一年级；两边因此生成出不同的关卡。必须逐字对齐。
+ */
+function gradeOf(item: { grade?: number | null }): number {
+  return item.grade ?? 1;
+}
+
+/**
+ * 年级 → 难度档位。学龄前（≤0）是 `sprout`，7 年级及以上跨到 `bridge`。
+ *
+ * ⛔ 不要写成 `('grade' + Math.max(1, grade))`：那会把学龄前摊成 `grade1`。
+ * 与后端 `lesson_generator._level_for_grade` 逐条对应。
+ */
+function levelOf(grade: number): LevelType {
+  if (grade <= 0) return 'sprout';
+  if (grade <= 6) return `grade${grade}` as LevelType;
+  return 'bridge';
 }
 
 /**
@@ -212,7 +243,7 @@ function generateTrack(
       _id: key,
       // title 保留内容原名（识字线是单字、古诗线是诗题），供后台与日志辨认
       title: group[0]?.title ?? `${TRACK_LABEL[track]} ${i + 1}`,
-      level: ('grade' + Math.max(1, grade)) as LevelType,
+      level: levelOf(grade),
       order: i + 1,
       character_ids: group.map((g) => g._id),
       game_types: gameTypesFor(track),
@@ -266,18 +297,28 @@ function defaultTagLabel(
 }
 
 /**
- * 主入口：由内容生成全部关卡。
+ * 主入口：由内容生成全部关卡（三条线 × **每个年级各一条**）。
  *
- * @param characters 字库（自动会取 `grade <= target` 的学习池）
- * @param poems 古诗
- * @param stories 故事
- * @param targetGrade 目标年级；该年级及以下的低年级字会合并进来
+ * ## 为什么按「内容自身年级」分桶
+ * 旧实现用单一 `targetGrade` 取「该年级及以下」的池子，却只产出 `grade = targetGrade`
+ * 的关卡。两个后果都真实发生过：
+ *   ① 学龄前（`grade=0`）的内容被摊进一年级 —— 导入过却「看不见」；
+ *   ② 学龄前孩子（`grade=0`）在客户端按 `lesson.grade <= 孩子年级` 过滤后
+ *      **一关都看不到**（关卡 grade 最小也是 1）。
+ *
+ * 改成每年级各自成线后：`grade=0` 的内容只进 `grade=0` 的关卡；一年级孩子仍按
+ * 「该年级及以下」看到 0 年级 + 1 年级两条线 —— 语义不变、互不污染。
+ *
+ * 与后端 `lesson_generator.py::generate_lessons` **逐条对应**，改动必须同步。
+ *
+ * @param targetGrade 年级**上限**（含）。默认 `DEFAULT_TARGET_GRADE`，
+ *                   即「内容有多少年级就生成多少」。
  */
 export function generateLessons(params: {
   characters: Character[];
   poems?: Poem[];
   stories?: Story[];
-  targetGrade: number;
+  targetGrade?: number;
   options?: GenerateOptions;
 }): GeneratedLesson[] {
   const options = {
@@ -285,44 +326,61 @@ export function generateLessons(params: {
     createdAt: params.options?.createdAt ?? DEFAULT_CREATED_AT,
   };
   const overrides = params.options?.overrides ?? {};
+  const ceiling = params.targetGrade ?? DEFAULT_TARGET_GRADE;
 
-  const grade = params.targetGrade;
-  // 学习池只取该年级及以下：一年级的孩子不该看到三年级的字。
-  const pool: SourceItem[] = params.characters
-    .filter((c) => c.status === 'published' && (c.grade ?? 1) <= grade)
-    .map((c) => ({
+  /** 按自身年级分桶；只留已发布、且不超过上限的。 */
+  function bucket<T extends { status?: string; grade?: number | null }>(items: T[]): Map<number, T[]> {
+    const map = new Map<number, T[]>();
+    for (const item of items) {
+      if (item.status !== 'published') continue;
+      const g = gradeOf(item);
+      if (g > ceiling) continue;
+      const list = map.get(g);
+      if (list) list.push(item);
+      else map.set(g, [item]);
+    }
+    return map;
+  }
+
+  const charBuckets = bucket(params.characters);
+  const poemBuckets = bucket(params.poems ?? []);
+  const storyBuckets = bucket(params.stories ?? []);
+  const ascending = (a: number, b: number): number => a - b;
+
+  // 输出顺序保持「按线分组」（识字 → 古诗 → 故事），线内按年级升序 ——
+  // 与后端实现一致。
+  const out: GeneratedLesson[] = [];
+
+  for (const grade of [...charBuckets.keys()].sort(ascending)) {
+    const pool: SourceItem[] = (charBuckets.get(grade) ?? []).map((c) => ({
       _id: c._id,
       title: c.char,
       difficulty: c.difficulty,
       tags: c.tags,
     }));
+    out.push(...generateTrack('literacy', grade, pool, overrides, options));
+  }
 
-  const literacy = generateTrack('literacy', grade, pool, overrides, options);
-  const poems = generateTrack(
-    'poem',
-    grade,
-    (params.poems ?? [])
-      .filter((p) => p.status === 'published' && (p.grade ?? 1) <= grade)
-      .map((p) => ({
-        _id: p._id,
-        title: p.title,
-        difficulty: p.difficulty,
-        tags: p.theme_tags,
-      })),
-    overrides,
-    options,
-  );
-  const stories = generateTrack(
-    'story',
-    grade,
-    (params.stories ?? [])
-      .filter((s) => s.status === 'published' && (s.grade ?? 1) <= grade)
+  for (const grade of [...poemBuckets.keys()].sort(ascending)) {
+    const src: SourceItem[] = (poemBuckets.get(grade) ?? []).map((p) => ({
+      _id: p._id,
+      title: p.title,
+      difficulty: p.difficulty,
+      tags: p.theme_tags,
+    }));
+    out.push(...generateTrack('poem', grade, src, overrides, options));
+  }
+
+  for (const grade of [...storyBuckets.keys()].sort(ascending)) {
+    const src: SourceItem[] = (storyBuckets.get(grade) ?? []).map((s) => ({
+      _id: s._id,
+      title: s.title,
       // 故事统一难度 1：故事的目的是「读得有趣」，不是考字认得准不准。
-      // 把它按难度排序会让最「难」的故事排在后面，而难度在此没有意义。
-      .map((s) => ({ _id: s._id, title: s.title, difficulty: 1, tags: undefined })),
-    overrides,
-    options,
-  );
+      difficulty: 1,
+      tags: undefined,
+    }));
+    out.push(...generateTrack('story', grade, src, overrides, options));
+  }
 
-  return [...literacy, ...poems, ...stories];
+  return out;
 }

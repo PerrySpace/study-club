@@ -144,6 +144,42 @@ export type AvatarKey = (typeof AVATAR)[keyof typeof AVATAR];
 /** 默认头像：兔子。任何「没选过」的分支都落到它。 */
 export const DEFAULT_AVATAR: AvatarKey = AVATAR.rabbit;
 
+/**
+ * 头像的中文名（= 学习伙伴的称呼）。
+ *
+ * 为什么必须有：伙伴的名字**不能写死在文案里**。孩子选了熊猫，界面却一直叫「小兔」，
+ * 是「我选的没生效」最直观的来源 —— 而且这种不一致只出现在选了非默认头像的用户身上，
+ * 开发和自测（都用默认兔子）永远撞不见。
+ *
+ * 与 `AVATAR` 的 key 一一对应，新增动物时两处一起加。
+ */
+export const AVATAR_LABELS: Record<AvatarKey, string> = {
+  rabbit: '小兔',
+  panda: '熊猫',
+  fox: '小狐',
+  cat: '小猫',
+  dog: '小狗',
+  bear: '小熊',
+  penguin: '企鹅',
+  owl: '猫头鹰',
+};
+
+/** 取头像的中文名；未知 key（含 `asset:` 自定义图）回落到默认头像的名字。 */
+export function avatarLabel(key: string | null | undefined): string {
+  return (key && AVATAR_LABELS[key as AvatarKey]) || AVATAR_LABELS[DEFAULT_AVATAR];
+}
+
+/**
+ * 动物头像的图片路径（本地 SVG，不依赖网络也不依赖后端）。
+ *
+ * 未知 key 回落到默认头像：宁可显示一只兔子，也不要 `<img>` 裂图 ——
+ * 裂图对孩子是「坏了」，兔子只是「换了个伙伴」。
+ */
+export function avatarImagePath(key: string | null | undefined): string {
+  const safe = key && AVATAR_LABELS[key as AvatarKey] ? key : DEFAULT_AVATAR;
+  return `/avatars/${safe}.svg`;
+}
+
 /** 自定义上传头像的前缀；`avatar_key` 形如 `asset:as_xxxxxxxxxxxxxxxx`。 */
 export const AVATAR_ASSET_PREFIX = 'asset:';
 

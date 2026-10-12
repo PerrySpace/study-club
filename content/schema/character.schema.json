@@ -6,7 +6,7 @@
   "required": [
     "_id", "char", "pinyin", "pinyin_plain", "tone", "is_polyphone", "polyphone_readings",
     "radical", "stroke_count", "structure", "stroke_order_ref", "meaning", "words", "sentences",
-    "pictograph", "image_ref", "audio_ref", "grade", "level", "difficulty", "tags",
+    "pictograph", "glyph", "image_ref", "audio_ref", "grade", "level", "difficulty", "tags",
     "similar_chars", "antonym", "synonyms", "unit_refs", "status", "version", "created_at", "updated_at"
   ],
   "additionalProperties": false,
@@ -39,7 +39,14 @@
     "meaning": { "type": "string", "minLength": 1, "maxLength": 40 },
     "words": { "type": "array", "minItems": 3, "maxItems": 5, "items": { "type": "string" } },
     "sentences": { "type": "array", "minItems": 1, "maxItems": 3, "items": { "type": "string" } },
-    "pictograph": { "type": ["string", "null"] },
+    "pictograph": {
+      "type": ["string", "null"],
+      "description": "字形说明【文字】（如「一横表示数目「一」」）。⚠️ 名字容易误解：它**不是图片**，图片字段是 glyph。客户端把它当提示文案直出。"
+    },
+    "glyph": {
+      "type": ["string", "null"],
+      "description": "字源图。三种形态：① emoji 如 💧 ② 图片链接 https://… ③ 素材 id 如 as_…。客户端「看图选字」的题干主图，图片优先于 emoji；留空则该字出不了「看图选字」题。"
+    },
     "image_ref": { "type": ["string", "null"] },
     "audio_ref": { "type": ["string", "null"] },
     "grade": { "type": "integer", "minimum": 0, "maximum": 6 },

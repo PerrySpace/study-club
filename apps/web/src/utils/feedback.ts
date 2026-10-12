@@ -12,7 +12,16 @@
  * 随机但**不连续重复**：上一轮刚用过的词，下一轮不再出现。
  * 逻辑放 web 层而非学科包：这是中文产品的文案口径，英语跟读复用组件时
  * 可以注入自己的词库（见 ReadAlongButton 的 props）。
+ *
+ * ⚠️ 词库里提到伙伴的地方一律写占位符 `{伙伴}`，**不要写死「小兔」**：
+ *    伙伴的名字来自孩子选的头像（`AVATAR_LABELS`），写死会让选了熊猫的孩子
+ *    被叫「小兔」——「我选的没生效」最典型的形态，且只在非默认头像上复现。
  */
+
+import { avatarLabel, DEFAULT_AVATAR } from '@study-club/core';
+
+/** 伙伴名的占位符。词库里凡是提到伙伴的地方都用它。 */
+export const COMPANION_PLACEHOLDER = '{伙伴}';
 
 export const PRAISE_WORDS: readonly string[] = [
   '读得真棒！',
@@ -20,7 +29,7 @@ export const PRAISE_WORDS: readonly string[] = [
   '声音真好听，读对啦！',
   '真不错，就是这样读！',
   '太棒了，一字不差！',
-  '好厉害，小兔给你点赞！',
+  '好厉害，{伙伴}给你点赞！',
   '读得又响亮又清楚！',
 ];
 
@@ -29,12 +38,21 @@ export const ENCOURAGE_WORDS: readonly string[] = [
   '没关系，我们再来一遍',
   '差一点点了，再读一次',
   '别着急，大胆读出来',
-  '跟着小兔，再试一遍',
+  '跟着{伙伴}，再试一遍',
   '已经很接近啦，再来一次',
 ];
 
 let lastPraiseIndex = -1;
 let lastEncourageIndex = -1;
+
+/**
+ * 把占位符换成伙伴名。
+ * 调用方没传名字时回落到**默认头像的名字**（与界面上的默认伙伴一致），
+ * 而不是把字面上的 `{伙伴}` 端给孩子看。
+ */
+function withCompanion(text: string, name?: string): string {
+  return text.split(COMPANION_PLACEHOLDER).join(name?.trim() || avatarLabel(DEFAULT_AVATAR));
+}
 
 function pickFrom(pool: readonly string[], lastIndex: number): number {
   if (pool.length <= 1) return 0;
@@ -44,14 +62,14 @@ function pickFrom(pool: readonly string[], lastIndex: number): number {
   return index;
 }
 
-/** 随机抽一句表扬（不会与上一次重复）。 */
-export function pickPraise(): string {
+/** 随机抽一句表扬（不会与上一次重复）。`companionName` 用于替换词库里的 `{伙伴}`。 */
+export function pickPraise(companionName?: string): string {
   lastPraiseIndex = pickFrom(PRAISE_WORDS, lastPraiseIndex);
-  return PRAISE_WORDS[lastPraiseIndex] ?? PRAISE_WORDS[0]!;
+  return withCompanion(PRAISE_WORDS[lastPraiseIndex] ?? PRAISE_WORDS[0]!, companionName);
 }
 
-/** 随机抽一句鼓励（不会与上一次重复）。 */
-export function pickEncouragement(): string {
+/** 随机抽一句鼓励（不会与上一次重复）。`companionName` 用于替换词库里的 `{伙伴}`。 */
+export function pickEncouragement(companionName?: string): string {
   lastEncourageIndex = pickFrom(ENCOURAGE_WORDS, lastEncourageIndex);
-  return ENCOURAGE_WORDS[lastEncourageIndex] ?? ENCOURAGE_WORDS[0]!;
+  return withCompanion(ENCOURAGE_WORDS[lastEncourageIndex] ?? ENCOURAGE_WORDS[0]!, companionName);
 }

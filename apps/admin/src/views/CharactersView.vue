@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue';
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
+import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus';
 
 import {
   adminApi,
@@ -8,6 +8,9 @@ import {
   type CharacterGradeCounts,
   type CharacterWritePayload,
 } from '@/api/admin';
+import { ApiError, CONTENT_IN_USE } from '@/api/client';
+import { gradeText } from '@/components/content-fields';
+import { useGradeTabs } from '@/composables/useGradeTabs';
 import { reportError } from '@/utils/error';
 import GlyphPreview from '@/components/GlyphPreview.vue';
 
@@ -32,17 +35,28 @@ const items = ref<AdminCharacter[]>([]);
 const total = ref(0);
 const gradeCounts = ref<CharacterGradeCounts | null>(null);
 
-/** 年级分类 Tab：0 = 学龄前；未分级（grade 缺失）单列一档。 */
-const GRADE_TABS = [
-  { value: undefined, label: '全部' },
-  { value: 1, label: '一年级' },
-  { value: 2, label: '二年级' },
-  { value: 3, label: '三年级' },
-  { value: 4, label: '四年级' },
-  { value: 5, label: '五年级' },
-  { value: 6, label: '六年级' },
-  { value: 0, label: '学龄前' },
-] as const;
+/**
+ * 年级分类 Tab —— 来自**站点配置**（含后台设置里新加的年级），不再在前端写死。
+ *
+ * 之前这里硬编码了一份 0–6 的清单，于是「设置里把年级扩到 7/8/9」在本页
+ * 完全看不到，而字库里 `grade=7` 的字确实存在 —— 看起来像导入没生效。
+ * 0 = 学龄前；未分级（grade 缺失）由统计接口单列。
+ */
+const { gradeTabs, loadGradeTabs } = useGradeTabs();
+
+/**
+ * 表单里年级可填的上限 —— 跟随站点配置。
+ *
+ * ⛔ 旧代码写死 `:min="1" :max="6"`：**学龄前（0）根本填不进去**，
+ * 7/8/9 也填不了 —— 后台扩了年级、表单却还停在 1–6，运营只能通过导入
+ * 绕过，而导入的内容在列表里又显示成「—」/「未分级」。三处都在这轮修掉了。
+ */
+const maxGrade = computed(() => {
+  const ids = gradeTabs.value
+    .map((t) => t.value)
+    .filter((v): v is number => typeof v === 'number');
+  return ids.length ? Math.max(...ids) : 6;
+});
 
 const activeGrade = ref<number | undefined>(undefined);
 
@@ -300,6 +314,7 @@ async function onFileChange(event: Event): Promise<void> {
 onMounted(() => {
   void load();
   void loadGradeCounts();
+  void loadGradeTabs();
 });
 
 function handlePageChange(page: number): void {
@@ -405,6 +420,54 @@ async function offline(row: AdminCharacter): Promise<void> {
     reportError(err, '下架失败');
   }
 }
+
+// ---------------------------------------------------------------------------
+// 真删（物理删除，不可恢复）
+// ---------------------------------------------------------------------------
+/**
+ * 字是最容易被引用的内容（关卡、单元、短文都靠 `character_ids` 指过来），
+ * 所以删除前让后端先查一遍引用；命中 40903 时把明细念给使用者听，
+ * 由他决定放弃还是强制删除。**不做静默级联删除** ——
+ * 那会连关卡一起抹掉，而关卡又挂着孩子的学习进度。
+ */
+async function remove(row: AdminCharacter): Promise<void> {
+  const name = row.char ?? row._id;
+  try {
+    await ElMessageBox.confirm(
+      `将物理删除「${name}」，从数据库中移除且不可恢复。若只是想让它不再下发给客户端，请改用「下架」。`,
+      '确认删除？',
+      { type: 'warning', confirmButtonText: '删除', cancelButtonText: '取消' },
+    );
+  } catch {
+    return; // 用户取消
+  }
+  await removeConfirmed(row, name, false);
+}
+
+async function removeConfirmed(row: AdminCharacter, name: string, force: boolean): Promise<void> {
+  try {
+    await adminApi.deleteCharacter(row._id, { force });
+    ElMessage.success(`已删除「${name}」`);
+    await load();
+    await loadGradeCounts();
+  } catch (err) {
+    if (!force && err instanceof ApiError && err.code === CONTENT_IN_USE) {
+      const detail = (err.errors ?? []).map((item) => item.reason).join('；');
+      try {
+        await ElMessageBox.confirm(
+          `「${name}」仍被引用（${detail || '有关卡或单元在用'}）。删掉之后这些地方会指向不存在的字，孩子的关卡可能点不进去。仍然删除？`,
+          '该内容仍在使用中',
+          { type: 'warning', confirmButtonText: '仍然删除', cancelButtonText: '放弃' },
+        );
+      } catch {
+        return;
+      }
+      await removeConfirmed(row, name, true);
+      return;
+    }
+    reportError(err, '删除失败');
+  }
+}
 </script>
 
 <template>
@@ -427,15 +490,16 @@ async function offline(row: AdminCharacter): Promise<void> {
     </div>
 
     <p class="page-hint">
-      主路径仍是<b>内容即仓库</b>（改 <span class="mono">content/characters/*.json</span> 后提 PR）；
-      本页用于快速纠错、按年级整理与批量增补。编辑只改服务端集合，需要回写仓库时请「导出 JSON」（05-1 §1.1）。
+      运行时真源是<b>服务端数据库</b>；<span class="mono">content/characters/*.json</span> 是
+      可版本管理的内容形态，需要回写仓库时请「导出 JSON」（05-1 §1.1）。
       <br />
       导入按 <span class="mono">_id</span> 幂等 upsert，可放心重跑；导出的文件可直接再次导入或进 git。
+      <b>导入的内容不会再被发布清掉</b>（库里有数据时以库为准，不覆盖、不删除）。
     </p>
 
     <div class="grade-tabs">
       <button
-        v-for="tab in GRADE_TABS"
+        v-for="tab in gradeTabs"
         :key="String(tab.value)"
         type="button"
         class="grade-tab"
@@ -469,7 +533,7 @@ async function offline(row: AdminCharacter): Promise<void> {
       <el-table-column label="部首" width="70"><template #default="{ row }">{{ row.radical || '—' }}</template></el-table-column>
       <el-table-column label="笔画" width="70"><template #default="{ row }">{{ row.stroke_count ?? '—' }}</template></el-table-column>
       <el-table-column label="结构" width="90"><template #default="{ row }">{{ row.structure || '—' }}</template></el-table-column>
-      <el-table-column label="年级" width="70"><template #default="{ row }">{{ row.grade ? `${row.grade} 年级` : '—' }}</template></el-table-column>
+      <el-table-column label="年级" width="80"><template #default="{ row }">{{ gradeText(row.grade) }}</template></el-table-column>
       <el-table-column label="释义" min-width="180" show-overflow-tooltip>
         <template #default="{ row }">{{ row.meaning || '—' }}</template>
       </el-table-column>
@@ -498,7 +562,7 @@ async function offline(row: AdminCharacter): Promise<void> {
       <el-table-column label="更新时间" width="180">
         <template #default="{ row }">{{ formatTime(row.updated_at) }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="120" fixed="right">
+      <el-table-column label="操作" width="160" fixed="right">
         <template #default="{ row }">
           <el-button link type="primary" @click="openEdit(row)">编辑</el-button>
           <el-popconfirm
@@ -508,9 +572,10 @@ async function offline(row: AdminCharacter): Promise<void> {
             @confirm="offline(row)"
           >
             <template #reference>
-              <el-button link type="danger" :disabled="row.status === 'offline'">下架</el-button>
+              <el-button link type="warning" :disabled="row.status === 'offline'">下架</el-button>
             </template>
           </el-popconfirm>
+          <el-button link type="danger" @click="remove(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -550,7 +615,8 @@ async function offline(row: AdminCharacter): Promise<void> {
           </el-col>
           <el-col :span="12">
             <el-form-item label="年级">
-              <el-input-number v-model="form.grade" :min="1" :max="6" />
+              <el-input-number v-model="form.grade" :min="0" :max="maxGrade" />
+              <span class="form-tip">0 = 学龄前；留空 = 未分级（客户端不下发）</span>
             </el-form-item>
           </el-col>
         </el-row>

@@ -13,12 +13,25 @@
  * 孩子完成一关的那一刻是**继续意愿最强**的时刻。把主行动给「回首页」等于
  * 在最想继续的时候打断他；而「下一关」让闯关链路自己往下走，地图上的解锁
  * 状态则由完成流水自动跟上 —— 这就是流程的闭环。
+ *
+ * ## 四条出口
+ * 完成一关后孩子可能想去的地方其实是四类，缺一个就会「走到这里就没路了」：
+ *   ① **再练一次** —— 刚才没拿到 3 星；
+ *   ② **下一关**   —— 顺着本线往下（无下一关时主按钮变「回地图」）；
+ *   ③ **回地图**   —— 想看解锁到哪了 / 换方向（**常驻**，不再只在末关出现）；
+ *   ④ **换条线闯关** —— 识字 / 古诗 / 故事之间横跳（`trackLinks`）。
  */
 import { computed } from 'vue';
 
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import StarRow from '@/components/biz/StarRow.vue';
+
+/** 换线入口。`key` 由调用方解释（通常是 track 名），本组件不关心路由。 */
+export interface TrackLink {
+  key: string;
+  label: string;
+}
 
 const props = withDefaults(
   defineProps<{
@@ -40,6 +53,10 @@ const props = withDefaults(
     nextLabel?: string;
     /** 是否显示「再练一次」 */
     showRetry?: boolean;
+    /** 是否显示「回地图」（有下一关时作为次级按钮出现） */
+    showBack?: boolean;
+    /** 换线入口（「换条线继续」一行）；空数组则不显示该行 */
+    trackLinks?: readonly TrackLink[];
     /** 全部完成时的结语（覆盖默认文案） */
     doneText?: string;
   }>(),
@@ -52,6 +69,8 @@ const props = withDefaults(
     hasNext: false,
     nextLabel: '下一关',
     showRetry: true,
+    showBack: true,
+    trackLinks: () => [],
     doneText: '',
   },
 );
@@ -60,6 +79,7 @@ const emit = defineEmits<{
   (e: 'next'): void;
   (e: 'retry'): void;
   (e: 'back'): void;
+  (e: 'track', key: string): void;
 }>();
 
 const ending = computed(() => props.doneText || '这一条线全部学完啦，回地图看看别的方向。');
@@ -93,10 +113,33 @@ const ending = computed(() => props.doneText || '这一条线全部学完啦，�
     </div>
 
     <template #footer>
-      <div class="row row--wrap">
-        <BaseButton v-if="showRetry" variant="secondary" @click="emit('retry')">再练一次</BaseButton>
-        <BaseButton v-if="hasNext" size="lg" @click="emit('next')">{{ nextLabel }}</BaseButton>
-        <BaseButton v-else size="lg" @click="emit('back')">回地图</BaseButton>
+      <div class="result__actions">
+        <div class="row row--wrap">
+          <BaseButton v-if="showRetry" variant="secondary" @click="emit('retry')">再练一次</BaseButton>
+          <BaseButton v-if="hasNext" size="lg" @click="emit('next')">{{ nextLabel }}</BaseButton>
+          <BaseButton v-else size="lg" @click="emit('back')">回地图</BaseButton>
+          <!--
+            有下一关时「回地图」退居次级：主行动仍是「继续闯关」。
+            但它必须**一直在**——孩子想去看看解锁到哪了、或不想接着闯，
+            没有这条路就只剩「被推着往前走」。
+          -->
+          <BaseButton v-if="hasNext && showBack" variant="secondary" @click="emit('back')">
+            回地图
+          </BaseButton>
+        </div>
+
+        <!-- 换条线继续：识字 / 古诗 / 故事之间横跳 -->
+        <div v-if="trackLinks.length" class="result__tracks">
+          <span class="text-sm text-muted">换个方向：</span>
+          <BaseButton
+            v-for="link in trackLinks"
+            :key="link.key"
+            variant="ghost"
+            @click="emit('track', link.key)"
+          >
+            {{ link.label }}
+          </BaseButton>
+        </div>
       </div>
     </template>
   </BaseCard>
@@ -161,5 +204,22 @@ const ending = computed(() => props.doneText || '这一条线全部学完啦，�
 .result__note {
   margin: 0;
   text-align: center;
+}
+
+/* 出口区：主行动一行，换线一行。两行之间留一点距离，避免误触 */
+.result__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+}
+
+.result__tracks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs) var(--space-xs);
 }
 </style>

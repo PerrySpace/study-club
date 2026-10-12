@@ -68,6 +68,18 @@ export function nextLesson(lessons: Lesson[], lessonId: string): Lesson | null {
 }
 
 /**
+ * 某条线的入口关卡（该线的第一关）—— 「换个方向继续」时用。
+ *
+ * 为什么取第一关、而不是「第一个未完成的」：关卡页此刻拿不到完整的完成记录
+ * （`learning` store 只存当前会话，完整记录要另发一次 `listLearningRecords`），
+ * 为一颗按钮多发一次请求不划算。第一关重玩无害（只可能把星星刷高）；
+ * 想接着上次的位置，走「回地图」—— 地图页的主按钮本来就是「继续第 N 关」。
+ */
+export function entryLessonOfTrack(lessons: Lesson[], track: Track): Lesson | null {
+  return lessons.find((l) => trackOf(l) === track) ?? null;
+}
+
+/**
  * 按内容 id 反查关卡（query 里没带 lesson 时用）。
  *
  * 诗/故事在各自线上都是「一关一条内容」，所以 `character_ids[0]` 就是内容 id，

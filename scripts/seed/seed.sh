@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
-# 种子数据导入编排 —— 按文件名顺序依次导入；支持 --only <表名> 与 --drop。
+# 种子数据导入编排 —— 按文件名顺序依次导入；支持 --only <表名> / --drop / --force。
+#
+# ⭐ 内容优先级（2026-10-12 起）：
+#   集合**为空**时（首次部署初始化）→ 用仓库 content/ 全量灌入；
+#   集合**已有数据**时            → 一律以数据库为准：只补缺，不覆盖、不删除。
+#   所以后台「内容导入」进来的内容不会再被发布流程清掉。
+#   要强制以仓库为准（覆盖同名 + 清理库内多余），显式加 --force。
 #
 # 用法：
 #   scripts/seed/seed.sh                      # 全量导入（幂等）
 #   scripts/seed/seed.sh --only characters    # 只导入文件名含 characters 的表
-#   scripts/seed/seed.sh --drop               # 导入前清空各目标集合
+#   scripts/seed/seed.sh --force              # 强制以仓库为准（会覆盖/清理库内内容）
+#   scripts/seed/seed.sh --drop               # 导入前清空各目标集合（等于全量重建）
 #
 # 运行位置（自动选择）：
 #   ① api 容器内（优先）—— 依赖与路径都已就绪，需先 scripts/api/up.sh

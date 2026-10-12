@@ -24,11 +24,40 @@ from __future__ import annotations
 
 from typing import Any, Iterable
 
+from ..core.runtime_config import GRADE_MAX
+
 # 每关几个字。太大会一关十几分钟，太小则频繁切页。
 DEFAULT_CHARS_PER_LESSON = 6
 
 TRACKS = ("literacy", "story", "poem")
 TRACK_LABEL = {"literacy": "识字", "story": "故事", "poem": "古诗"}
+
+
+def _grade_of(item: dict[str, Any]) -> int:
+    """内容**自身**的年级。
+
+    ⛔ 只能对「字段缺失」回落 1，**不能**写成 `int(item.get("grade") or 1)`。
+    Python 里 `0` 是 falsy，而 `0` 正是**学龄前**的合法取值 —— 这样写会把
+    学龄前的字静默升成一年级：导入过的内容「看起来进去了」，却出现在一年级的
+    关卡里，界面上完全看不出异常（本仓真实踩过）。
+    TS 侧对应写法是 `c.grade ?? 1`（`??` 只对 null/undefined 回落），两边必须一致。
+    """
+    raw = item.get("grade")
+    return 1 if raw is None else int(raw)
+
+
+def _level_for_grade(grade: int) -> str:
+    """年级 → 难度档位。
+
+    学龄前（≤0）是 `sprout`，7 年级及以上跨学段落到 `bridge`。
+    ⛔ 不要写成 `f"grade{max(1, grade)}"`：那会把学龄前摊成 `grade1`，
+    与客户端 `levelForGrade()` 的口径不一致（那里 `grade <= 0 → sprout`）。
+    """
+    if grade <= 0:
+        return "sprout"
+    if grade <= 6:
+        return f"grade{grade}"
+    return "bridge"
 
 
 def _sort_key(item: dict[str, Any]) -> tuple[int, str]:
@@ -164,7 +193,7 @@ def _generate_track(
             {
                 "_id": key,
                 "title": title,
-                "level": f"grade{max(1, grade)}",
+                "level": _level_for_grade(grade),
                 "order": i + 1,
                 "character_ids": [g["_id"] for g in group],
                 "game_types": _game_types(track),
@@ -187,51 +216,87 @@ def generate_lessons(
     characters: Iterable[dict],
     poems: Iterable[dict] = (),
     stories: Iterable[dict] = (),
-    target_grade: int = 1,
+    target_grade: int = GRADE_MAX,
     chars_per_lesson: int = DEFAULT_CHARS_PER_LESSON,
     overrides: dict[str, Any] | None = None,
     created_at: str = "1970-01-01T00:00:00.000Z",
 ) -> list[dict]:
-    """由内容生成全部关卡（三条线）。
+    """由内容生成全部关卡（三条线 × **每个年级各一条**）。
 
-    `target_grade` 取「该年级及以下」作为学习池 —— 一年级的孩子不该看到三年级的字。
+    ## 为什么按「内容自身年级」分桶，而不是一个池子只生成一套
+
+    旧实现用单一 `target_grade` 取「该年级及以下」的池子、却只产出
+    **grade = target_grade** 的关卡（`target_grade=1` ⇒ 全部关卡都是 grade 1）。
+    两个后果都真实发生过：
+
+      ① 学龄前（`grade=0`）的内容被 `int(x.get("grade") or 1)` 摊成一年级 ——
+         「导入过的学龄前内容」在关卡里全成了一年级的字，界面看不出异常；
+      ② 学龄前孩子（`grade=0`）在客户端按 `lesson.grade <= 孩子年级` 过滤后
+         **一关都看不到**（因为关卡 grade 最小也是 1）。
+
+    改成每个年级各自成线后：`grade=0` 的字只进 `grade=0` 的关卡；
+    一年级孩子仍按「该年级及以下」看到 0 年级 + 1 年级两条线，语义不变、互不污染。
+
+    `target_grade` 现在是**上限**（含）：只生成 `grade <= target_grade` 的桶。
+    默认 `GRADE_MAX` —— 「内容有多少年级就生成多少」，让后台扩展年级后无需改代码。
     """
     ov = {k: v for k, v in (overrides or {}).items() if not k.startswith("_")}
 
-    pool = [
-        {
-            "_id": c["_id"],
-            "title": c.get("char") or c["_id"],
-            "difficulty": c.get("difficulty"),
-            "tags": c.get("tags") or [],
-        }
-        for c in characters
-        if c.get("status") == "published" and int(c.get("grade") or 1) <= target_grade
-    ]
+    def _bucket(items: Iterable[dict]) -> dict[int, list[dict]]:
+        """按自身年级分桶；只留已发布、且不超过上限的。"""
+        out: dict[int, list[dict]] = {}
+        for item in items:
+            if item.get("status") != "published":
+                continue
+            grade = _grade_of(item)
+            if grade > target_grade:
+                continue
+            out.setdefault(grade, []).append(item)
+        return out
 
-    literacy = _generate_track("literacy", target_grade, pool, ov, chars_per_lesson, created_at)
-    poem_src = [
-        {
-            "_id": p["_id"],
-            "title": p.get("title") or p["_id"],
-            "difficulty": p.get("difficulty"),
-            "tags": p.get("theme_tags") or [],
-        }
-        for p in poems
-        if p.get("status") == "published" and int(p.get("grade") or 1) <= target_grade
-    ]
-    story_src = [
-        {
-            "_id": s["_id"],
-            "title": s.get("title") or s["_id"],
-            # 故事统一难度 1：目的是「读得有趣」，不是考字认得准不准
-            "difficulty": 1,
-            "tags": [],
-        }
-        for s in stories
-        if s.get("status") == "published" and int(s.get("grade") or 1) <= target_grade
-    ]
+    char_buckets = _bucket(characters)
+    poem_buckets = _bucket(poems)
+    story_buckets = _bucket(stories)
 
-    poems = _generate_track("poem", target_grade, poem_src, ov, chars_per_lesson, created_at)
-    stories_out = _generate_track("story", target_grade, story_src, ov, chars_per_lesson, created_at)
-    return [*literacy, *poems, *stories_out]
+    out: list[dict] = []
+
+    # 输出顺序保持「按线分组」（识字 → 古诗 → 故事），线内按年级升序 ——
+    # 与旧实现的顺序习惯一致，日志与快照更好读。
+    for grade in sorted(char_buckets):
+        pool = [
+            {
+                "_id": c["_id"],
+                "title": c.get("char") or c["_id"],
+                "difficulty": c.get("difficulty"),
+                "tags": c.get("tags") or [],
+            }
+            for c in char_buckets[grade]
+        ]
+        out += _generate_track("literacy", grade, pool, ov, chars_per_lesson, created_at)
+
+    for grade in sorted(poem_buckets):
+        src = [
+            {
+                "_id": p["_id"],
+                "title": p.get("title") or p["_id"],
+                "difficulty": p.get("difficulty"),
+                "tags": p.get("theme_tags") or [],
+            }
+            for p in poem_buckets[grade]
+        ]
+        out += _generate_track("poem", grade, src, ov, chars_per_lesson, created_at)
+
+    for grade in sorted(story_buckets):
+        src = [
+            {
+                "_id": s["_id"],
+                "title": s.get("title") or s["_id"],
+                # 故事统一难度 1：目的是「读得有趣」，不是考字认得准不准
+                "difficulty": 1,
+                "tags": [],
+            }
+            for s in story_buckets[grade]
+        ]
+        out += _generate_track("story", grade, src, ov, chars_per_lesson, created_at)
+
+    return out

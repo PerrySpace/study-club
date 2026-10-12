@@ -16,6 +16,20 @@
 
 约束：用 `unique_key`（或文档自带 `_id`）做 upsert，**幂等**；`--drop` 时先清集合。
 
+## ⭐ 内容优先级：初始化用仓库，库里有数据就用库里的
+
+内容型集合（`characters / poems / stories / readings / curriculum_units / badges`）
+分两种模式（判定见 `import_spec`）：
+
+- **`repo-first`（仓库优先）**：集合为空（= 首次部署初始化）时全量灌入；
+  或显式 `--drop` / `--force` 时覆盖同名 + 清理库内多余项。
+- **`db-first`（库优先）**：只要集合里已有数据，就**只补「库里还没有的」** ——
+  不覆盖同名文档（保住运营在后台改过的）、不删除库内独有文档。
+  这是**默认**行为，目的是让后台导入的内容不会被发布流程抹掉。
+
+`lessons` 是**派生型**（由库内内容运行时算出），始终重算 + 清理旧文档，
+不适用上面的库优先规则 —— 否则停用一个字会留下指向空内容的关卡。
+
 分层说明：本模块是**离线 CLI 入口**（scripts/seed/seed.py），不在请求路径上，
 因此直接用 motor 客户端是刻意的 —— 请求路径的分层纪律（view → controller → repository）
 针对的是 HTTP 服务；把一次性导入也塞进仓储层只会让仓储多出一堆只被调用一次的写接口。
@@ -33,6 +47,7 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
 from ..core.config import settings
 from ..core.datetimes import normalize_dates
+from ..core.runtime_config import GRADE_MAX
 from ..core.security import hash_passcode
 from .lesson_generator import generate_lessons
 
@@ -62,6 +77,9 @@ GENERATED_DEPENDENCIES: dict[str, tuple[str, ...]] = {
 #: ⛔ **绝不能**把 accounts / invites 放进来 —— 它们的内容来自**用户行为**
 #:    （注册、领码），不是仓库的镜像。照抄「不在本次导入里就删」会删掉真实用户数据。
 #:    用白名单而不是「除某些集合外都清」，就是为了让这个风险**显式可见**。
+#:
+#: ⚠️ 进了这个白名单**不代表一定会清** —— 清不清还取决于下面 MIRROR_COLLECTIONS
+#:    的「库优先」规则。白名单只是「有资格被清」；「宁可不动」才是默认值。
 PRUNABLE_COLLECTIONS: frozenset[str] = frozenset(
     {
         "characters",
@@ -73,6 +91,26 @@ PRUNABLE_COLLECTIONS: frozenset[str] = frozenset(
         "badges",
     }
 )
+
+#: 集合的导入模式。语义见 `import_spec` 里的判定。
+MODE_REPO = "repo-first"  # 以仓库为准：覆盖同名文档 + 清掉库内多余的
+MODE_DB = "db-first"  # 以库为准：只补「库里还没有的」，不覆盖、不删除
+
+#: 「派生型」集合 —— 内容由库内其它集合**运行时算出**，不是用户录入的原始数据。
+#:
+#: ⛔ 派生型必须**始终**重算并清掉不再成立的旧文档：运营在后台停用/删掉一个字，
+#:    对应关卡就该消失，否则会留下指向不存在内容的空关卡。
+#:    它们没有「库有仓无 = 运营数据」的语义，所以不适用下面的库优先规则。
+DERIVED_COLLECTIONS: frozenset[str] = frozenset({"lessons"})
+
+#: 「镜像型」集合 —— 内容直接来自仓库 `content/**`，是**可被运营在后台改写**的原始内容。
+#:
+#: 库为空（= 初始化）时全量灌入；库非空时转为**库优先**，保护后台导入的内容。
+#: ⛔ 这一条是血泪换来的：2026-10-11 连着两次发布，把运营通过后台导入的
+#:    3509 个汉字 + 141 首古诗整批物理删掉（seed 日志里的 `stale_removed`），
+#:    且 `content_version` 被打回仓库基线。后台「导入」只写数据库、不写仓库文件，
+#:    所以「导入 → 看到效果」是假象，下一次 deploy 就蒸发。
+MIRROR_COLLECTIONS: frozenset[str] = PRUNABLE_COLLECTIONS - DERIVED_COLLECTIONS
 
 
 async def resolve_generated(spec: dict, db: AsyncIOMotorDatabase, repo_root: Path) -> list[dict]:
@@ -103,11 +141,15 @@ async def resolve_generated(spec: dict, db: AsyncIOMotorDatabase, repo_root: Pat
     poems_pool = await _all("poems")
     stories_pool = await _all("stories")
 
+    # ⛔ `target_grade` 是**上限**。旧写法 `int(spec.get("target_grade") or 1)` 里
+    #    `0` 是 falsy ⇒ 想「生成到学龄前」时会静默变成 1（学龄前被摊进一年级）。
+    #    缺省用 GRADE_MAX：后台把年级扩到 7/8/9 后，无需改这个 spec 就能生成到。
+    raw_target = spec.get("target_grade")
     lessons = generate_lessons(
         characters=characters_pool,
         poems=poems_pool,
         stories=stories_pool,
-        target_grade=int(spec.get("target_grade") or 1),
+        target_grade=GRADE_MAX if raw_target is None else int(raw_target),
         chars_per_lesson=int(spec.get("chars_per_lesson") or 6),
         overrides=overrides,
     )
@@ -176,7 +218,11 @@ def _prepare_document(spec: dict, doc: dict) -> dict:
 
 
 async def import_spec(
-    db: AsyncIOMotorDatabase, spec: dict, repo_root: Path, drop: bool = False
+    db: AsyncIOMotorDatabase,
+    spec: dict,
+    repo_root: Path,
+    drop: bool = False,
+    force: bool = False,
 ) -> dict:
     collection = spec["collection"]
     # 生成型 spec 从库里读依赖集合来算，不读文件
@@ -189,6 +235,26 @@ async def import_spec(
 
     if drop:
         await db[collection].delete_many({})
+
+    # ⭐ 本次用哪种模式？（用户 2026-10-12 定的规则）
+    #
+    #   初始化时可以用仓库内容，但**数据库有数据就一定以数据库为准**。
+    #
+    #   - 镜像型 & 库为空      → 初始化 → 仓库优先（全量灌入）
+    #   - 镜像型 & 库非空      → 库优先（只补缺；不覆盖同名、不删库内多余）
+    #   - 派生型 / 其它集合    → 不受此规则约束（派生型永远重算）
+    #   - drop / --force       → 显式声明「以仓库为准」，强制回到旧行为
+    #
+    #   为什么默认是「库优先」而不是「仓库优先」：
+    #   后台「内容导入」只写数据库、**不写仓库文件**。若默认按仓库映射清理，
+    #   运营辛苦导入的内容会在下一次 deploy 被静默删除（已发生过两次，
+    #   3509 字 + 141 诗），而构建照样 SUCCESS、日志只有一行 `stale_removed`。
+    mode = MODE_REPO
+    if collection in MIRROR_COLLECTIONS and not drop and not force:
+        if await db[collection].count_documents({}) > 0:
+            mode = MODE_DB
+    db_first = mode == MODE_DB
+
     created = 0
     updated = 0
     skipped = 0
@@ -203,17 +269,18 @@ async def import_spec(
     #    它们的内容来自用户行为（注册、领码），不是仓库的镜像。
     #    照抄「不在本次导入里就删」会**删掉真实用户数据**。
     #    因此这里用显式白名单，而不是「除了某些集合都清」。
+    #
+    # ⛔ 库优先模式下**一律不清**：库内多出来的正是运营导入的内容。
+    #    （真正的删除动作在写入循环**之后**，见下面「先写后删」。）
     stale_removed = 0
-    if collection in PRUNABLE_COLLECTIONS and spec.get("prune_stale", True):
+    kept_stale = 0
+    if db_first and collection in PRUNABLE_COLLECTIONS:
+        # 数出来只是为了打印「保留了多少条库内独有内容」，
+        # 让部署日志能直接看出「运营导入的东西这次一条都没被动」。
         keep_ids = {str(d.get("_id")) for d in docs}
-        stale_ids: list[str] = []
         async for old in db[collection].find({}):
-            oid = str(old.get("_id") or "")
-            if oid not in keep_ids:
-                stale_ids.append(oid)
-        for oid in stale_ids:
-            await db[collection].delete_one({"_id": oid})
-            stale_removed += 1
+            if str(old.get("_id") or "") not in keep_ids:
+                kept_stale += 1
 
     for doc in docs:
         flt = _upsert_filter(doc, unique_key)
@@ -224,13 +291,33 @@ async def import_spec(
             continue
         exists = await db[collection].find_one(flt, {"_id": 1})
         if exists:
+            if db_first:
+                # 库优先：库里的这条可能已被运营在后台改写，原样保留
+                skipped += 1
+                continue
             await db[collection].replace_one(flt, doc, upsert=True)
             updated += 1
         else:
             await db[collection].insert_one(doc)
             created += 1
+
+    # 写入完成后再清理（见上面「先写后删」的说明）
+    if collection in PRUNABLE_COLLECTIONS and not db_first and spec.get("prune_stale", True):
+        keep_ids = {str(d.get("_id")) for d in docs}
+        # ⛔ 先收集再删除，**不能**在游标的 `async for` 里直接删：
+        #    边遍历边删会让后续元素在游标里被跳过，残留清不干净。
+        stale_ids: list[str] = []
+        async for old in db[collection].find({}):
+            oid = str(old.get("_id") or "")
+            if oid not in keep_ids:
+                stale_ids.append(oid)
+        for oid in stale_ids:
+            await db[collection].delete_one({"_id": oid})
+            stale_removed += 1
+
     # `stale_removed` 放进返回值：让部署日志能看到「清了几条历史残留」。
     # 不记的话，清理失败与「本来就没有残留」在日志里长得一模一样。
+    # `kept_stale` / `mode` 同理 —— 「这次一个都没删」必须能从日志里读出来。
     return {
         "collection": collection,
         "feature": spec.get("feature", ""),
@@ -238,7 +325,9 @@ async def import_spec(
         "updated": updated,
         "skipped": skipped,
         "stale_removed": stale_removed,
+        "kept_stale": kept_stale,
         "total": len(docs),
+        "mode": mode,
     }
 
 
@@ -248,6 +337,7 @@ async def import_dir(
     repo_root: Path,
     only: str | None = None,
     drop: bool = False,
+    force: bool = False,
 ) -> list[dict]:
     results: list[dict] = []
     # 本次运行里**已经导入过**的集合名。用来判断生成型 spec 的依赖是否就绪 ——
@@ -283,7 +373,7 @@ async def import_dir(
                     f"{never_imported}。请去掉 --only 或调整 seed 文件顺序，"
                     f"让依赖先于它执行。"
                 )
-        result = await import_spec(db, spec, repo_root, drop=drop)
+        result = await import_spec(db, spec, repo_root, drop=drop, force=force)
         result["file"] = path.name
         results.append(result)
         imported_collections.add(spec["collection"])
@@ -303,6 +393,7 @@ async def run(
     repo_root: str | None = None,
     only: str | None = None,
     drop: bool = False,
+    force: bool = False,
 ) -> list[dict]:
     app_dir = Path(__file__).resolve()
     repo = Path(repo_root) if repo_root else _find_repo_root(app_dir)
@@ -311,7 +402,7 @@ async def run(
     client = AsyncIOMotorClient(mongo_uri or settings.mongodb_uri, uuidRepresentation="standard")
     try:
         db = client[settings.mongodb_db]
-        return await import_dir(db, data, repo, only=only, drop=drop)
+        return await import_dir(db, data, repo, only=only, drop=drop, force=force)
     finally:
         client.close()
 
@@ -325,6 +416,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--mongo-uri", default=None, help="MongoDB 连接串")
     parser.add_argument("--only", default=None, help="只导入文件名包含该子串的表")
     parser.add_argument("--drop", action="store_true", help="导入前清空目标集合")
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help=(
+            "强制以仓库为准：覆盖同名内容，并清理库内多出来的条目。"
+            "默认只在集合为空（初始化）时这样做；库里有数据时一律以数据库为准，"
+            "只补缺、不覆盖、不删除。"
+        ),
+    )
     args = parser.parse_args(argv)
 
     results = asyncio.run(
@@ -334,6 +434,7 @@ def main(argv: list[str] | None = None) -> int:
             repo_root=args.repo_root,
             only=args.only,
             drop=args.drop,
+            force=args.force,
         )
     )
     for r in results:
@@ -345,6 +446,12 @@ def main(argv: list[str] | None = None) -> int:
         # 在日志里长得一模一样，看的人无从判断。
         if r.get("stale_removed"):
             line += f" stale_removed={r['stale_removed']}"
+        # ⭐ 库优先模式必须显式打印。它的表现是「什么都不做」，
+        #    与「跑失败了/没跑到」在日志上一模一样 —— 不打印就无从区分。
+        if r.get("mode") == MODE_DB:
+            line += f" mode=db-first(库内独有 {r.get('kept_stale', 0)} 条已保留)"
+        if r.get("skipped"):
+            line += f" skipped={r['skipped']}"
         print(line)
     print(f"完成：共 {len(results)} 个数据集。")
     return 0

@@ -41,6 +41,8 @@ export const ERROR_CODE = {
 
   /** 状态冲突 */
   CONTENT_EXISTS: 40902,
+  /** 内容仍被关卡 / 单元 / 短文引用，物理删除被拒绝（可显式 force 强制删除）。 */
+  CONTENT_IN_USE: 40903,
 
   /** 素材超过体积上限（见 ASSET_MAX_BYTES）。 */
   ASSET_TOO_LARGE: 41301,

@@ -154,31 +154,119 @@ async def test_unknown_generator_raises(repo_root: Path):
         await importer.resolve_generated({"generated": "nope"}, db, repo_root)
 
 
-# ---------------------------------------------------------------- 清理白名单
+# ---------------------------------------------------------------- 内容优先级（库优先）
+
+_DOCS_SPEC = {"collection": "stories", "unique_key": "_id", "documents": [{"_id": "st_new", "title": "新故事"}]}
 
 
 @pytest.mark.asyncio
-async def test_prunable_collection_removes_stale(repo_root: Path):
-    """⭐ 回归：内容型集合里「内容包已删掉的条目」必须从库里清掉。
+async def test_empty_collection_is_filled_from_repo(repo_root: Path):
+    """⭐ 初始化：集合为空时，仓库内容要全量灌进去。
 
-    实测踩过：内容包从 5 篇故事删到 4 篇，库里的旧篇仍在 →
-    自动生成的关卡数 22 变 23。这类偏差不报错、界面不异常，
-    只有把「库内条数」与「内容包条数」对着看才发现。
+    这是「初始化时可以用仓库的」那一半。
+    """
+    db = _FakeDB({"stories": []})
+    result = await importer.import_spec(db, _DOCS_SPEC, repo_root)
+
+    assert result["mode"] == importer.MODE_REPO
+    assert result["created"] == 1
+    assert [d["_id"] for d in db["stories"]._docs] == ["st_new"]
+
+
+@pytest.mark.asyncio
+async def test_non_empty_collection_keeps_db_content(repo_root: Path):
+    """⭐⭐ 核心回归（2026-10-11 真实事故）：库非空时，运营导入的内容绝不能被清掉。
+
+    事故经过：运营通过后台导入了 3509 个汉字 + 141 首古诗（**只写数据库、不写仓库**），
+    随后连续两次 deploy 把它们整批物理删除 —— 构建报 SUCCESS，日志只有一行
+    `stale_removed=3509`，`content_version` 被打回仓库基线。
+
+    规则（用户 2026-10-12 定）：数据库有数据就一定以数据库为准。
+    """
+    db = _FakeDB({"stories": []})
+    # 库里有运营导入的内容（内容包里没有）
+    db["stories"]._docs.append({"_id": "st_from_admin", "title": "运营导入的故事"})
+    db["stories"]._docs.append({"_id": "st_new", "title": "被运营改写过的旧标题"})
+
+    result = await importer.import_spec(db, _DOCS_SPEC, repo_root)
+
+    ids = [d["_id"] for d in db["stories"]._docs]
+    assert "st_from_admin" in ids, "运营导入的内容被清掉了！"
+    assert result["stale_removed"] == 0, "库优先模式下不允许删除任何文档"
+    assert result["mode"] == importer.MODE_DB
+    assert result["kept_stale"] == 1, "库内独有 1 条，日志要如实报出"
+    # 同名文档也不覆盖：运营在后台改过的标题必须保住
+    assert next(d for d in db["stories"]._docs if d["_id"] == "st_new")["title"] == "被运营改写过的旧标题"
+    assert result["skipped"] == 1
+
+
+@pytest.mark.asyncio
+async def test_db_first_still_backfills_missing_docs(repo_root: Path):
+    """库优先 ≠ 什么都不做：仓库里「库里还没有的」仍要补进去。
+
+    补缺不会破坏任何已有数据，所以默认执行 —— 否则开发新加的内容永远上不了线。
+    """
+    db = _FakeDB({"stories": [{'_id': "st_from_admin", "title": "运营导入"}]})
+    spec = {
+        "collection": "stories",
+        "documents": [{"_id": "st_new", "title": "新故事"}, {"_id": "st_from_admin", "title": "仓库版"}],
+    }
+    result = await importer.import_spec(db, spec, repo_root)
+
+    ids = sorted(d["_id"] for d in db["stories"]._docs)
+    assert ids == ["st_from_admin", "st_new"], "缺失的文档要补进来，已有的要留下"
+    assert result["created"] == 1
+    assert result["skipped"] == 1
+
+
+@pytest.mark.asyncio
+async def test_force_restores_repo_first(repo_root: Path):
+    """`--force` 是唯一的逃生舱：显式要求「以仓库为准」，恢复覆盖 + 清理。"""
+    db = _FakeDB({"stories": [{"_id": "st_obsolete", "title": "仓库里已删掉"}]})
+
+    result = await importer.import_spec(db, _DOCS_SPEC, repo_root, force=True)
+
+    assert result["mode"] == importer.MODE_REPO
+    assert result["stale_removed"] == 1, "强推时要清掉库内多余项"
+    assert [d["_id"] for d in db["stories"]._docs] == ["st_new"]
+
+
+@pytest.mark.asyncio
+async def test_drop_restores_repo_first(repo_root: Path):
+    """`--drop` 同样是显式的「以仓库为准」（全量重建）。"""
+    db = _FakeDB({"stories": [{"_id": "st_obsolete", "title": "旧"}]})
+    result = await importer.import_spec(db, _DOCS_SPEC, repo_root, drop=True)
+
+    assert result["mode"] == importer.MODE_REPO
+    assert [d["_id"] for d in db["stories"]._docs] == ["st_new"]
+
+
+@pytest.mark.asyncio
+async def test_derived_lessons_are_always_pruned(repo_root: Path):
+    """⭐ 派生型（lessons）不受库优先保护：它是库内内容的函数，必须跟着内容变。
+
+    若它也「库优先」，运营停用一个字之后旧关卡会残留 ——
+    孩子会看到指向不存在内容的空关卡。
     """
     db = _FakeDB({"characters": _chars(12), "poems": [], "stories": []})
-    # 预置一篇内容包里已经没有的旧故事
-    db["stories"]._docs.append({"_id": "st_old_removed", "title": "旧故事", "status": "published"})
+    # 库非空，但教训是：lessons 依然要重算 + 清理
+    db["lessons"]._docs.append({"_id": "ls_obsolete", "title": "旧批次关卡"})
 
-    data_dir = repo_root / "scripts" / "seed" / "data"
-    (data_dir / "07_stories.json").write_text(
-        json.dumps({"collection": "stories", "documents": [{"_id": "st_new", "title": "新故事"}]}),
-        encoding="utf-8",
-    )
-    results = await importer.import_dir(db, data_dir, repo_root)
-    ids = [d["_id"] for d in db["stories"]._docs]
-    assert "st_old_removed" not in ids, "内容包已删的条目必须从库中清掉"
-    assert ids == ["st_new"]
-    assert next(r for r in results if r["collection"] == "stories")["stale_removed"] == 1
+    spec = {"collection": "lessons", "generated": "lessons", "chars_per_lesson": 6}
+    result = await importer.import_spec(db, spec, repo_root)
+
+    ids = [d["_id"] for d in db["lessons"]._docs]
+    assert "ls_obsolete" not in ids
+    assert set(ids) == {"literacy:1:1", "literacy:1:2"}
+    assert result["stale_removed"] == 1
+
+
+def test_mirror_and_derived_partition():
+    """模式判定依赖的这两个集合必须钉住：镜像型 = 白名单 − 派生型。"""
+    assert "lessons" in importer.DERIVED_COLLECTIONS
+    assert "lessons" not in importer.MIRROR_COLLECTIONS, "lessons 是派生物，不能走库优先保护"
+    for mirror in ("characters", "poems", "stories", "curriculum_units"):
+        assert mirror in importer.MIRROR_COLLECTIONS
 
 
 @pytest.mark.asyncio

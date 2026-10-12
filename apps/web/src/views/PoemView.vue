@@ -29,9 +29,17 @@ import LevelResult from '@/components/biz/LevelResult.vue';
 import PoemLine from '@/components/biz/PoemLine.vue';
 import ReadAlongButton from '@/components/biz/ReadAlongButton.vue';
 import SpeakButton from '@/components/biz/SpeakButton.vue';
+import { useCompanion } from '@/composables/useCompanion';
 import { useToast } from '@/composables/useToast';
 import { pickPraise } from '@/utils/feedback';
-import { lessonByContentId, nextLesson, routeForLesson, trackOf } from '@/utils/levels';
+import {
+  entryLessonOfTrack,
+  lessonByContentId,
+  nextLesson,
+  routeForLesson,
+  type Track,
+  trackOf,
+} from '@/utils/levels';
 
 const route = useRoute();
 const router = useRouter();
@@ -39,6 +47,7 @@ const childStore = useChildStore();
 const content = useContentStore();
 const learning = useLearningStore();
 const toast = useToast();
+const companion = useCompanion();
 
 const { current } = storeToRefs(childStore);
 
@@ -120,7 +129,7 @@ async function choose(option: string): Promise<void> {
   selected.value = option;
   revealed.value = true;
   isCorrect.value = option === q.answer;
-  praiseText.value = isCorrect.value ? pickPraise() : '';
+  praiseText.value = isCorrect.value ? pickPraise(companion.name.value) : '';
   if (!isCorrect.value) wrongTries.value += 1;
 
   // 命中学字库时才写入复习状态/错题本，避免污染识字 SRS。
@@ -204,6 +213,21 @@ function goNext(): void {
 function goBackToMap(): void {
   void router.replace({ name: 'map', query: { track: 'poem' } });
 }
+
+/** 换条线闯关 —— 去那条线的第一关（见 `entryLessonOfTrack` 的取舍说明）。 */
+function goTrack(key: string): void {
+  const child = current.value;
+  const track = key as Track;
+  const target = child
+    ? entryLessonOfTrack(content.lessonsOfTrack(child.grade, track), track)
+    : null;
+  if (!target) {
+    toast.show('这条线暂时还没有关卡，先回地图看看吧');
+    goBackToMap();
+    return;
+  }
+  void router.replace(routeForLesson(target));
+}
 </script>
 
 <template>
@@ -239,9 +263,14 @@ function goBackToMap(): void {
         next-label="下一首"
         :show-retry="false"
         :done-text="'古诗都学完啦，回地图看看别的方向。'"
+        :track-links="[
+          { key: 'literacy', label: '去识字闯关' },
+          { key: 'story', label: '去故事闯关' },
+        ]"
         @next="goNext"
         @retry="retry"
         @back="goBackToMap"
+        @track="goTrack"
       />
     </div>
 
@@ -265,7 +294,7 @@ function goBackToMap(): void {
 
       <div class="learn-page__body">
         <GuideBubble
-          text="先跟着小兔听一遍，再一句一句跟着读，最后试试填字练习吧！"
+          :text="`先跟着${companion.name.value}听一遍，再一句一句跟着读，最后试试填字练习吧！`"
           :auto-speak="false"
         />
 
@@ -290,6 +319,7 @@ function goBackToMap(): void {
                   />
                   <ReadAlongButton
                     :text="line.text"
+                    :companion-name="companion.name.value"
                     label="跟读这句"
                     size="sm"
                   />

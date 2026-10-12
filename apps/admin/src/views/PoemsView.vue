@@ -6,7 +6,7 @@
  * 「下载模板」拿到的说明与这里展示的一致。
  */
 import ContentManager from '@/components/ContentManager.vue';
-import { GRADE_TABS, LEVEL_OPTIONS, type ColumnDef, type FieldDef } from '@/components/content-fields';
+import { LEVEL_OPTIONS, type ColumnDef, type FieldDef } from '@/components/content-fields';
 
 const fields: FieldDef[] = [
   { name: 'title', label: '诗题', kind: 'text', required: true, maxlength: 24, hint: 'ID 由诗题派生，改诗题等于换一条记录' },
@@ -23,7 +23,7 @@ const fields: FieldDef[] = [
   { name: 'appreciation', label: '译文赏析', kind: 'textarea', rows: 2, maxlength: 300, hint: '儿童可读的口语化版本，不要写成文学评论' },
   { name: 'background', label: '创作背景', kind: 'textarea', rows: 2, maxlength: 300 },
   { name: 'key_characters', label: '重点字', kind: 'list', hint: '与字库相同的汉字字面，用于诗内生字标注' },
-  { name: 'grade', label: '年级', kind: 'number', hint: '1–6；0 为学龄前' },
+  { name: 'grade', label: '年级', kind: 'number', hint: '0 = 学龄前；缺省 = 未分级（客户端不下发）。可选年级见「站点配置」' },
   { name: 'level', label: '难度', kind: 'select', options: LEVEL_OPTIONS },
   { name: 'difficulty', label: '难度分', kind: 'number', hint: '1–5，用于排序' },
   {
@@ -65,7 +65,6 @@ const columns: ColumnDef[] = [
     label="古诗"
     :fields="fields"
     :columns="columns"
-    :grade-tabs="GRADE_TABS"
     hint="古诗是「诵读」类内容，务必逐句填拼音与释义 —— 客户端的逐句朗读与家长导读都依赖它们。"
   />
 </template>

@@ -211,7 +211,7 @@ async def run_import(repos: Repositories, req: ContentImportRequest) -> dict:
         results.append(await import_assets(repos, root, dry_run=req.dry_run))
 
     if not req.dry_run:
-        await _refresh_manifest(repos)
+        await refresh_manifest(repos)
 
     return {
         "results": results,
@@ -222,7 +222,13 @@ async def run_import(repos: Repositories, req: ContentImportRequest) -> dict:
     }
 
 
-async def _refresh_manifest(repos: Repositories) -> None:
+async def refresh_manifest(repos: Repositories) -> None:
+    """重算清单计数并进一个内容小版本。
+
+    公开给别的写入路径复用（如后台物理删除内容）：**只要内容的「published 条数」变了，
+    就必须刷新清单**，否则 `/health` 与客户端看到的 `content_version` 会停在旧值，
+    出现「库里已经删了、客户端还以为没变」。
+    """
     counts = await repos.content_counts()
     counts.pop("assets", None)
     entries = {

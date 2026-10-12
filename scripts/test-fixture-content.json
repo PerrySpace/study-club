@@ -275,6 +275,42 @@
         "动物"
       ],
       "status": "published"
+    },
+    {
+      "_id": "ch_p0",
+      "char": "爸",
+      "grade": 0,
+      "level": "sprout",
+      "difficulty": 1,
+      "order": 100,
+      "tags": [
+        "家人"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_p1",
+      "char": "妈",
+      "grade": 0,
+      "level": "sprout",
+      "difficulty": 1,
+      "order": 101,
+      "tags": [
+        "家人"
+      ],
+      "status": "published"
+    },
+    {
+      "_id": "ch_g2",
+      "char": "七",
+      "grade": 2,
+      "level": "grade2",
+      "difficulty": 1,
+      "order": 102,
+      "tags": [
+        "数字"
+      ],
+      "status": "published"
     }
   ],
   "poems": [
@@ -298,6 +334,13 @@
       "difficulty": 1,
       "grade": 1,
       "status": "published"
+    },
+    {
+      "_id": "pm_p0",
+      "title": "咏鹅",
+      "difficulty": 1,
+      "grade": 0,
+      "status": "published"
     }
   ],
   "stories": [
@@ -311,6 +354,12 @@
       "_id": "st_2",
       "title": "白云",
       "grade": 1,
+      "status": "published"
+    },
+    {
+      "_id": "st_p0",
+      "title": "小手拍拍",
+      "grade": 0,
       "status": "published"
     }
   ],

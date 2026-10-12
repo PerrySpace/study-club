@@ -542,9 +542,18 @@ async def delete_content(
     collection: str,
     doc_id: str,
     request: Request,
+    hard: bool = Query(False, description="true = 物理删除，不可恢复；默认 false = 下架（软删）"),
+    force: bool = Query(False, description="物理删除时忽略引用校验（会留下悬空引用）"),
     admin: dict = Depends(get_current_admin),
     repos: Repositories = Depends(get_repos),
 ):
+    """删除内容。
+
+    默认仍是**下架**（软删，`status → offline`），保持既有调用方行为不变；
+    只有显式传 `hard=true` 才是不可恢复的物理删除。
+    """
     return ok(
-        await admin_controller.delete_content(repos, collection, doc_id, admin, client_ip(request))
+        await admin_controller.delete_content(
+            repos, collection, doc_id, admin, client_ip(request), hard=hard, force=force
+        )
     )

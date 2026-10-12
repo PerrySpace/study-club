@@ -61,10 +61,18 @@ import ReadAlongButton from '@/components/biz/ReadAlongButton.vue';
 import SpeakButton from '@/components/biz/SpeakButton.vue';
 import WritingPad from '@/components/biz/WritingPad.vue';
 import { useBreakpoint } from '@/composables/useBreakpoint';
+import { useCompanion } from '@/composables/useCompanion';
 import { useSpeech } from '@/composables/useSpeech';
 import { useToast } from '@/composables/useToast';
 import { useViewportHeight } from '@/composables/useViewportHeight';
-import { nextLesson, routeForLesson, starsForAccuracy, trackOf } from '@/utils/levels';
+import {
+  entryLessonOfTrack,
+  nextLesson,
+  routeForLesson,
+  starsForAccuracy,
+  type Track,
+  trackOf,
+} from '@/utils/levels';
 
 const route = useRoute();
 const router = useRouter();
@@ -76,6 +84,7 @@ const toast = useToast();
 const { isDesktop } = useBreakpoint();
 const { canSpeak, speak } = useSpeech();
 const viewportHeight = useViewportHeight();
+const companion = useCompanion();
 
 const { current } = storeToRefs(childStore);
 
@@ -210,21 +219,22 @@ function rateFor(base: number): number {
  *
  * 跟读题没有「选项」，`answer === char`，直接套用「答对啦！水 —— 水」会显得很傻；
  * 单独给一句针对「读」的反馈。表扬语从词库随机抽（utils/feedback），
- * 每题换一句，避免固定「答对啦」被听腻。
+ * 每题换一句，避免固定「答对啦」被听腻。词库里的 `{伙伴}` 由伙伴名（= 孩子选的头像）填充。
  */
 const feedbackOk = computed(() => {
   const q = currentQuestion.value;
   if (!q) return '';
+  const praise = pickPraise(companion.name.value);
   return q.question_type === QUESTION_TYPE.speak
-    ? `${pickPraise()}这个字是「${q.char}」`
-    : `${pickPraise()}${q.char} —— ${q.answer}`;
+    ? `${praise}这个字是「${q.char}」`
+    : `${praise}${q.char} —— ${q.answer}`;
 });
 
 const feedbackNo = computed(() => {
   const q = currentQuestion.value;
   if (!q) return '';
   return q.question_type === QUESTION_TYPE.speak
-    ? `再听一遍正确读音：「${q.char}」，跟着小兔慢慢读。`
+    ? `再听一遍正确读音：「${q.char}」，跟着${companion.name.value}慢慢读。`
     : `正确答案是「${q.answer}」，已加入错题本，稍后会再练。`;
 });
 
@@ -698,6 +708,28 @@ function goBackToMap(): void {
   );
 }
 
+/**
+ * 换条线闯关 —— 去那条线的**第一关**。
+ *
+ * 为什么不是「第一个未完成的」：关卡页此刻拿不到完整的完成记录
+ * （`learning` store 只存当前会话，完整记录要另发一次 `listLearningRecords`），
+ * 为一颗按钮多发一次请求不划算。第一关重玩无害（只可能把星星刷高）；
+ * 想接着上次的位置就走「回地图」—— 地图上的主按钮本来就是「继续第 N 关」。
+ */
+function goTrack(key: string): void {
+  const child = current.value;
+  const track = key as Track;
+  const target = child
+    ? entryLessonOfTrack(content.lessonsOfTrack(child.grade, track), track)
+    : null;
+  if (!target) {
+    toast.show('这条线暂时还没有关卡，先回地图看看吧');
+    goBackToMap();
+    return;
+  }
+  void router.replace(routeForLesson(target));
+}
+
 /** 桌面快捷键（02-2 §五）：数字选答案 / 空格下一题 / Esc 退出。 */
 function onKeydown(event: KeyboardEvent): void {
   if (event.key === 'Escape') {
@@ -885,6 +917,7 @@ onUnmounted(() => {
             <template v-if="studyStep === 'read'">
               <ReadAlongButton
                 :text="currentChar.char"
+                :companion-name="companion.name.value"
                 label="按住读一遍"
                 size="lg"
                 block
@@ -1069,9 +1102,14 @@ onUnmounted(() => {
         note="复习计划已按记忆曲线安排；下次打开首页即可看到「到期复习」。"
         :has-next="Boolean(next)"
         next-label="下一关"
+        :track-links="[
+          { key: 'poem', label: '去古诗闯关' },
+          { key: 'story', label: '去故事闯关' },
+        ]"
         @next="goNext"
         @retry="startQuiz"
         @back="goBackToMap"
+        @track="goTrack"
       />
     </div>
   </section>

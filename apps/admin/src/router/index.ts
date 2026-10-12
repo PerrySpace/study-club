@@ -63,6 +63,12 @@ const router = createRouter({
           meta: { title: '古诗' },
         },
         {
+          path: 'stories',
+          name: 'stories',
+          component: () => import('@/views/StoriesView.vue'),
+          meta: { title: '故事 / 儿歌' },
+        },
+        {
           path: 'config',
           name: 'config',
           component: () => import('@/views/ConfigView.vue'),

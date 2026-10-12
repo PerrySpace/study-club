@@ -20,10 +20,17 @@ import type { ContentBundle } from '../types/content';
 import { EMPTY_BUNDLE as EMPTY } from '../types/content';
 
 /**
- * 拉取时使用的年级上界：取 6（小学最高年级），
- * 于是 `grade <= 6` 的筛选等价于「全量字库」，客户端一次拿到所有可用内容。
+ * 拉取时使用的年级上界。
+ *
+ * 取 **30** = 后端 `runtime_config.GRADE_MAX`，语义是「不限」：`grade <= 30`
+ * 等价于「全量」，客户端一次拿到所有可用内容 —— 包括**学龄前（0）**与后台
+ * 扩展出的 7/8/9 年级。
+ *
+ * ⛔ 不要写死成 6。后台年级是**可配置**的（设置里能增删，本仓已扩到 9），
+ * 写死 6 会让那些年级的内容在客户端**怎么都拉不到** —— 服务端明明存着，
+ * 表现却是「导入没生效」，而两端代码都看不出哪里不对。
  */
-export const CONTENT_FETCH_MAX_GRADE = 6;
+export const CONTENT_FETCH_MAX_GRADE = 30;
 
 export interface ContentSource {
   readonly kind: 'http';

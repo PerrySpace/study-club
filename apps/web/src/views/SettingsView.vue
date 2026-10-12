@@ -15,6 +15,7 @@ import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 
 import {
+  avatarImagePath,
   DEFAULT_AVATAR,
   useAuthStore,
   useChildStore,
@@ -85,9 +86,9 @@ const contentSummary = computed(() => {
 
 const appVersion = __APP_VERSION__;
 
-/** 头像 URL：动物头像走本地 SVG。 */
+/** 头像 URL：动物头像走本地 SVG（路径规则在 core，避免各处各写一份）。 */
 function avatarSrc(key: string | null | undefined): string {
-  return `/avatars/${key || DEFAULT_AVATAR}.svg`;
+  return avatarImagePath(key);
 }
 
 function syncFromCurrent(): void {

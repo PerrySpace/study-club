@@ -2,8 +2,14 @@
   "collection": "lessons",
   "feature": "关卡编排（运行时生成）",
   "generated": "lessons",
-  "target_grade": 1,
   "chars_per_lesson": 6,
   "overrides": "scripts/seed/data/lesson_overrides.json",
-  "unique_key": "_id"
+  "unique_key": "_id",
+  "_comment": [
+    "关卡按「内容自身年级」分桶生成：每个年级各成一条线（识字 / 古诗 / 故事）。",
+    "不写 target_grade 时上限取 GRADE_MAX（30）—— 即「内容有多少年级就生成多少」，",
+    "后台把年级扩到 7/8/9 后无需改这里。",
+    "⛔ 不要写 target_grade: 1 之类「只生成某一年级」的值：那会让客户端按",
+    "lesson.grade <= 孩子年级 过滤时，学龄前孩子（grade=0）筛出零关。"
+  ]
 }

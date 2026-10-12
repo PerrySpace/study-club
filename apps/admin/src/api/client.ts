@@ -43,6 +43,8 @@ export const FEATURE_DISABLED = 40302;
 export const FORBIDDEN = 40301;
 export const TOKEN_EXPIRED = 40101;
 export const TOKEN_INVALID = 40102;
+/** 内容仍被关卡 / 单元 / 短文引用，物理删除被拒绝（可 force 强制）。 */
+export const CONTENT_IN_USE = 40903;
 
 /** Token 失效类错误：需要清会话并回到登录页。 */
 export function isAuthError(err: unknown): boolean {

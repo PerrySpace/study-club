@@ -7,7 +7,7 @@
  * `character_ids / character_chars` 与配图 —— 前者是能不能推，后者是孩子读不读得下去。
  */
 import ContentManager from '@/components/ContentManager.vue';
-import { GRADE_TABS, LEVEL_OPTIONS, type ColumnDef, type FieldDef } from '@/components/content-fields';
+import { LEVEL_OPTIONS, type ColumnDef, type FieldDef } from '@/components/content-fields';
 
 const fields: FieldDef[] = [
   { name: 'title', label: '标题', kind: 'text', required: true, maxlength: 24 },
@@ -41,7 +41,7 @@ const fields: FieldDef[] = [
   { name: 'character_chars', label: '全部字面', kind: 'list', derived: true, hint: '导入时按正文逐字提取' },
   { name: 'new_character_chars', label: '生字', kind: 'list', derived: true, hint: '文中出现但尚未入字库的字' },
   { name: 'word_count', label: '字数', kind: 'number', derived: true },
-  { name: 'grade', label: '年级', kind: 'number', hint: '1–6；0 为学龄前' },
+  { name: 'grade', label: '年级', kind: 'number', hint: '0 = 学龄前；缺省 = 未分级（客户端不下发）。可选年级见「站点配置」' },
   { name: 'level', label: '难度', kind: 'select', options: LEVEL_OPTIONS },
   { name: 'difficulty', label: '难度分', kind: 'number', hint: '1–5' },
   { name: 'order', label: '排序', kind: 'number', hint: '同级内排序，小的靠前' },
@@ -72,7 +72,6 @@ const columns: ColumnDef[] = [
     label="短文"
     :fields="fields"
     :columns="columns"
-    :grade-tabs="GRADE_TABS"
     hint="短文只用孩子已学过的字。客户端只推覆盖率 ≥75% 的短文 —— 「已学字」少于「全字面」七成，这篇就等于天书，孩子只会挫败。"
   />
 </template>

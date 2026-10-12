@@ -24,6 +24,7 @@ const menu = [
   { index: '/characters', label: '字库', icon: 'Collection' },
   { index: '/readings', label: '识字短文', icon: 'Document' },
   { index: '/poems', label: '古诗', icon: 'Notebook' },
+  { index: '/stories', label: '故事 / 儿歌', icon: 'Reading' },
   { index: '/config', label: '站点配置', icon: 'Setting' },
 ];
 

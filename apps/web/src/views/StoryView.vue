@@ -30,8 +30,16 @@ import GuideBubble from '@/components/biz/GuideBubble.vue';
 import LevelResult from '@/components/biz/LevelResult.vue';
 import ReadAlongButton from '@/components/biz/ReadAlongButton.vue';
 import SpeakButton from '@/components/biz/SpeakButton.vue';
+import { useCompanion } from '@/composables/useCompanion';
 import { useToast } from '@/composables/useToast';
-import { lessonByContentId, nextLesson, routeForLesson, trackOf } from '@/utils/levels';
+import {
+  entryLessonOfTrack,
+  lessonByContentId,
+  nextLesson,
+  routeForLesson,
+  type Track,
+  trackOf,
+} from '@/utils/levels';
 
 const route = useRoute();
 const router = useRouter();
@@ -40,6 +48,7 @@ const content = useContentStore();
 const learning = useLearningStore();
 const siteConfig = useSiteConfigStore();
 const toast = useToast();
+const companion = useCompanion();
 
 const { current } = storeToRefs(childStore);
 
@@ -173,6 +182,21 @@ function goBackToMap(): void {
   void router.replace({ name: 'map', query: { track: 'story' } });
 }
 
+/** 换条线闯关 —— 去那条线的第一关（见 `entryLessonOfTrack` 的取舍说明）。 */
+function goTrack(key: string): void {
+  const child = current.value;
+  const track = key as Track;
+  const target = child
+    ? entryLessonOfTrack(content.lessonsOfTrack(child.grade, track), track)
+    : null;
+  if (!target) {
+    toast.show('这条线暂时还没有关卡，先回地图看看吧');
+    goBackToMap();
+    return;
+  }
+  void router.replace(routeForLesson(target));
+}
+
 function retry(): void {
   readOk.value = new Set();
   finished.value = false;
@@ -238,9 +262,14 @@ watch(() => [current.value?._id, storyId.value] as const, resetAndLoad);
         next-label="下一个故事"
         :show-retry="false"
         :done-text="'故事都读完啦，回地图看看别的方向。'"
+        :track-links="[
+          { key: 'literacy', label: '去识字闯关' },
+          { key: 'poem', label: '去古诗闯关' },
+        ]"
         @next="goNext"
         @retry="retry"
         @back="goBackToMap"
+        @track="goTrack"
       />
     </div>
 
@@ -297,6 +326,7 @@ watch(() => [current.value?._id, storyId.value] as const, resetAndLoad);
                 <ReadAlongButton
                   :text="line"
                   :matcher="readingMatches"
+                  :companion-name="companion.name.value"
                   label="我来读这句"
                   size="sm"
                   @result="onReadResult(index, $event)"

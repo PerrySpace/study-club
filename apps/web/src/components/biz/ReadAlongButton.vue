@@ -33,6 +33,12 @@ const props = withDefaults(
      * 学科可用更宽松的规则覆盖（如按覆盖率判定）。
      */
     matcher?: (transcript: string, target: string) => boolean;
+    /**
+     * 伙伴称呼，用来把称赞文案里的 `{伙伴}` 填上（「好厉害，熊猫给你点赞！」）。
+     * 刻意走 prop 而不是在组件里读 store —— 组件要保持「不依赖业务 store」，
+     * 否则英语跟读就不能直接复用了。
+     */
+    companionName?: string;
   }>(),
   {
     label: '跟读一遍',
@@ -40,6 +46,7 @@ const props = withDefaults(
     block: false,
     disabled: false,
     matcher: undefined,
+    companionName: '',
   },
 );
 
@@ -164,8 +171,8 @@ async function startListen(): Promise<void> {
     transcript.value = result.transcript;
     matched.value = judge(result.transcript, props.text);
     // 表扬/鼓励各抽一句：换词而不是换口径，孩子每次听到的夸奖都不一样
-    praiseText.value = pickPraise();
-    encourageText.value = pickEncouragement();
+    praiseText.value = pickPraise(props.companionName);
+    encourageText.value = pickEncouragement(props.companionName);
     emit('result', {
       matched: matched.value,
       transcript: result.transcript,

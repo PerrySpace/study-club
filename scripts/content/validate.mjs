@@ -4,7 +4,7 @@
  *
  * 校验项：
  *   1. manifest 结构 + 各文件 checksum 与磁盘一致
- *   2. 每个实体必填字段与取值枚举
+ *   2. 字段形状以 content/schema/*.json 为准（必填齐备、无未声明字段）
  *   3. 汉字无重复；组词必含本字；释义长度合规
  *   4. 单元 / 关卡的 character_ids 均指向存在且已发布的字
  *   5. 古诗每行 pinyin 的音节数与该行字数一致
@@ -34,6 +34,50 @@ function readJson(p) {
 }
 function sha256(buf) {
   return 'sha256:' + createHash('sha256').update(buf).digest('hex');
+}
+
+// ---- 内容形状：以 content/schema/*.json 为唯一真源 ----
+//
+// ⚠️ 这里曾经把「字条有哪些字段」**再手抄一份**成 `REQUIRED_CHAR_FIELDS`。
+//    于是三份清单各自漂移：`character.schema.json` 漏了 `glyph`、这份手抄清单也漏了 `glyph`，
+//    而实现（CharCard / 出题）与内容（83 条字里 60 条带值）都在用 `glyph`。
+//    校验照样全绿 —— 直到有人真去读 schema 建导入模板，才发现它对自家内容**全部不通过**。
+//    ⇒ 字段清单只允许存在于 schema 里，本文件只读它，不再抄。
+const SCHEMA_BY_DIR = {
+  characters: 'character.schema.json',
+  poems: 'poem.schema.json',
+  readings: 'reading.schema.json',
+  lessons: 'lesson.schema.json',
+  stories: 'story.schema.json',
+  badges: 'badge.schema.json',
+};
+/** 目录名对不上 schema 名的例外（「单元」住在 lessons/ 目录里）。 */
+const SCHEMA_OVERRIDES = { 'lessons/units.json': 'unit.schema.json' };
+
+/** 按 schema 校验一份内容文件的字段形状（必填齐备 + 无未声明字段）。 */
+function checkShape(filePath, items) {
+  const schemaName = SCHEMA_OVERRIDES[filePath] ?? SCHEMA_BY_DIR[filePath.split('/')[0]];
+  if (!schemaName) return;
+  const schemaPath = join(CONTENT, 'schema', schemaName);
+  if (!existsSync(schemaPath)) {
+    warn(`${filePath} 没有 content/schema/${schemaName}，字段形状未经校验（建议补一份）`);
+    return;
+  }
+  const { properties = {}, required = [], additionalProperties } = readJson(schemaPath);
+  const allowed = new Set(Object.keys(properties));
+  for (const item of items) {
+    const id = item._id ?? item.title ?? '(无 id)';
+    for (const f of required) {
+      if (!(f in item)) err(`${filePath} / ${id} 缺少 schema 要求的字段 ${f}`);
+    }
+    if (additionalProperties === false) {
+      for (const k of Object.keys(item)) {
+        if (!allowed.has(k)) {
+          err(`${filePath} / ${id} 含 schema 未声明的字段 ${k}（请补进 content/schema/${schemaName}）`);
+        }
+      }
+    }
+  }
 }
 
 // ---- 1. manifest ----
@@ -72,22 +116,18 @@ const poems = loaded['poems/required-75.json'] ?? [];
 const units = loaded['lessons/units.json'] ?? [];
 const lessons = loaded['lessons/lessons.json'] ?? [];
 
+// ---- 2. 字段形状（以 schema 为准，覆盖全部内容文件）----
+for (const file of manifest.files ?? []) {
+  checkShape(file.path, loaded[file.path] ?? []);
+}
+
 // ---- 2/3. 汉字 ----
-const REQUIRED_CHAR_FIELDS = [
-  '_id', 'char', 'pinyin', 'pinyin_plain', 'tone', 'is_polyphone', 'polyphone_readings', 'radical',
-  'stroke_count', 'structure', 'stroke_order_ref', 'meaning', 'words', 'sentences', 'pictograph',
-  'image_ref', 'audio_ref', 'grade', 'level', 'difficulty', 'tags', 'similar_chars', 'antonym',
-  'synonyms', 'unit_refs', 'status', 'version', 'created_at', 'updated_at',
-];
 const STRUCTURES = ['独体', '左右', '上下', '半包围', '全包围', '品字'];
 const STATUSES = ['draft', 'pending_review', 'published', 'offline', 'deleted'];
 
 const seenChars = new Map();
 const charIds = new Set();
 for (const c of characters) {
-  for (const f of REQUIRED_CHAR_FIELDS) {
-    if (!(f in c)) err(`字条 ${c.char ?? c._id} 缺少字段 ${f}`);
-  }
   if (seenChars.has(c.char)) err(`汉字重复：${c.char}（${seenChars.get(c.char)} 与 ${c._id}）`);
   else seenChars.set(c.char, c._id);
   charIds.add(c._id);

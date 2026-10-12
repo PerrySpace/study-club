@@ -20,7 +20,7 @@ from bson.errors import InvalidId
 from ..core import errors as E
 from ..repositories import Repositories
 from ..repositories.content_registry import REGISTRY, all_specs, spec_for
-from . import invite_controller, srs
+from . import content_import_controller, invite_controller, srs
 from .serializers import serialize
 
 # 单字符汉字 id：与内容包既有命名一致（ch_<codepoint hex>）
@@ -777,22 +777,121 @@ async def update_content(
     return serialize(saved or {**existing, **patch})
 
 
+# 谁可能「指向」一条内容：这些集合的 `character_ids` 装的是别的内容 id
+# （识字关装字 id、古诗关装诗 id、故事关装故事 id；短文与单元装字 id）。
+# ⚠️ 三元组是（Repositories 属性名, 集合名, 字段）——**这两个名字不一样**：
+#    单元在 Repositories 上是 `units`，集合名却叫 `curriculum_units`，
+#    混用会在查引用时直接 AttributeError（测试已钉住）。
+_REFERENCE_FIELDS: tuple[tuple[str, str, str], ...] = (
+    ("lessons", "lessons", "character_ids"),
+    ("units", "curriculum_units", "character_ids"),
+    ("readings", "readings", "character_ids"),
+)
+
+
+async def references_for(repos: Repositories, collection: str, doc_id: str) -> list[dict[str, Any]]:
+    """列出「谁在引用这条内容」（空列表 = 没人引用，可放心删）。
+
+    为什么非要查：物理删除会留下**悬空引用**，而且它不报错 ——
+    表现只是关卡点进去空空如也，或解锁链指向一扇不存在的门（孩子被卡住）。
+    这类故障在界面上看不出原因，所以必须在删之前拦住。
+    """
+    counts: dict[str, dict[str, Any]] = {}
+
+    if collection in ("characters", "poems", "stories", "readings"):
+        for repo_key, coll_name, field in _REFERENCE_FIELDS:
+            n = await getattr(repos, repo_key).count({field: doc_id})
+            if n:
+                entry = counts.setdefault(repo_key, {"collection": coll_name, "count": 0})
+                entry["count"] += n
+
+    # 关卡之间靠 `required_lesson_id` 串成解锁链：删一个关卡会让后继关卡指向空。
+    if collection == "lessons":
+        n = await repos.lessons.count({"required_lesson_id": doc_id})
+        if n:
+            entry = counts.setdefault("lessons", {"collection": "lessons", "count": 0})
+            entry["count"] += n
+
+    out: list[dict[str, Any]] = []
+    for repo_key, entry in sorted(counts.items()):
+        spec = spec_for(entry["collection"])
+        out.append(
+            {
+                "collection": entry["collection"],
+                "label": spec.label if spec else repo_key,
+                "count": entry["count"],
+            }
+        )
+    return out
+
+
 async def delete_content(
-    repos: Repositories, collection: str, doc_id: str, actor: dict, ip: str
+    repos: Repositories,
+    collection: str,
+    doc_id: str,
+    actor: dict,
+    ip: str,
+    *,
+    hard: bool = False,
+    force: bool = False,
 ) -> dict:
+    """删除一条内容。**两种语义刻意分开，默认不改变既有行为。**
+
+    - `hard=False`（默认）＝ **下架**：只把 status 置为 offline，随时能改回来。
+      这是内容运营的常规动作，也是推荐做法（客户端立刻不再下发，数据还在）。
+    - `hard=True` ＝ **物理删除**：从库里真的移除，**不可恢复**。
+      用于「导入了一批错数据、要清掉重来」这类场景。
+
+    `hard=True` 时先查引用：仍被关卡 / 单元 / 短文引用则**拒绝**（40903），
+    并把引用明细回给调用方，由前端提示「这个字被 3 个关卡用着」。
+    确实要删就显式 `force=True`，此时悬空引用的后果由操作者自行承担。
+    """
     repo, spec = _repo_and_spec(repos, collection)
-    ok = await repo.soft_delete(doc_id, now=_now())
-    if not ok:
+    if await repo.find_one({"_id": doc_id}) is None:
         raise E.BizException(E.CONTENT_NOT_FOUND, f"{spec.label}不存在")
+
+    if not hard:
+        ok = await repo.soft_delete(doc_id, now=_now())
+        if not ok:
+            raise E.BizException(E.CONTENT_NOT_FOUND, f"{spec.label}不存在")
+        await log_audit(
+            repos,
+            actor=actor,
+            action=f"{spec.collection}.offline",
+            target_collection=spec.collection,
+            target_id=doc_id,
+            ip=ip,
+        )
+        return {"deleted": True, "id": doc_id, "hard": False, "references": []}
+
+    references = await references_for(repos, collection, doc_id)
+    if references and not force:
+        raise E.BizException(
+            E.CONTENT_IN_USE,
+            f"「{spec.label}」仍被引用，删除会让它们指向不存在的内容",
+            errors=[
+                {"field": r["collection"], "reason": f"{r['label']} 引用 {r['count']} 处"}
+                for r in references
+            ],
+        )
+
+    removed = await repo.delete_one({"_id": doc_id})
+    if not removed:
+        raise E.BizException(E.CONTENT_NOT_FOUND, f"{spec.label}不存在")
+
     await log_audit(
         repos,
         actor=actor,
-        action=f"{spec.collection}.offline",
+        action=f"{spec.collection}.delete",
         target_collection=spec.collection,
         target_id=doc_id,
+        diff={"hard": True, "force": force, "references": references},
         ip=ip,
     )
-    return {"deleted": True, "id": doc_id}
+    # ⚠️ 清单计数与 content_version 必须跟着变：否则 `/health` 停在旧版本、
+    #    客户端不重拉，「库里删了、客户端还显示着」会伪装成缓存问题。
+    await content_import_controller.refresh_manifest(repos)
+    return {"deleted": True, "id": doc_id, "hard": True, "references": references}
 
 
 def known_collections() -> list[str]:
@@ -836,6 +935,12 @@ def content_template(collection: str) -> dict:
             f"{spec.label}导入模板。把 items 数组替换成真实内容后上传到后台「导入 JSON」；"
             f"导入按 _id 幂等 upsert，可重复导入来更新已有内容。"
             f"必填字段：{'、'.join(sorted(required)) or '无'}。"
+            f"⚠️ 导入只写数据库（不会写回仓库 content/）。"
+            f"发布（deploy）时：仓库里**已有**的集合不会再被重新播种 "
+            f"—— 数据库有数据就以数据库为准，只补缺、不覆盖、不删除，"
+            f"所以导入的内容会保留下来。"
+            f"若某次发布跑过 `seed --force`，才会以仓库为准并清理库内多余条目。"
+            f"⚠️ 状态必须是 published、grade 必须填，否则客户看不到（详见 fields 里的说明）。"
         ),
         "fields": fields,
         "items": [dict(spec.template_sample)] if spec.template_sample else [],
