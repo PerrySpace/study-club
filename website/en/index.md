@@ -20,6 +20,8 @@ hero:
       link: https://gitee.com/perry-space/study-club
 
 features:
+  - title: One account, multiple kids
+    details: Each child gets an independent profile and progress — switch or archive anytime, no extra sign-up needed.
   - title: Three responsive tiers
     details: Phone (<768px), iPad (768–1279px) and desktop (≥1280px) from a single Web + PWA codebase.
   - title: Server-authoritative

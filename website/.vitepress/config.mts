@@ -65,6 +65,7 @@ export default defineConfig({
                 text: '介绍',
                 items: [
                   { text: '学习俱乐部是什么', link: '/docs/what' },
+                  { text: '界面导览', link: '/docs/tour' },
                   { text: '快速开始', link: '/docs/quick-start' },
                 ],
               },
