@@ -36,6 +36,7 @@ import ReadAlongButton from '@/components/biz/ReadAlongButton.vue';
 import SpeakButton from '@/components/biz/SpeakButton.vue';
 import { useCompanion } from '@/composables/useCompanion';
 import { useToast } from '@/composables/useToast';
+import { useTrackProgress } from '@/composables/useTrackProgress';
 import {
   entryLessonOfTrack,
   lessonByContentId,
@@ -109,6 +110,9 @@ const readOk = ref<Set<number>>(new Set());
 const finished = ref(false);
 const stars = ref(0);
 const newBadges = ref<string[]>([]);
+/** 这条短文线是否**真的**全部学完（决定结果页要不要放庆祝语）。 */
+const celebrate = ref(false);
+const { hasCompletedAll } = useTrackProgress();
 
 /** 完成度：跟读通过句数 / 总句数。 */
 const readProgress = computed(() =>
@@ -171,6 +175,8 @@ async function finish(): Promise<void> {
       .map((code) => content.bundle.badges.find((b) => b.code === code)?.title ?? code)
       .filter(Boolean);
     if (titles.length) newBadges.value = titles;
+    // 只有**每一篇**都完成过才算「全部闯关完成」（判据见 useTrackProgress）
+    celebrate.value = await hasCompletedAll(trackLessons.value.map((l) => l._id));
   } catch {
     toast.warn('完成记录没有保存成功，但你已经读完啦');
   }
@@ -205,6 +211,7 @@ function retry(): void {
   readOk.value = new Set();
   finished.value = false;
   stars.value = 0;
+  celebrate.value = false;
 }
 
 async function load(): Promise<void> {
@@ -226,6 +233,7 @@ function resetAndLoad(): void {
   finished.value = false;
   stars.value = 0;
   newBadges.value = [];
+  celebrate.value = false;
   void load();
 }
 
@@ -261,6 +269,7 @@ watch(() => [current.value?._id, storyId.value] as const, resetAndLoad);
           { label: '跟读通过', value: readOk.size },
         ]"
         :badges="newBadges"
+        :celebrate="celebrate"
         note="短文里的字已进入复习计划，下次打开首页就能练。"
         :has-next="Boolean(next)"
         next-label="下一篇短文"

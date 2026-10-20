@@ -102,6 +102,17 @@ export interface ListenResult {
    * 填充值与「引擎真的给了」在类型上无法区分，界面会显示一个假分数。
    */
   confidence: number | null;
+  /**
+   * 只检测到了「有人说话」，**没有拿到文本**。
+   *
+   * 什么时候会出现：设备有麦克风、也真的听到了声音，但识别引擎不可用
+   * （典型是 Chrome 自带的识别要连境外服务器，网络到不了）。
+   * 此时不能判「读对了没有」，只能确认「你确实读了」——
+   * 界面必须把这一点写在脸上，⛔ 不得当成识别成功。
+   */
+  soundOnly?: boolean;
+  /** 本次采集到的最大音量 0–1（仅供界面做「麦克风在工作」的提示）。 */
+  peak?: number;
 }
 
 /**
@@ -124,6 +135,15 @@ export interface SpeechAdapter {
   readonly canSpeak: boolean;
   /** 是否支持跟读识别（ASR） */
   readonly canListen: boolean;
+  /**
+   * 能否至少「听到声音」（麦克风可采集）。
+   *
+   * 与 `canListen` 分开：识别引擎可能没有（Firefox / 部分 WebView），
+   * 也可能是坏的（国内网络到不了 Chrome 的识别服务），但麦克风本身是好的。
+   * 此时只能确认「有人在读」，**不能**判断读得对不对 ——
+   * 界面必须把这条差别说出来（`ListenResult.soundOnly`）。
+   */
+  readonly canHearSound: boolean;
   /** 朗读一段文本；resolve `true` 表示播放结束，`false` 表示平台不支持（调用方走降级） */
   speak(text: string, options?: SpeakOptions): Promise<boolean>;
   /**
@@ -142,7 +162,12 @@ export interface SpeechAdapter {
    * 开始一次跟读识别，resolve 出最终识别文本。
    * 不支持 / 无权限 / 无结果 / 超时一律 **reject**，由调用方降级（不要吞掉后当成功）。
    */
-  listen(options?: { lang?: string; timeoutMs?: number }): Promise<ListenResult>;
+  listen(options?: {
+    lang?: string;
+    timeoutMs?: number;
+    /** 实时音量回调（0–1）：界面用它画「麦克风正在听」的电平条。 */
+    onLevel?: (level: number) => void;
+  }): Promise<ListenResult>;
   /** 中止识别（用户中途放弃） */
   stopListening(): void;
   /** 释放资源（组件卸载、页面离开时调用） */

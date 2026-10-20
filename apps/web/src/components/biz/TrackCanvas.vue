@@ -85,7 +85,10 @@ const nodes = computed<Node[]>(() => {
   const n = props.lessons.length;
   return props.lessons.map((lesson, index) => {
     const done = props.completed.has(lesson._id);
-    const locked = !props.isUnlocked(lesson, index);
+    // ⛔ 已完成 ⇒ 一定可点。父层的 `isUnlocked` 已经这样判；这里再兜一次，
+    //    是因为「绿色对勾按不动」的根因就在这条链路上（父层传什么，这里画什么），
+    //    而它只在「跳过前面的关直接做了后面」时出现，很难靠手点复现。
+    const locked = !done && !props.isUnlocked(lesson, index);
     return {
       lesson,
       index,

@@ -21,11 +21,12 @@
  *   ③ **回地图**   —— 想看解锁到哪了 / 换方向（**常驻**，不再只在末关出现）；
  *   ④ **换条线闯关** —— 识字 / 古诗 / 故事之间横跳（`trackLinks`）。
  */
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import StarRow from '@/components/biz/StarRow.vue';
+import { usePraise } from '@/composables/usePraise';
 
 /** 换线入口。`key` 由调用方解释（通常是 track 名），本组件不关心路由。 */
 export interface TrackLink {
@@ -59,6 +60,13 @@ const props = withDefaults(
     trackLinks?: readonly TrackLink[];
     /** 全部完成时的结语（覆盖默认文案） */
     doneText?: string;
+    /**
+     * 这条线**真的**全部学完了（判据见 `useTrackProgress`）。
+     *
+     * ⛔ 不要用「没有下一关」代替：孩子可以从首页直接打开最后一首，
+     *    那时也没有下一关，但整条线并没学完。
+     */
+    celebrate?: boolean;
   }>(),
   {
     title: '本关完成',
@@ -72,6 +80,7 @@ const props = withDefaults(
     showBack: true,
     trackLinks: () => [],
     doneText: '',
+    celebrate: false,
   },
 );
 
@@ -83,11 +92,41 @@ const emit = defineEmits<{
 }>();
 
 const ending = computed(() => props.doneText || '这一条线全部学完啦，回地图看看别的方向。');
+
+/** 全部闯关完成的语音鼓励：「非常棒！…」+「Good job!」。 */
+const { cheerText, cheering, cheer, canSpeak } = usePraise();
+
+watch(
+  () => props.celebrate,
+  (done) => {
+    if (done) void cheer();
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
   <BaseCard :title="title" :subtitle="subtitle">
     <div class="result">
+      <!--
+        「全部闯关完成」是整条线唯一的大节点：先给一句庆祝语（同时会念出来），
+        再展示星星。顺序不能反 —— 星星说的是「这一关」，庆祝语说的是「整条路」。
+        自动朗读有可能被系统的「需要用户手势」策略拦掉，所以旁边常驻一个
+        「再听一遍」—— 一点就响，孩子想再听一次也有地方点。
+      -->
+      <div v-if="celebrate" class="result__cheer">
+        <p class="result__cheer-text">{{ cheerText }}</p>
+        <button
+          v-if="canSpeak"
+          type="button"
+          class="result__cheer-play tap clickable"
+          :disabled="cheering"
+          @click="cheer"
+        >
+          {{ cheering ? '正在说…' : '🔊 再听一遍' }}
+        </button>
+      </div>
+
       <!-- 星星是「我做得怎么样」的唯一反馈：放在结果区最上方、最大 -->
       <StarRow :stars="stars" :size="44" class="result__stars" />
       <p class="result__stars-text text-sm text-muted">
@@ -155,6 +194,39 @@ const ending = computed(() => props.doneText || '这一条线全部学完啦，�
 
 .result__stars {
   margin-block: var(--space-2xs);
+}
+
+.result__cheer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  /* 用浅绿底 + 正文色，而不是绿字：#32b67a 直接做文字只有 2.4:1，
+     户外强光下看不清（视觉规范要求正文对比度 ≥4.5:1）。 */
+  background: color-mix(in srgb, var(--color-success) 20%, var(--color-surface));
+}
+
+.result__cheer-text {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--font-lg);
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.result__cheer-play {
+  min-height: 40px;
+  padding: 0 var(--space-sm);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  font-size: var(--font-sm);
+  font-weight: 600;
 }
 
 .result__stars-text {

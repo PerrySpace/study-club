@@ -99,11 +99,13 @@ const progressPct = computed(() => {
  * 判据是「顺序」而不是 `required_lesson_id` 字段：自动生成的关卡在服务端就算好了
  * 解锁链，但客户端用「前一关」直接判定口径更直观，也不会因为某次生成结果变化而失效。
  *
- * @param index 该关在当前线里的序号（第 N 关）。`lesson` 本身用不到 ——
- *   刻意**不接收**它：一旦开始用 `lesson.required_lesson_id`，就等于把这个判定
- *   与服务端生成规则耦合起来了。
+ * ⛔ **已完成的关卡永远算已解锁**，这一条不能省：孩子可以从首页「古诗学习」
+ * 直接打开第 3 首，前两首没做 —— 只按「前一关完成」判定的话，第 3 首会同时
+ * 是「已完成」和「未解锁」：地图上画着绿色对勾，点下去毫无反应。
+ * 完成过的关卡没有任何理由再拦一次。
  */
-function isUnlocked(_lesson: Lesson, index: number): boolean {
+function isUnlocked(lesson: Lesson, index: number): boolean {
+  if (completedIds.value.has(lesson._id)) return true;
   if (index === 0) return true;
   const prev = lessons.value[index - 1];
   return prev ? completedIds.value.has(prev._id) : true;
@@ -226,6 +228,15 @@ watch(
           @select="startLesson"
         />
 
+        <!-- 整条线走完是孩子能看到的唯一「大节点」，地图上必须有个交代 -->
+        <div v-if="progressPct === 100" class="done-banner" role="status">
+          <span class="done-banner__icon" aria-hidden="true">🎉</span>
+          <div>
+            <p class="done-banner__title">全部闯关完成！</p>
+            <p class="text-sm text-muted">{{ activeTitle }}这条线已经全部点亮，太厉害了，Good job！</p>
+          </div>
+        </div>
+
         <!-- 继续按钮：完成一关回来时，不必在赛道上自己找「学到哪了」 -->
         <BaseButton
           v-if="nextTodo"
@@ -267,5 +278,29 @@ watch(
   color: var(--color-text-muted);
   font-size: var(--font-sm);
   text-align: center;
+}
+
+/*
+ * 「全部闯关完成」横幅。
+ * 用浅绿底 + 正文色（不是绿字）：绿字在浅底上对比度不足 3:1，户外看不清。
+ */
+.done-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-success) 18%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--color-success) 45%, transparent);
+}
+
+.done-banner__icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.done-banner__title {
+  margin: 0;
+  font-weight: 700;
 }
 </style>

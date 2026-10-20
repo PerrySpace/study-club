@@ -29,7 +29,7 @@ function mk(id: string, char: string, extra: Record<string, unknown> = {}): Char
     image_ref: null,
     audio_ref: null,
     grade: 0,
-    level: 'easy',
+    level: 'grade1',
     difficulty: 1,
     tags: [],
     similar_chars: [],

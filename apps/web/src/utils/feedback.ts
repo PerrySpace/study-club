@@ -73,3 +73,27 @@ export function pickEncouragement(companionName?: string): string {
   lastEncourageIndex = pickFrom(ENCOURAGE_WORDS, lastEncourageIndex);
   return withCompanion(ENCOURAGE_WORDS[lastEncourageIndex] ?? ENCOURAGE_WORDS[0]!, companionName);
 }
+
+/**
+ * 「全部闯关完成」的庆祝语。
+ *
+ * 与 `PRAISE_WORDS` 分开：那是**单题/单关**的即时反馈，这里是**整条线学完**
+ * 的一次性大节点 —— 分量不一样，用同一套词会把「全通关」说得和「答对一题」
+ * 一样轻。英文那句由调用方单独用 `lang: 'en-US'` 朗读（见 `usePraise`），
+ * 混在中文句子里用中文音色念会变成「古德 久布」。
+ */
+export const CHEER_WORDS: readonly string[] = [
+  '非常棒！整条线都闯完啦！',
+  '太厉害了！你把这一条线全部学完了！',
+  '太棒啦！每一关都被你点亮了！',
+  '了不起！全部闯关完成，{伙伴}都为你骄傲！',
+  '真厉害！你坚持到了最后一关！',
+];
+
+let lastCheerIndex = -1;
+
+/** 随机抽一句「全部闯关完成」的庆祝语（不会与上一次重复）。 */
+export function pickCheer(companionName?: string): string {
+  lastCheerIndex = pickFrom(CHEER_WORDS, lastCheerIndex);
+  return withCompanion(CHEER_WORDS[lastCheerIndex] ?? CHEER_WORDS[0]!, companionName);
+}

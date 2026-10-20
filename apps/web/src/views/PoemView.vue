@@ -19,7 +19,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { useChildStore, useContentStore, useLearningStore } from '@study-club/core';
 import type { Lesson, Poem } from '@study-club/core';
-import { generatePoemFillQuestion, readingPlanForSentence } from '@study-club/subject-hanzi';
+import { generatePoemFillQuestion, readingMatches, readingPlanForSentence } from '@study-club/subject-hanzi';
 
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
@@ -31,6 +31,7 @@ import ReadAlongButton from '@/components/biz/ReadAlongButton.vue';
 import SpeakButton from '@/components/biz/SpeakButton.vue';
 import { useCompanion } from '@/composables/useCompanion';
 import { useToast } from '@/composables/useToast';
+import { useTrackProgress } from '@/composables/useTrackProgress';
 import { pickPraise } from '@/utils/feedback';
 import {
   entryLessonOfTrack,
@@ -64,6 +65,9 @@ const wrongTries = ref(0);
 const finished = ref(false);
 const stars = ref(0);
 const newBadges = ref<string[]>([]);
+/** 这条古诗线是否**真的**全部学完（决定结果页要不要放庆祝语）。 */
+const celebrate = ref(false);
+const { hasCompletedAll } = useTrackProgress();
 
 const poemId = computed(() => String(route.params.poemId ?? ''));
 
@@ -107,6 +111,24 @@ const question = computed(() => {
   });
 });
 
+/**
+ * 「朗读整首」真正要念的内容：**题目 + 朝代 + 作者 + 正文**。
+ *
+ * 只念正文时，孩子听到的是一串没有来历的句子；而「谁写的、什么朝代」
+ * 恰恰是古诗启蒙的一半。用「，」而不是「·」：TTS 对间隔号通常不作停顿，
+ * 会连读成「唐李白」，听起来像一个人名。
+ */
+const reciteText = computed(() => {
+  const poem = poemRef.value;
+  if (!poem) return '';
+  const title = `《${poem.title}》`;
+  const dynasty = poem.dynasty?.trim() ?? '';
+  // 「唐」要念成「唐代」：单念一个「唐」在句子开头会被听成动词/名字
+  const dynastyText = dynasty && !/[代朝]$/.test(dynasty) ? `${dynasty}代` : dynasty;
+  const head = [dynastyText, poem.author?.trim() ?? ''].filter(Boolean).join('，');
+  return head ? `${title}。${head}。${poem.full_text}` : `${title}。${poem.full_text}`;
+});
+
 function reload(): void {
   poemRef.value = content.bundle.poems.find((p) => p._id === poemId.value) ?? null;
   selected.value = null;
@@ -115,6 +137,7 @@ function reload(): void {
   finished.value = false;
   stars.value = 0;
   newBadges.value = [];
+  celebrate.value = false;
   questionStartedAt.value = Date.now();
 }
 
@@ -205,6 +228,8 @@ async function finish(): Promise<void> {
       .map((code) => content.bundle.badges.find((b) => b.code === code)?.title ?? code)
       .filter(Boolean);
     if (titles.length) newBadges.value = titles;
+    // 只有**每一首**都完成过才算「全部闯关完成」（判据见 useTrackProgress）
+    celebrate.value = await hasCompletedAll(trackLessons.value.map((l) => l._id));
   } catch {
     toast.warn('完成记录没有保存成功，但这一首已经学完啦');
   }
@@ -266,6 +291,7 @@ function goTrack(key: string): void {
         :badges="newBadges"
         note="诗里的重点字已进入复习计划，下次打开首页就能练。"
         :has-next="Boolean(next)"
+        :celebrate="celebrate"
         next-label="下一首"
         :show-retry="false"
         :done-text="'古诗都学完啦，回地图看看别的方向。'"
@@ -287,10 +313,10 @@ function goTrack(key: string): void {
           <p class="text-muted">{{ poemRef.dynasty }} · {{ poemRef.author }}</p>
           <div class="row row--wrap">
             <span class="pill">{{ poemRef.source }}</span>
-            <!-- 整首朗读：古诗的韵律只在整篇连读里存在 -->
+            <!-- 整首朗读：古诗的韵律只在整篇连读里存在，且要连题目与作者一起念 -->
             <SpeakButton
-              :text="poemRef.full_text"
-              :rate="readingPlanForSentence(poemRef.full_text).rate"
+              :text="reciteText"
+              :rate="readingPlanForSentence(reciteText).rate"
               label="朗读整首"
               variant="primary"
             />
@@ -325,6 +351,7 @@ function goTrack(key: string): void {
                   />
                   <ReadAlongButton
                     :text="line.text"
+                    :matcher="readingMatches"
                     :companion-name="companion.name.value"
                     label="跟读这句"
                     size="sm"

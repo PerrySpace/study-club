@@ -51,6 +51,8 @@ export function useSpeech() {
 
   const playing = ref(false);
   const listening = ref(false);
+  /** 识别期间实时音量（0–1）。界面用它画电平条，证明「麦克风真的在听」。 */
+  const level = ref(0);
   /** 当前设备可用的中文音色（`voiceschanged` 后会刷新）。 */
   const voices = ref<SpeechVoice[]>([]);
   /** 选中的音色 `voiceURI`；空串表示「自动挑选」。 */
@@ -94,12 +96,17 @@ export function useSpeech() {
   async function speak(text: string, options?: SpeakOptions): Promise<boolean> {
     if (!speech.canSpeak) return false;
     playing.value = true;
+    const lang = options?.lang ?? 'zh-CN';
+    // 中文才注入「挑好的中文音色」；英文等其它语言交给引擎按 lang 选，
+    // 否则中文音色会把 "Good job" 念成「古德 久布」。
+    const withChineseVoice = lang.toLowerCase().startsWith('zh');
     try {
       return await speech.speak(text, {
         ...options,
-        // 显式带上音色：平台侧的启发式优选只作兜底，
-        // 用户在设置里挑过的必须优先。
-        voiceURI: options?.voiceURI ?? voiceURI.value ?? undefined,
+        lang,
+        voiceURI: withChineseVoice
+          ? options?.voiceURI ?? (voiceURI.value || undefined)
+          : options?.voiceURI,
       });
     } finally {
       playing.value = false;
@@ -112,18 +119,31 @@ export function useSpeech() {
   }
 
   /** 开始一次跟读识别；失败会抛错，调用方负责降级与提示。 */
-  async function listen(options?: { timeoutMs?: number }): Promise<ListenResult> {
+  async function listen(options?: {
+    timeoutMs?: number;
+    onLevel?: (value: number) => void;
+  }): Promise<ListenResult> {
     listening.value = true;
+    level.value = 0;
     try {
-      return await speech.listen({ lang: 'zh-CN', ...options });
+      return await speech.listen({
+        lang: 'zh-CN',
+        ...options,
+        onLevel: (value) => {
+          level.value = value;
+          options?.onLevel?.(value);
+        },
+      });
     } finally {
       listening.value = false;
+      level.value = 0;
     }
   }
 
   function stopListening(): void {
     speech.stopListening();
     listening.value = false;
+    level.value = 0;
   }
 
   // 音色是异步就绪的：只在挂载时同步取一次的话，拿到的是空数组
@@ -159,8 +179,10 @@ export function useSpeech() {
   return {
     canSpeak: speech.canSpeak,
     canListen: speech.canListen,
+    canHearSound: speech.canHearSound,
     playing,
     listening,
+    level,
     voices,
     voiceURI,
     activeVoice,

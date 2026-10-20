@@ -69,8 +69,14 @@ export function readingMatches(transcript: string, target: string): boolean {
 /**
  * 朗读（TTS）时的「读什么」与语速。
  *
- * 汉字单字用慢速（声调要靠拖长才听得出来），整句恢复正常语速 ——
- * 句子里逐字放慢会让句子失去韵律，孩子反而更听不懂。
+ * 语速口径（基速，实际语速还会乘以 `gameplay.speak_rate`）：
+ *   - 单字 **0.6**：声调要靠拖长才听得出来，0.7 仍然偏快；
+ *   - 词语 0.68–0.72：比单字快一点，但两个字的词不能连成一团；
+ *   - 整句 **0.78**：接近成人语速（0.95）时，6 岁孩子第一遍基本听不清。
+ *
+ * ⛔ 这三个值是「孩子跟着读得出来」的下限，不是「听起来自然」的下限。
+ *    调快之前请先在一台真机上跟读一遍 —— 成人觉得「有点慢」通常才是对的。
+ *    家长侧的整体档位仍由 `gameplay.speak_rate` 缩放（见各视图的 rateFor）。
  */
 export interface ReadingPlan {
   text: string;
@@ -78,14 +84,14 @@ export interface ReadingPlan {
 }
 
 export function readingPlanForChar(char: string): ReadingPlan {
-  return { text: char, rate: 0.7 };
+  return { text: char, rate: 0.6 };
 }
 
 export function readingPlanForWord(word: string): ReadingPlan {
-  // 两个字以上的词用 0.8：比单字快一点，比正常慢一点。
-  return { text: word, rate: word.length > 2 ? 0.9 : 0.8 };
+  // 两个字以上的词用 0.7：比单字快一点，比正常慢很多。
+  return { text: word, rate: word.length > 2 ? 0.72 : 0.68 };
 }
 
 export function readingPlanForSentence(sentence: string): ReadingPlan {
-  return { text: sentence, rate: 0.95 };
+  return { text: sentence, rate: 0.78 };
 }

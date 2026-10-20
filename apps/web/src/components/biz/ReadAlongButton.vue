@@ -54,13 +54,30 @@ const emit = defineEmits<{
   (e: 'result', payload: { matched: boolean; transcript: string; degraded: boolean }): void;
 }>();
 
-const { canListen, listening, listen } = useSpeech();
+const { canListen, canHearSound, listening, level, listen } = useSpeech();
 
-/** 设备不支持识别：按钮退化为「我听过了」。 */
-const degraded = computed(() => !canListen);
+/**
+ * 连麦克风都拿不到（极老的设备 / 被策略禁用）：按钮退化为「我听过了」。
+ *
+ * ⚠️ 只要麦克风能采集，就**不要**退化 —— 识别引擎坏了（国内网络连不上
+ * Chrome 的识别服务）时，至少还能确认「孩子真的读了」，
+ * 安静地什么都不做会被当成功能坏了。
+ */
+const degraded = computed(() => !canListen && !canHearSound);
+
+/** 有麦克风、但没有（或坏了）识别引擎：走「只听声音」模式。 */
+const soundOnlyMode = computed(() => !canListen && canHearSound);
 
 const transcript = ref('');
 const matched = ref<boolean | null>(null);
+/**
+ * 只听到「有人说话」，没拿到文字。
+ *
+ * 识别引擎连不上（国内网络到不了 Chrome 的识别服务）时会走到这里。
+ * 界面上不能显示成「读对了」，只能显示成「听到了你的声音」——
+ * 我们不能判断读得对不对，就不假装判断了。
+ */
+const heardOnly = ref(false);
 const errorText = ref('');
 /** 本次结果的表扬/鼓励文案（出结果时从词库随机抽一句） */
 const praiseText = ref('');
@@ -83,6 +100,7 @@ const judge = (heard: string, target: string): boolean =>
 function reset(): void {
   transcript.value = '';
   matched.value = null;
+  heardOnly.value = false;
   errorText.value = '';
   praiseText.value = '';
   encourageText.value = '';
@@ -169,6 +187,15 @@ async function startListen(): Promise<void> {
   try {
     const result = await listen();
     transcript.value = result.transcript;
+
+    // 只有「声音、没有文字」：如实记为「读过了」，但不判对错。
+    if (result.soundOnly) {
+      heardOnly.value = true;
+      praiseText.value = pickPraise(props.companionName);
+      emit('result', { matched: true, transcript: '', degraded: true });
+      return;
+    }
+
     matched.value = judge(result.transcript, props.text);
     // 表扬/鼓励各抽一句：换词而不是换口径，孩子每次听到的夸奖都不一样
     praiseText.value = pickPraise(props.companionName);
@@ -182,8 +209,14 @@ async function startListen(): Promise<void> {
     matched.value = false;
     const code = err instanceof Error ? err.message : 'SPEECH_ERROR';
     // 把技术错误码翻成孩子/家长能懂的话，而不是把 `SPEECH_NOTALLOWED` 甩到屏幕上
-    if (code.includes('NOTALLOWED') || code.includes('SERVICE_NOT_ALLOWED')) {
+    if (code.includes('NOTALLOWED') || code.includes('SERVICE_NOT_ALLOWED') || code.includes('SERVICENOTALLOWED')) {
       errorText.value = '麦克风被挡住了，请在浏览器里允许使用麦克风';
+    } else if (code.includes('NETWORK')) {
+      // 识别要连境外服务器，国内网络经常直接失败 —— 这不是「孩子没读」，
+      // 必须说清原因，否则家长只会反复让孩子重读。
+      errorText.value = '这台设备连不上语音识别（需要联网），先让家长看看网络吧';
+    } else if (code.includes('NO_SPEECH')) {
+      errorText.value = '没听到声音，凑近麦克风再读一次吧';
     } else if (code.includes('TIMEOUT') || code.includes('NO_RESULT') || code.includes('EMPTY')) {
       errorText.value = '没听清，凑近一点再读一次吧';
     } else if (code.includes('UNSUPPORTED')) {
@@ -239,23 +272,54 @@ onBeforeUnmount(cancelHold);
       {{ holdHint }}
     </p>
 
-    <p v-else-if="listening" class="read-along__hint text-sm text-muted">
-      对着麦克风慢慢读「{{ text }}」
-    </p>
+    <!-- 正在听：提示 + 电平条 + 「听到声音了」三个提示是同一个阶段，归在一组 -->
+    <template v-else-if="listening">
+      <p class="read-along__hint text-sm text-muted">对着麦克风慢慢读「{{ text }}」</p>
 
-    <p v-else-if="matched !== null" class="read-along__feedback">
-      <span v-if="matched" class="read-along__feedback--ok">👍 {{ praiseText }}</span>
-      <span v-else class="read-along__feedback--no">{{ encourageText }}，慢慢读「{{ text }}」</span>
-      <span v-if="transcript" class="read-along__heard text-sm text-muted">（听到的是「{{ transcript }}」）</span>
-    </p>
+      <!--
+        电平条：孩子看不见「识别」这件事，只看见按钮转圈。
+        麦克风真的收到声音时条会亮起来 —— 这是「它在听我」最直接的证据，
+        也是家长判断「是不是权限/设备问题」的依据。
+      -->
+      <div class="read-along__meter" aria-hidden="true">
+        <span
+          v-for="n in 6"
+          :key="n"
+          class="read-along__bar"
+          :class="{ 'read-along__bar--on': level * 6 >= n }"
+        ></span>
+      </div>
+      <p v-if="level >= 0.16" class="read-along__heard text-sm">听到你的声音了，接着读完～</p>
+    </template>
 
-    <p v-else-if="acknowledged" class="read-along__feedback read-along__feedback--ok">
-      👍 已记录（这台设备听不到声音）
-    </p>
+    <template v-else>
+      <p v-if="matched !== null" class="read-along__feedback">
+        <span v-if="matched" class="read-along__feedback--ok">👍 {{ praiseText }}</span>
+        <span v-else class="read-along__feedback--no">{{ encourageText }}，慢慢读「{{ text }}」</span>
+        <span v-if="transcript" class="read-along__heard text-sm text-muted">（听到的是「{{ transcript }}」）</span>
+      </p>
 
-    <p v-else-if="errorText" class="read-along__feedback read-along__feedback--no">
-      {{ errorText }}
-    </p>
+      <!-- 只听到声音、没拿到文字：给正向反馈，但把「没判对错」说明白 -->
+      <p v-else-if="heardOnly" class="read-along__feedback">
+        <span class="read-along__feedback--ok">👍 {{ praiseText }}</span>
+        <span class="read-along__heard text-sm text-muted">
+          （听到了你的声音；这台设备听不清内容，只确认你读过了）
+        </span>
+      </p>
+
+      <p v-else-if="acknowledged" class="read-along__feedback read-along__feedback--ok">
+        👍 已记录（这台设备听不到声音）
+      </p>
+
+      <p v-else-if="errorText" class="read-along__feedback read-along__feedback--no">
+        {{ errorText }}
+      </p>
+
+      <!-- 声音模式必须先说清楚：只能确认「读过」，不能判断读得对不对 -->
+      <p v-else-if="soundOnlyMode" class="read-along__hint text-sm text-muted">
+        这台设备听不清内容，会确认你有没有读
+      </p>
+    </template>
   </div>
 </template>
 
@@ -381,6 +445,50 @@ onBeforeUnmount(cancelHold);
 
 .read-along__feedback--no {
   color: var(--color-warn);
+}
+
+/*
+ * 电平条：6 根柱子，按音量从左到右依次亮起。
+ * 高度做成「波浪」而不是等高 —— 等高会被看成进度条，孩子会等它走满。
+ */
+.read-along__meter {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 20px;
+}
+
+.read-along__bar {
+  width: 6px;
+  border-radius: 3px;
+  background: var(--color-border);
+  transform-origin: bottom;
+  transition: background 80ms linear, transform 80ms linear;
+}
+
+.read-along__bar:nth-child(1),
+.read-along__bar:nth-child(6) {
+  height: 8px;
+}
+
+.read-along__bar:nth-child(2),
+.read-along__bar:nth-child(5) {
+  height: 13px;
+}
+
+.read-along__bar:nth-child(3),
+.read-along__bar:nth-child(4) {
+  height: 18px;
+}
+
+.read-along__bar--on {
+  background: var(--color-info);
+  transform: scaleY(1.1);
+}
+
+.read-along__heard {
+  color: var(--color-text-muted);
+  line-height: 1.4;
 }
 
 @keyframes mic-pulse {

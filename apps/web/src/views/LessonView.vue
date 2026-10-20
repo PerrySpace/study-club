@@ -64,6 +64,7 @@ import { useBreakpoint } from '@/composables/useBreakpoint';
 import { useCompanion } from '@/composables/useCompanion';
 import { useSpeech } from '@/composables/useSpeech';
 import { useToast } from '@/composables/useToast';
+import { useTrackProgress } from '@/composables/useTrackProgress';
 import { useViewportHeight } from '@/composables/useViewportHeight';
 import {
   entryLessonOfTrack,
@@ -156,6 +157,9 @@ const combo = ref(0);
 const bestCombo = ref(0);
 /** 本关新解锁的徽章标题（服务端只回 code，标题从内容包里查）。 */
 const newBadges = ref<string[]>([]);
+/** 这条识字线是否**真的**全部学完（决定结果页要不要放庆祝语）。 */
+const celebrate = ref(false);
+const { hasCompletedAll } = useTrackProgress();
 
 const lessonId = computed(() => String(route.params.lessonId ?? ''));
 
@@ -347,6 +351,9 @@ async function setup(): Promise<void> {
   targets.value = resolved;
   studyIndex.value = 0;
   studyStep.value = 'look';
+  // 同路由名只换参数时组件会被复用：不清掉上一关的庆祝状态，
+  // 下一关的结果页会一开场就念「全部闯关完成」。
+  celebrate.value = false;
   phase.value = 'study';
 }
 
@@ -711,6 +718,10 @@ async function nextQuestion(): Promise<void> {
         .map((code) => content.bundle.badges.find((b) => b.code === code)?.title ?? code)
         .filter(Boolean);
       if (titles.length) newBadges.value = [...new Set([...newBadges.value, ...titles])];
+      // 「今日任务 / 到期复习 / 错题本」不是关卡，不参与「全部闯关完成」的判定
+      if (isTrackLesson.value) {
+        celebrate.value = await hasCompletedAll(trackLessons.value.map((l) => l._id));
+      }
     } catch (err) {
       console.error('[lesson] 关卡流水写入失败', err);
       toast.warn('这次成绩没记上，但你已经闯完这一关啦');
@@ -1131,6 +1142,7 @@ onUnmounted(() => {
         :badges="newBadges"
         note="复习计划已按记忆曲线安排；下次打开首页即可看到「到期复习」。"
         :has-next="Boolean(next)"
+        :celebrate="celebrate"
         next-label="下一关"
         :track-links="[
           { key: 'poem', label: '去古诗闯关' },
